@@ -43,6 +43,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 
                                 //handle getting the range of dates for the previous n days
                                 var trailingRange = 7;
+                                var numDaysToCheck = 7;
 
                                 Date.prototype.subtractDays = function(days) {
                                     var dat = new Date(this.valueOf())
@@ -60,7 +61,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     return dateArray;
                                 }
 
-                                var dateArray = getDates(new Date(), (new Date()).subtractDays(trailingRange));
+                                var dateArray = getDates(new Date(), (new Date()).subtractDays(numDaysToCheck + trailingRange));
 
                                 //check the year(s) needed for the data
                                 var yearsNeeded = []
@@ -83,6 +84,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var totalDetractors = 0;
                                                 var totalPromoters = 0;
 
+                                                //get the data needed for all of the dates in the date array
+                                                var npsCountArray = [];
+                                                var npsDetractorsArray = [];
+                                                var npsPromotersArray = [];
                                                 for (k = 0; k < dateArray.length; k++) {
                                                     let yearStr = String(dateArray[k].getFullYear());
                                                     let monthStr = String(dateArray[k].getMonth() + 1);
@@ -98,26 +103,32 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     numDetractors = docLocationNPS.get(`${dateStr}.num_detractors`);
                                                     numPromoters = docLocationNPS.get(`${dateStr}.num_promoters`);
 
+                                                    //store the totals in an array (0 if no data)
                                                     if (dayCount != undefined) {
-                                                        totalCount += dayCount;
-                                                        totalDetractors += numDetractors;
-                                                        totalPromoters += numPromoters; 
-                                                    }                                             
+                                                        npsCountArray.push(dayCount);
+                                                        npsDetractorsArray.push(numDetractors);
+                                                        npsPromotersArray.push(numPromoters);  
+                                                    }
+                                                    else {
+                                                        npsCountArray.push(0);
+                                                        npsDetractorsArray.push(0);
+                                                        npsPromotersArray.push(0);  
+                                                    }                                         
                                                 }
-                                                //check the total count so it won't divide by zero
-                                                if (totalCount != 0) {
-                                                    npsScore = (totalPromoters - totalDetractors) / totalCount * 100;
-                                                }
-                                                else {
-                                                    npsScore = 0;
-                                                }
-                                                
-                                                npsScore = npsScore.toFixed(1);
 
+                                                //get the nps score for today
+                                                todaysNPS = calculateNpsScore(0, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
                                                 var npsScoresList = document.getElementById('nps_scores');
                                                 var score = document.createElement('li');
-                                                score.textContent = npsScore;
-                                                npsScoresList.appendChild(score); 
+                                                score.textContent = todaysNPS;
+                                                npsScoresList.appendChild(score);
+                                                
+                                                yesterdaysNPS = calculateNpsScore(1, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
+                                                shift = todaysNPS - yesterdaysNPS;
+                                                var npsShiftList = document.getElementById('nps_shift');
+                                                var score = document.createElement('li');
+                                                score.textContent = yesterdaysNPS;
+                                                npsShiftList.appendChild(score);
 
                                                 closeLoadingScreen();
 
@@ -159,4 +170,27 @@ function closeLoadingScreen() {
     if (document.getElementById('loadingScreen')) {
         document.getElementById('loadingScreen').style.display = 'none';
     }
+}
+
+//calculates the nps score given days since today's date and the arrays that stores all of the totals
+function calculateNpsScore(daysSinceToday, trailingRange, countArray, detractorsArray, promotersArray) {
+    var totalCount = 0;
+    var totalDetractors = 0;
+    var totalPromoters = 0;
+    for (i = 0; i < trailingRange; i++) {
+        totalCount += countArray[daysSinceToday + i];
+        totalDetractors += detractorsArray[daysSinceToday + i];
+        totalPromoters += promotersArray[daysSinceToday + i];
+    }
+
+    if (totalCount != 0) {
+        npsScore = (totalPromoters - totalDetractors) / totalCount * 100;
+    }
+    else {
+        npsScore = 0;
+    }
+    
+    npsScore = npsScore.toFixed(1);
+    return npsScore;
+    
 }
