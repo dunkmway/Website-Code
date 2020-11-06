@@ -48,8 +48,6 @@ var publicPages = [
     '/login'
 ]
 
-var siteWideReady = false;
-
 firebase.auth().onAuthStateChanged(function (user) {
     var currentPath = window.location.pathname;
     if (user) {
@@ -68,8 +66,6 @@ firebase.auth().onAuthStateChanged(function (user) {
             if (document.getElementById('navLogin')) {
                 document.getElementById('navLogin').style.display = 'none';
             }
-            siteWideReady = true;
-            closeLoadingScreen();
         }
     }
     else {
@@ -88,8 +84,6 @@ firebase.auth().onAuthStateChanged(function (user) {
             if (document.getElementById('navLogin')) {
                 document.getElementById('navLogin').style.display = 'inline-block';
             }
-            siteWideReady = true;
-            closeLoadingScreen();
         }
     }
 })

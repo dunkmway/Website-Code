@@ -1,5 +1,4 @@
 //what I need to do is put up an error screen if the fetch fails
-var pageReady = false;
 
 var userName = ""
 var businessName = ""
@@ -120,7 +119,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 score.textContent = npsScore;
                                                 npsScoresList.appendChild(score); 
 
-                                                pageReady = true;
                                                 closeLoadingScreen();
 
                                             }
@@ -158,9 +156,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 function closeLoadingScreen() {
-    if (siteWideReady && pageReady) {
-        if (document.getElementById('loadingScreen')) {
-            document.getElementById('loadingScreen').style.display = 'none';
-        }
+    if (document.getElementById('loadingScreen')) {
+        document.getElementById('loadingScreen').style.display = 'none';
     }
 }
