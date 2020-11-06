@@ -125,6 +125,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 
                                                 yesterdaysNPS = calculateNpsScore(1, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
                                                 var shift = todaysNPS - yesterdaysNPS;
+                                                console.log(shift);
                                                 var npsShiftList = document.getElementById('nps_shift');
                                                 var liShift = document.createElement('li');
                                                 liShift.textContent = shift;
