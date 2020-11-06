@@ -125,7 +125,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 
                                                 yesterdaysNPS = calculateNpsScore(1, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
                                                 var shift = todaysNPS - yesterdaysNPS;
-                                                shift = Number(shift.toFixed(1));
+                                                shift = parseFloat(shift.toFixed(1));
                                                 console.log(shift);
                                                 var npsShiftList = document.getElementById('nps_shift');
                                                 var liShift = document.createElement('li');
@@ -192,7 +192,7 @@ function calculateNpsScore(daysSinceToday, trailingRange, countArray, detractors
         npsScore = 0;
     }
     
-    npsScore = Number(npsScore.toFixed(1));
+    npsScore = parseFloat(npsScore.toFixed(1));
     return npsScore;
     
 }
