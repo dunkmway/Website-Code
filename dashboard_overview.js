@@ -72,6 +72,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     }
                                 }
 
+                                npsScoreArray = [];
+                                npsDateArray = [];
                                 for (i = 0; i < yearsNeeded.length; i++) {
                                     for (j = 0; j < locations.length; j++) {
                                     let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
@@ -93,6 +95,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     let monthStr = String(dateArray[k].getMonth() + 1);
                                                     let dayStr = String(dateArray[k].getDate());
                                                     let dateStr = yearStr + '-' + monthStr + '-' + dayStr;
+                                                    npsDateArray.push(dateStr);
 
                                                     //get the totals from this date in the document
                                                     var dayCount = 0
@@ -116,14 +119,21 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     }                                         
                                                 }
 
+                                                //get the nps scores for the number of days to check
+                                                for (k = 0; k < numDaysToCheck; k++) {
+                                                    daysScore = calculateNpsScore(k, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
+                                                    npsScoreArray.push(daysScore);
+                                                }
+
                                                 //get the nps score for today
-                                                todaysNPS = calculateNpsScore(0, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
+                                                todaysNPS = npsScoreArray[0]
                                                 var npsScoresList = document.getElementById('nps_scores');
                                                 var score = document.createElement('li');
                                                 score.textContent = todaysNPS;
                                                 npsScoresList.appendChild(score);
                                                 
-                                                yesterdaysNPS = calculateNpsScore(1, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
+                                                //set the shift since yesterday
+                                                yesterdaysNPS = npsScoreArray[1]
                                                 var shift = todaysNPS - yesterdaysNPS;
                                                 var shiftStr = shift.toFixed(1);
                                                 console.log(shiftStr);
@@ -145,6 +155,26 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         });
                                     }
                                 }
+                                //set up the graph
+                                var ctx = document.getElementById('npsChart').getContext('2d');
+                                var chart = new Chart(ctx, {
+                                    // The type of chart we want to create
+                                    type: 'line',
+
+                                    // The data for our dataset
+                                    data: {
+                                        labels: npsDateArray,
+                                        datasets: [{
+                                            label: 'My First dataset',
+                                            backgroundColor: 'rgb(255, 99, 132)',
+                                            borderColor: 'rgb(255, 99, 132)',
+                                            data: npsScoreArray
+                                        }]
+                                    },
+
+                                    // Configuration options go here
+                                    options: {}
+                                });
                                 
                             }
                             else {
