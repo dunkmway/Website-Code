@@ -72,8 +72,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     }
                                 }
 
-                                npsScoreArray = [];
-                                npsDateArray = [];
+                                var npsScoreArray = [];
+                                var npsDateArray = [];
                                 for (i = 0; i < yearsNeeded.length; i++) {
                                     for (j = 0; j < locations.length; j++) {
                                     let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
@@ -95,8 +95,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     let monthStr = String(dateArray[k].getMonth() + 1);
                                                     let dayStr = String(dateArray[k].getDate());
                                                     let dateStr = yearStr + '-' + monthStr + '-' + dayStr;
-                                                    npsDateArray.push(dateStr);
-
+                                                    if (k < numDaysToCheck) {
+                                                        npsDateArray.push(dateStr);
+                                                    }
+                                                    
                                                     //get the totals from this date in the document
                                                     var dayCount = 0
                                                     var numDetractors = 0
