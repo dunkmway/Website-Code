@@ -156,6 +156,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     }
                                 }
                                 //set up the graph
+                                console.log(npsDateArray);
+                                console.log(npsScoreArray);
                                 var ctx = document.getElementById('npsChart').getContext('2d');
                                 var chart = new Chart(ctx, {
                                     // The type of chart we want to create
