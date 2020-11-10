@@ -163,7 +163,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                     // The data for our dataset
                                     data: {
-                                        labels: npsDateArray.reversed(),
+                                        labels: npsDateArray.reverse(),
                                         datasets: [{
                                             label: 'My First dataset',
                                             backgroundColor: 'rgb(255, 99, 132)',
