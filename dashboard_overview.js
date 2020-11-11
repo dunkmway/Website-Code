@@ -72,11 +72,16 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     }
                                 }
 
-                                var npsScoreArray = [];
-                                var npsDateArray = [];
+                                //totals for all of the locations
+                                var totalCountArray = []
+                                var totalDetractorsArray = []
+                                var totalPromotersArray = []
+                                var npsDateArray = []
                                 for (i = 0; i < yearsNeeded.length; i++) {
                                     for (j = 0; j < locations.length; j++) {
                                     let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
+                                    var npsScoreArray = [];
+                                    npsDateArray = [];
 
                                     locationNPSDoc.get()
                                         .then(function(docLocationNPS) {
@@ -95,14 +100,12 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     let monthStr = String(dateArray[k].getMonth() + 1);
                                                     let dayStr = String(dateArray[k].getDate());
                                                     let dateStr = yearStr + '-' + monthStr + '-' + dayStr;
-                                                    if (k < numDaysToCheck) {
-                                                        npsDateArray.push(dateStr);
-                                                    }
-                                                    
+                                                    npsDateArray.push(dateStr);
+
                                                     //get the totals from this date in the document
-                                                    var dayCount = 0
-                                                    var numDetractors = 0
-                                                    var numPromoters = 0
+                                                    var dayCount = 0;
+                                                    var numDetractors = 0;
+                                                    var numPromoters = 0;
 
                                                     dayCount = docLocationNPS.get(`${dateStr}.day_count`);
                                                     numDetractors = docLocationNPS.get(`${dateStr}.num_detractors`);
@@ -118,7 +121,19 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                         npsCountArray.push(0);
                                                         npsDetractorsArray.push(0);
                                                         npsPromotersArray.push(0);  
-                                                    }                                         
+                                                    }    
+                                                    
+                                                    //sum up the totals into their array per day
+                                                    if (totalCountArray.length = 0) {
+                                                        totalCountArray.push(npsCountArray[k]);
+                                                        totalDetractorsArray.push(npsDetractorsArray[k]);
+                                                        totalPromotersArray.push(npsPromotersArray[k]);
+                                                    }
+                                                    else {
+                                                        totalCountArray[k] += npsCountArray[k];
+                                                        totalDetractorsArray[k] += npsDetractorsArray[k];
+                                                        totalPromotersArray[k] += npsPromotersArray[k];
+                                                    }
                                                 }
 
                                                 //get the nps scores for the number of days to check
@@ -158,8 +173,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     }
                                 }
                                 //set up the graph
+                                //FIXME: Need to calulate the total nps score for all locations, not each one individually
+                                //What is happening now is that each location is pushing to the array and then this is getting a lot of data.
                                 console.log(npsDateArray);
-                                console.log(npsScoreArray);
+                                console.log(totalCountArray);
                                 var ctx = document.getElementById('npsChart').getContext('2d');
                                 var chart = new Chart(ctx, {
                                     // The type of chart we want to create
