@@ -73,15 +73,23 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 }
 
                                 //totals for all of the locations
-                                var totalCountArray = []
-                                var totalDetractorsArray = []
-                                var totalPromotersArray = []
-                                var npsDateArray = new Array(dateArray.length);
+                                var totalCountArray = new Array(dateArray.length).fill(0);
+                                var totalDetractorsArray = new Array(dateArray.length).fill(0);
+                                var totalPromotersArray = new Array(dateArray.length).fill(0);
+                                var npsDateArray = []
+
+                                for (i = 0; i < dateArray.length; i++) {
+                                    let yearStr = String(dateArray[k].getFullYear());
+                                    let monthStr = String(dateArray[k].getMonth() + 1);
+                                    let dayStr = String(dateArray[k].getDate());
+                                    let dateStr = yearStr + '-' + monthStr + '-' + dayStr;
+                                    npsDateArray.push(dateStr);
+                                }
+
                                 for (i = 0; i < yearsNeeded.length; i++) {
                                     for (j = 0; j < locations.length; j++) {
                                     let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
                                     var npsScoreArray = [];
-                                    npsDateArray = [];
 
                                     locationNPSDoc.get()
                                         .then(function(docLocationNPS) {
@@ -95,20 +103,15 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var npsCountArray = [];
                                                 var npsDetractorsArray = [];
                                                 var npsPromotersArray = [];
-                                                for (k = 0; k < dateArray.length; k++) {
-                                                    let yearStr = String(dateArray[k].getFullYear());
-                                                    let monthStr = String(dateArray[k].getMonth() + 1);
-                                                    let dayStr = String(dateArray[k].getDate());
-                                                    let dateStr = yearStr + '-' + monthStr + '-' + dayStr;
-
+                                                for (k = 0; k < npsDateArray.length; k++) {
                                                     //get the totals from this date in the document
                                                     var dayCount = 0;
                                                     var numDetractors = 0;
                                                     var numPromoters = 0;
 
-                                                    dayCount = docLocationNPS.get(`${dateStr}.day_count`);
-                                                    numDetractors = docLocationNPS.get(`${dateStr}.num_detractors`);
-                                                    numPromoters = docLocationNPS.get(`${dateStr}.num_promoters`);
+                                                    dayCount = docLocationNPS.get(`${npsDateArray[k]}.day_count`);
+                                                    numDetractors = docLocationNPS.get(`${npsDateArray[k]}.num_detractors`);
+                                                    numPromoters = docLocationNPS.get(`${npsDateArray[k]}.num_promoters`);
 
                                                     //store the totals in an array (0 if no data)
                                                     if (dayCount != undefined) {
