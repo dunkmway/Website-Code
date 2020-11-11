@@ -100,7 +100,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     let monthStr = String(dateArray[k].getMonth() + 1);
                                                     let dayStr = String(dateArray[k].getDate());
                                                     let dateStr = yearStr + '-' + monthStr + '-' + dayStr;
-                                                    npsDateArray.push(dateStr);
 
                                                     //get the totals from this date in the document
                                                     var dayCount = 0;
@@ -125,14 +124,15 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     
                                                     //sum up the totals into their array per day
                                                     if (totalCountArray.length = 0) {
-                                                        totalCountArray.push(npsCountArray[k]);
-                                                        totalDetractorsArray.push(npsDetractorsArray[k]);
-                                                        totalPromotersArray.push(npsPromotersArray[k]);
+                                                        npsDateArray.push(dateStr);
+                                                        totalCountArray.push(dayCount);
+                                                        totalDetractorsArray.push(numDetractors);
+                                                        totalPromotersArray.push(numPromoters);
                                                     }
                                                     else {
-                                                        totalCountArray[k] += npsCountArray[k];
-                                                        totalDetractorsArray[k] += npsDetractorsArray[k];
-                                                        totalPromotersArray[k] += npsPromotersArray[k];
+                                                        totalCountArray[k] += dayCount;
+                                                        totalDetractorsArray[k] += numDetractors;
+                                                        totalPromotersArray[k] += numPromoters;
                                                     }
                                                 }
 
