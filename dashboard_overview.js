@@ -79,9 +79,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 var npsDateArray = []
 
                                 for (i = 0; i < dateArray.length; i++) {
-                                    let yearStr = String(dateArray[k].getFullYear());
-                                    let monthStr = String(dateArray[k].getMonth() + 1);
-                                    let dayStr = String(dateArray[k].getDate());
+                                    let yearStr = String(dateArray[i].getFullYear());
+                                    let monthStr = String(dateArray[i].getMonth() + 1);
+                                    let dayStr = String(dateArray[i].getDate());
                                     let dateStr = yearStr + '-' + monthStr + '-' + dayStr;
                                     npsDateArray.push(dateStr);
                                 }
