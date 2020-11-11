@@ -76,7 +76,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 var totalCountArray = []
                                 var totalDetractorsArray = []
                                 var totalPromotersArray = []
-                                var npsDateArray = []
+                                var npsDateArray = new Array(dateArray.length);
                                 for (i = 0; i < yearsNeeded.length; i++) {
                                     for (j = 0; j < locations.length; j++) {
                                     let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
@@ -123,17 +123,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     }    
                                                     
                                                     //sum up the totals into their array per day
-                                                    if (totalCountArray.length = 0) {
-                                                        npsDateArray.push(dateStr);
-                                                        totalCountArray.push(dayCount);
-                                                        totalDetractorsArray.push(numDetractors);
-                                                        totalPromotersArray.push(numPromoters);
-                                                    }
-                                                    else {
-                                                        totalCountArray[k] += dayCount;
-                                                        totalDetractorsArray[k] += numDetractors;
-                                                        totalPromotersArray[k] += numPromoters;
-                                                    }
+                                                    totalCountArray[k] = totalCountArray[k] + dayCount;
+                                                    totalDetractorsArray[k] = totalDetractorsArray[k] + numDetractors;
+                                                    totalPromotersArray[k] = totalPromotersArray[k] + numPromoters;
                                                 }
 
                                                 //get the nps scores for the number of days to check
