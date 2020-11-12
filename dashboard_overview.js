@@ -35,7 +35,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 
                                 //populate nps_locations list
                                 var npsLocationList = document.getElementById('nps_locations');
-                                for (i = 0; i < locations.length; i++) {
+                                for (var i = 0; i < locations.length; i++) {
                                     var location = document.createElement('li');
                                     location.textContent = locations[i];
                                     npsLocationList.appendChild(location);
@@ -65,7 +65,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                 //check the year(s) needed for the data
                                 var yearsNeeded = []
-                                for (i = 0; i < dateArray.length; i++) {
+                                for (var i = 0; i < dateArray.length; i++) {
                                     var checkYear = String(dateArray[i].getFullYear())
                                     if (!yearsNeeded.includes(checkYear)) {
                                         yearsNeeded.push(checkYear);
@@ -78,7 +78,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 var totalPromotersArray = new Array(dateArray.length).fill(0);
                                 var npsDateArray = []
 
-                                for (i = 0; i < dateArray.length; i++) {
+                                for (var i = 0; i < dateArray.length; i++) {
                                     let yearStr = String(dateArray[i].getFullYear());
                                     let monthStr = String(dateArray[i].getMonth() + 1);
                                     let dayStr = String(dateArray[i].getDate());
@@ -88,8 +88,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                 console.log({npsDateArray});
 
-                                for (i = 0; i < yearsNeeded.length; i++) {
-                                    for (j = 0; j < locations.length; j++) {
+                                for (var i = 0; i < yearsNeeded.length; i++) {
+                                    for (var j = 0; j < locations.length; j++) {
                                     let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
                                     var npsScoreArray = [];
 
@@ -103,7 +103,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var npsPromotersArray = [];
 
                                                 console.log({npsDateArray});
-                                                for (k = 0; k < npsDateArray.length; k++) {
+                                                for (var k = 0; k < npsDateArray.length; k++) {
                                                     //get the totals from this date in the document
                                                     var dayCount = 0;
                                                     var numDetractors = 0;
@@ -138,7 +138,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 console.log({npsCountArray});
                                                 console.log({npsDetractorsArray});
                                                 console.log({npsPromotersArray});
-                                                for (k = 0; k < numDaysToCheck; k++) {
+                                                for (var k = 0; k < numDaysToCheck; k++) {
                                                     var daysScore = calculateNpsScore(k, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
                                                     console.log({daysScore});
                                                     npsScoreArray.push(daysScore);
@@ -169,7 +169,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 console.log({i});
                                                 console.log({yearsNeeded});
                                                 console.log({j});
-                                                console.log({location});
+                                                console.log({locations});
                                                 if ((i == (yearsNeeded.length - 1)) && (j == (locations.length - 1))) {
                                                     console.log("In the if statement to create the graph.")
                                                     var tmpDateArray = []
