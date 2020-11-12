@@ -171,9 +171,11 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 //What is happening now is that each location is pushing to the array and then this is getting a lot of data.
 
                                 //need to only get the npsDates that we are requesting which is numDaysToCheck
-                                for (i = 0; i < (npsDateArray.length - numDaysToCheck); i++) {
-                                    npsDateArray.pop()
+                                var tmpDateArray = []
+                                for (i = 0; i < numDaysToCheck; i++) {
+                                    tmpDateArray.push(npsDateArray[i]);
                                 }
+                                npsDateArray = tmpDateArray;
 
                                 // var npsTotalScores = []
                                 // for (i = 0; i < npsDateArray.length; i++) {
@@ -188,7 +190,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 
                                     // The data for our dataset
                                     data: {
-                                        labels: npsDateArray,
+                                        labels: npsDateArray.reverse(),
                                         datasets: [{
                                             label: 'My First dataset',
                                             backgroundColor: '#707070',
