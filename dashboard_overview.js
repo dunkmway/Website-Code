@@ -166,17 +166,21 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 closeLoadingScreen();
 
                                                 //if this is the final time calulating the scores then calculate the totals
+                                                console.log({i});
+                                                console.log({yearsNeeded});
+                                                console.log({j});
+                                                console.log({location});
                                                 if ((i == (yearsNeeded.length - 1)) && (j == (locations.length - 1))) {
                                                     console.log("In the if statement to create the graph.")
                                                     var tmpDateArray = []
-                                                    for (i = 0; i < numDaysToCheck; i++) {
-                                                        tmpDateArray.push(npsDateArray[i]);
+                                                    for (k = 0; k < numDaysToCheck; k++) {
+                                                        tmpDateArray.push(npsDateArray[k]);
                                                     }
                                                     npsDateArray = tmpDateArray;
 
                                                     var npsTotalScores = []
-                                                    for (i = 0; i < npsDateArray.length; i++) {
-                                                        daysScore = calculateNpsScore(i, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
+                                                    for (k = 0; k < npsDateArray.length; k++) {
+                                                        daysScore = calculateNpsScore(k, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
                                                         npsTotalScores.push(daysScore.toFixed(1));
                                                     }
 
