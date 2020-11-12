@@ -142,7 +142,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 console.log({todaysNPS});
                                                 var npsScoresList = document.getElementById('nps_scores');
                                                 var score = document.createElement('li');
-                                                score.textContent = todaysNPS;
+                                                score.textContent = todaysNPS.toFixed(1);
                                                 npsScoresList.appendChild(score);
                                                 
                                                 //set the shift since yesterday
@@ -183,7 +183,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 // var npsTotalScores = []
                                 // for (i = 0; i < npsDateArray.length; i++) {
                                 //     daysScore = calculateNpsScore(i, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
-                                //     npsTotalScores.push(daysScore);
+                                //     npsTotalScores.push(daysScore.toFixed(1));
                                 // }
 
                                 var ctx = document.getElementById('npsChart').getContext('2d');
@@ -239,6 +239,7 @@ function calculateNpsScore(daysSinceToday, trailingRange, countArray, detractors
     var totalCount = 0;
     var totalDetractors = 0;
     var totalPromoters = 0;
+    var npsScore = 0;
     for (i = 0; i < trailingRange; i++) {
         totalCount += countArray[daysSinceToday + i];
         totalDetractors += detractorsArray[daysSinceToday + i];
@@ -252,7 +253,6 @@ function calculateNpsScore(daysSinceToday, trailingRange, countArray, detractors
         npsScore = 0;
     }
     
-    npsScore = npsScore.toFixed(1);
     return npsScore;
     
 }
