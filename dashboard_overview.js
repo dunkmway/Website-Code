@@ -96,10 +96,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         .then(function(docLocationNPS) {
                                             if(docLocationNPS.exists) {
 
-                                                var totalCount = 0;
-                                                var totalDetractors = 0;
-                                                var totalPromoters = 0;
-
                                                 //get the data needed for all of the dates in the date array
                                                 var npsCountArray = [];
                                                 var npsDetractorsArray = [];
@@ -158,7 +154,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 liShift.textContent = shiftStr;
                                                 npsShiftList.appendChild(liShift);
 
-                                                closeLoadingScreen();
+                                                //closeLoadingScreen();
 
                                             }
                                             else {
@@ -187,24 +183,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 }
 
                                 var ctx = document.getElementById('npsChart').getContext('2d');
-                                var chart = new Chart(ctx, {
-                                    // The type of chart we want to create
-                                    type: 'line',
-
-                                    // The data for our dataset
-                                    data: {
-                                        labels: npsDateArray.reverse(),
-                                        datasets: [{
-                                            label: 'My First dataset',
-                                            backgroundColor: 'rgb(255, 99, 132)',
-                                            borderColor: 'rgb(255, 99, 132)',
-                                            data: npsTotalScores
-                                        }]
-                                    },
-
-                                    // Configuration options go here
-                                    options: {}
-                                });
                                 
                             }
                             else {
