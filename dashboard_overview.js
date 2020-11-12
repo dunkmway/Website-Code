@@ -187,6 +187,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 console.log(totalCountArray);
                                 console.log(totalDetractorsArray);
                                 console.log(totalPromotersArray);
+
+                                var npsTotalScores = []
+                                for (i = 0; i < npsDateArray.length; i++) {
+                                    daysScore = calculateNpsScore(i, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
+                                    npsScoreArray.push(daysScore);
+                                }
+
                                 var ctx = document.getElementById('npsChart').getContext('2d');
                                 var chart = new Chart(ctx, {
                                     // The type of chart we want to create
@@ -199,7 +206,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             label: 'My First dataset',
                                             backgroundColor: 'rgb(255, 99, 132)',
                                             borderColor: 'rgb(255, 99, 132)',
-                                            data: totalCountArray
+                                            data: npsTotalScores
                                         }]
                                     },
 
