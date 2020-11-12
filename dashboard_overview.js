@@ -78,6 +78,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 var totalPromotersArray = new Array(dateArray.length).fill(0);
                                 var npsDateArray = []
 
+                                console.log({npsCountArray});
+                                console.log({npsDetractorsArray});
+                                console.log({npsPromotersArray});
+
                                 for (i = 0; i < dateArray.length; i++) {
                                     let yearStr = String(dateArray[i].getFullYear());
                                     let monthStr = String(dateArray[i].getMonth() + 1);
