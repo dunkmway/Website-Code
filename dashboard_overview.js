@@ -191,7 +191,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 var npsTotalScores = []
                                 for (i = 0; i < npsDateArray.length; i++) {
                                     daysScore = calculateNpsScore(i, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
-                                    npsScoreArray.push(daysScore);
+                                    npsTotalScores.push(daysScore);
                                 }
 
                                 var ctx = document.getElementById('npsChart').getContext('2d');
