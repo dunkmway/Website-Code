@@ -184,7 +184,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             label: 'My First dataset',
                                             backgroundColor: 'rgb(255, 99, 132)',
                                             borderColor: 'rgb(255, 99, 132)',
-                                            data: npsScoreArray
+                                            data: totalCountArray
                                         }]
                                     },
 
