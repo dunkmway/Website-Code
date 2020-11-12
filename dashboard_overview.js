@@ -132,12 +132,12 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                                 //get the nps scores for the number of days to check
                                                 for (k = 0; k < numDaysToCheck; k++) {
-                                                    daysScore = calculateNpsScore(k, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
+                                                    var daysScore = calculateNpsScore(k, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
                                                     npsScoreArray.push(daysScore);
                                                 }
 
                                                 //get the nps score for today
-                                                todaysNPS = npsScoreArray[0]
+                                                var todaysNPS = npsScoreArray[0]
                                                 console.log({todaysNPS});
                                                 var npsScoresList = document.getElementById('nps_scores');
                                                 var score = document.createElement('li');
@@ -145,7 +145,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 npsScoresList.appendChild(score);
                                                 
                                                 //set the shift since yesterday
-                                                yesterdaysNPS = npsScoreArray[1]
+                                                var yesterdaysNPS = npsScoreArray[1]
                                                 console.log({yesterdaysNPS});
                                                 var shift = todaysNPS - yesterdaysNPS;
                                                 var shiftStr = shift.toFixed(1);
