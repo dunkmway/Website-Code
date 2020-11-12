@@ -131,12 +131,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                                         //sum up the totals into their array per day
                                                         //nothing was saved so don't add anything
-                                                    }    
-                                                    
-                                                    //sum up the totals into their array per day
-                                                    totalCountArray[k] = totalCountArray[k] + dayCount;
-                                                    totalDetractorsArray[k] = totalDetractorsArray[k] + numDetractors;
-                                                    totalPromotersArray[k] = totalPromotersArray[k] + numPromoters;
+                                                    }
                                                 }
 
                                                 //get the nps scores for the number of days to check
