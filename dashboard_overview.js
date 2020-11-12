@@ -117,12 +117,20 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     if (dayCount != undefined) {
                                                         npsCountArray.push(dayCount);
                                                         npsDetractorsArray.push(numDetractors);
-                                                        npsPromotersArray.push(numPromoters);  
+                                                        npsPromotersArray.push(numPromoters); 
+                                                        
+                                                        //sum up the totals into their array per day
+                                                        totalCountArray[k] = totalCountArray[k] + dayCount;
+                                                        totalDetractorsArray[k] = totalDetractorsArray[k] + numDetractors;
+                                                        totalPromotersArray[k] = totalPromotersArray[k] + numPromoters;
                                                     }
                                                     else {
                                                         npsCountArray.push(0);
                                                         npsDetractorsArray.push(0);
                                                         npsPromotersArray.push(0);  
+
+                                                        //sum up the totals into their array per day
+                                                        //nothing was saved so don't add anything
                                                     }    
                                                     
                                                     //sum up the totals into their array per day
@@ -170,8 +178,15 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 //set up the graph
                                 //FIXME: Need to calulate the total nps score for all locations, not each one individually
                                 //What is happening now is that each location is pushing to the array and then this is getting a lot of data.
+
+                                //need to only get the npsDates that we are requesting which is numDaysToCheck
+                                for (i = 0; i < (npsDateArray.length - numDaysToCheck); i++) {
+                                    npsDateArray.pop()
+                                }
                                 console.log(npsDateArray);
                                 console.log(totalCountArray);
+                                console.log(totalDetractorsArray);
+                                console.log(totalPromotersArray);
                                 var ctx = document.getElementById('npsChart').getContext('2d');
                                 var chart = new Chart(ctx, {
                                     // The type of chart we want to create
