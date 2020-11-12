@@ -173,11 +173,11 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     }
                                                     npsDateArray = tmpDateArray;
 
-                                                    // var npsTotalScores = []
-                                                    // for (i = 0; i < npsDateArray.length; i++) {
-                                                    //     daysScore = calculateNpsScore(i, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
-                                                    //     npsTotalScores.push(daysScore.toFixed(1));
-                                                    // }
+                                                    var npsTotalScores = []
+                                                    for (i = 0; i < npsDateArray.length; i++) {
+                                                        daysScore = calculateNpsScore(i, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
+                                                        npsTotalScores.push(daysScore.toFixed(1));
+                                                    }
 
                                                     var ctx = document.getElementById('npsChart').getContext('2d');
                                                     var chart = new Chart(ctx, {
@@ -191,7 +191,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                                 label: 'My First dataset',
                                                                 backgroundColor: '#707070',
                                                                 borderColor: '#707070',
-                                                                data: totalCountArray
+                                                                data: npsTotalScores
                                                             }]
                                                         },
                                                     
