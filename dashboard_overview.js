@@ -86,6 +86,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     npsDateArray.push(dateStr);
                                 }
 
+                                console.log({npsDateArray});
+
                                 for (i = 0; i < yearsNeeded.length; i++) {
                                     for (j = 0; j < locations.length; j++) {
                                     let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
