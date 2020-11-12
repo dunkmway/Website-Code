@@ -78,10 +78,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 var totalPromotersArray = new Array(dateArray.length).fill(0);
                                 var npsDateArray = []
 
-                                console.log({npsCountArray});
-                                console.log({npsDetractorsArray});
-                                console.log({npsPromotersArray});
-
                                 for (i = 0; i < dateArray.length; i++) {
                                     let yearStr = String(dateArray[i].getFullYear());
                                     let monthStr = String(dateArray[i].getMonth() + 1);
@@ -105,6 +101,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var npsCountArray = [];
                                                 var npsDetractorsArray = [];
                                                 var npsPromotersArray = [];
+
+                                                console.log({npsDateArray});
                                                 for (k = 0; k < npsDateArray.length; k++) {
                                                     //get the totals from this date in the document
                                                     var dayCount = 0;
