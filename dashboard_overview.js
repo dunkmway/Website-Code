@@ -166,7 +166,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 closeLoadingScreen();
 
                                                 //if this is the final time calulating the scores then calculate the totals
-                                                if ((i = (yearsNeeded.length - 1)) && (j = (locations.length - 1))) {
+                                                if ((i == (yearsNeeded.length - 1)) && (j == (locations.length - 1))) {
                                                     var tmpDateArray = []
                                                     for (i = 0; i < numDaysToCheck; i++) {
                                                         tmpDateArray.push(npsDateArray[i]);
