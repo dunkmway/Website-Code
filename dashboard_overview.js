@@ -138,6 +138,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                                 //get the nps score for today
                                                 todaysNPS = npsScoreArray[0]
+                                                console.log({todaysNPS});
                                                 var npsScoresList = document.getElementById('nps_scores');
                                                 var score = document.createElement('li');
                                                 score.textContent = todaysNPS;
@@ -145,6 +146,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 
                                                 //set the shift since yesterday
                                                 yesterdaysNPS = npsScoreArray[1]
+                                                console.log({yesterdaysNPS});
                                                 var shift = todaysNPS - yesterdaysNPS;
                                                 var shiftStr = shift.toFixed(1);
                                                 console.log(shiftStr);
