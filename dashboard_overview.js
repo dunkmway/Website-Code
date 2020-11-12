@@ -167,6 +167,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                                 //if this is the final time calulating the scores then calculate the totals
                                                 if ((i == (yearsNeeded.length - 1)) && (j == (locations.length - 1))) {
+                                                    console.log("In the if statement to create the graph.")
                                                     var tmpDateArray = []
                                                     for (i = 0; i < numDaysToCheck; i++) {
                                                         tmpDateArray.push(npsDateArray[i]);
