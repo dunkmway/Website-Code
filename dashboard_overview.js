@@ -1,5 +1,6 @@
 //what I need to do is put up an error screen if the fetch fails
 console.log("In the dashboard js file")
+closeLoadingScreen();
 var userName = ""
 var businessName = ""
 var locations = []
@@ -178,10 +179,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 for (i = 0; i < (npsDateArray.length - numDaysToCheck); i++) {
                                     npsDateArray.pop()
                                 }
-                                console.log(npsDateArray);
-                                console.log(totalCountArray);
-                                console.log(totalDetractorsArray);
-                                console.log(totalPromotersArray);
 
                                 var npsTotalScores = []
                                 for (i = 0; i < npsDateArray.length; i++) {
