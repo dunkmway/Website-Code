@@ -87,13 +87,14 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 }
 
                                 console.log({npsDateArray});
+                                var promises = [];
 
                                 for (var i = 0; i < yearsNeeded.length; i++) {
                                     for (var j = 0; j < locations.length; j++) {
                                     let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
                                     var npsScoreArray = [];
 
-                                    locationNPSDoc.get()
+                                    var promise = locationNPSDoc.get()
                                         .then(function(docLocationNPS) {
                                             if(docLocationNPS.exists) {
 
@@ -164,47 +165,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 npsShiftList.appendChild(liShift);
 
                                                 closeLoadingScreen();
-
-                                                //if this is the final time calulating the scores then calculate the totals
-                                                console.log({i});
-                                                console.log({yearsNeeded});
-                                                console.log({j});
-                                                console.log({locations});
-                                                if ((i == (yearsNeeded.length - 1)) && (j == (locations.length - 1))) {
-                                                    console.log("In the if statement to create the graph.")
-                                                    var tmpDateArray = []
-                                                    for (k = 0; k < numDaysToCheck; k++) {
-                                                        tmpDateArray.push(npsDateArray[k]);
-                                                    }
-                                                    npsDateArray = tmpDateArray;
-
-                                                    var npsTotalScores = []
-                                                    for (k = 0; k < npsDateArray.length; k++) {
-                                                        daysScore = calculateNpsScore(k, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
-                                                        npsTotalScores.push(daysScore.toFixed(1));
-                                                    }
-
-                                                    var ctx = document.getElementById('npsChart').getContext('2d');
-                                                    var chart = new Chart(ctx, {
-                                                        // The type of chart we want to create
-                                                        type: 'line',
-                                                    
-                                                        // The data for our dataset
-                                                        data: {
-                                                            labels: npsDateArray.reverse(),
-                                                            datasets: [{
-                                                                label: 'My First dataset',
-                                                                backgroundColor: '#707070',
-                                                                borderColor: '#707070',
-                                                                data: npsTotalScores
-                                                            }]
-                                                        },
-                                                    
-                                                        // Configuration options go here
-                                                        options: {}
-                                                    });
-                                                }
-
                                             }
                                             else {
                                                 // doc.data() will be undefined in this case
@@ -214,6 +174,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         .catch(function(locationNPSError) {
                                             console.log("Error getting nps year document", locationNPSError);
                                         });
+                                        promises.push(promise);
                                     }
                                 }
                                 //set up the graph
@@ -221,6 +182,42 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 //What is happening now is that each location is pushing to the array and then this is getting a lot of data.
 
                                 //need to only get the npsDates that we are requesting which is numDaysToCheck
+                                //if this is the final time calulating the scores then calculate the totals
+                                Promise.allSettled(promises).then(function(getNPSTotals) {
+                                    console.log("In the if statement to create the graph.")
+                                    var tmpDateArray = []
+                                    for (k = 0; k < numDaysToCheck; k++) {
+                                        tmpDateArray.push(npsDateArray[k]);
+                                    }
+                                    npsDateArray = tmpDateArray;
+
+                                    var npsTotalScores = []
+                                    for (k = 0; k < npsDateArray.length; k++) {
+                                        daysScore = calculateNpsScore(k, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
+                                        npsTotalScores.push(daysScore.toFixed(1));
+                                    }
+
+                                    var ctx = document.getElementById('npsChart').getContext('2d');
+                                    var chart = new Chart(ctx, {
+                                        // The type of chart we want to create
+                                        type: 'line',
+                                    
+                                        // The data for our dataset
+                                        data: {
+                                            labels: npsDateArray.reverse(),
+                                            datasets: [{
+                                                label: 'My First dataset',
+                                                backgroundColor: '#707070',
+                                                borderColor: '#707070',
+                                                data: npsTotalScores
+                                            }]
+                                        },
+                                    
+                                        // Configuration options go here
+                                        options: {}
+                                    });
+                                });
+
                             }
                             else {
                                 // doc.data() will be undefined in this case
