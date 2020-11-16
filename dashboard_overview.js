@@ -204,9 +204,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     
                                         // The data for our dataset
                                         data: {
-                                            labels: npsDateArray.reverse(),
+                                            // labels: npsDateArray.reverse(),
                                             datasets: [{
-                                                label: 'My First dataset',
                                                 backgroundColor: '#707070',
                                                 borderColor: '#707070',
                                                 data: npsTotalScores
@@ -214,7 +213,25 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         },
                                     
                                         // Configuration options go here
-                                        options: {}
+                                        options: {
+                                            scales: {
+                                                yAxes: [{
+                                                    ticks: {
+                                                        stepSize: 1,
+                                                        display: false
+                                                        
+                                                    }
+                                                }],
+                                                xAxes: [{
+                                                    ticks: {
+                                                        display: false
+                                                    },
+                                                    gridLines: {
+                                                        display: false
+                                                    }
+                                                }]
+                                            }
+                                        }
                                     });
                                 });
 
