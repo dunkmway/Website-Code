@@ -229,6 +229,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             datasets: [{
                                                 backgroundColor: '#707070',
                                                 borderColor: '#707070',
+                                                fill: false,
                                                 data: npsTotalScores.reverse()
                                             }]
                                         },
