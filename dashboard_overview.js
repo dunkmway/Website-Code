@@ -92,7 +92,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 for (var i = 0; i < yearsNeeded.length; i++) {
                                     for (var j = 0; j < locations.length; j++) {
                                     let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
-                                    var npsScoreArray = [];
 
                                     var promise = locationNPSDoc.get()
                                         .then(function(docLocationNPS) {
@@ -102,6 +101,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var npsCountArray = [];
                                                 var npsDetractorsArray = [];
                                                 var npsPromotersArray = [];
+                                                var npsScoreArray = [];
 
                                                 console.log({npsDateArray});
                                                 for (var k = 0; k < npsDateArray.length; k++) {
