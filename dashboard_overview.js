@@ -220,13 +220,17 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                         precision: 0,
                                                         display: false
                                                         
-                                                    }
+                                                    },
+                                                    position: 'right'
                                                 }],
                                                 xAxes: [{
                                                     ticks: {
                                                         display: false
                                                     },
                                                     gridLines: {
+                                                        display: false
+                                                    },
+                                                    scaleLabel: {
                                                         display: false
                                                     }
                                                 }]
