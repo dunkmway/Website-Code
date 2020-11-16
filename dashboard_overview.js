@@ -204,7 +204,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     
                                         // The data for our dataset
                                         data: {
-                                            // labels: npsDateArray.reverse(),
+                                            labels: npsDateArray.reverse(),
                                             datasets: [{
                                                 backgroundColor: '#707070',
                                                 borderColor: '#707070',
@@ -217,7 +217,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             scales: {
                                                 yAxes: [{
                                                     ticks: {
-                                                        stepSize: 1,
+                                                        precision: 0,
                                                         display: false
                                                         
                                                     }
