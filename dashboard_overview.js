@@ -233,6 +233,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                         display: false
                                                     }
                                                 }]
+                                            },
+                                            legend: {
+                                                display: false
                                             }
                                         }
                                     });
