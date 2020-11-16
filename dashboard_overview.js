@@ -170,6 +170,26 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             else {
                                                 // doc.data() will be undefined in this case
                                                 console.log("No such nps year document!");
+                                                //set the location data to 0 if they don't have documents
+
+                                                //get the nps score for today
+                                                var todaysNPS = 0
+                                                console.log({todaysNPS});
+                                                var npsScoresList = document.getElementById('nps_scores');
+                                                var score = document.createElement('li');
+                                                score.textContent = todaysNPS.toFixed(1);
+                                                npsScoresList.appendChild(score);
+                                                
+                                                //set the shift since yesterday
+                                                var yesterdaysNPS = 0
+                                                console.log({yesterdaysNPS});
+                                                var shift = todaysNPS - yesterdaysNPS;
+                                                var shiftStr = shift.toFixed(1);
+                                                console.log(shiftStr);
+                                                var npsShiftList = document.getElementById('nps_shift');
+                                                var liShift = document.createElement('li');
+                                                liShift.textContent = shiftStr;
+                                                npsShiftList.appendChild(liShift);
                                             }
                                         })
                                         .catch(function(locationNPSError) {
