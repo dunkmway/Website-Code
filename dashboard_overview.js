@@ -219,8 +219,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 yAxes: [{
                                                     ticks: {
                                                         precision: 0,
-                                                        display: false
-                                                        
                                                     },
                                                     position: 'right'
                                                 }],
