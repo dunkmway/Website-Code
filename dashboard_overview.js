@@ -226,13 +226,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     }
                                     //get the totals for today and yesterday for the shift
                                     //get the nps score for today
-                                    var todaysTotalNPS = 0
+                                    var todaysTotalNPS = npsTotalScores[0];
                                     console.log({todaysTotalNPS});
                                     var totalScoreElement = document.getElementById('currentTotalNPS');
                                     totalScoreElement.textContent = todaysTotalNPS.toFixed(1);
                                     
                                     //set the shift since yesterday
-                                    var yesterdaysTotalNPS = 0
+                                    var yesterdaysTotalNPS = npsTotalScores[1];
                                     console.log({yesterdaysTotalNPS});
                                     var totalShift = todaysTotalNPS - yesterdaysTotalNPS;
                                     totalShiftElement = document.getElementById("currentTotalNPSShift");
