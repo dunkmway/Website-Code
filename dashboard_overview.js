@@ -188,6 +188,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 console.log(shiftStr);
                                                 var npsShiftList = document.getElementById('nps_shift');
                                                 var liShift = document.createElement('li');
+                                                liShift.textContent = shiftStr;
                                                 //set the color based on the shift
                                                 if (shift < 0) {
                                                     liShift.style.color = "red"
@@ -195,7 +196,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 else if (shift > 0) {
                                                     liShift.style.color = "green"
                                                 }
-                                                liShift.textContent = shiftStr;
                                                 npsShiftList.appendChild(liShift);
                                             }
                                         })
@@ -235,7 +235,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     var yesterdaysTotalNPS = npsTotalScores[1];
                                     console.log({yesterdaysTotalNPS});
                                     var totalShift = todaysTotalNPS - yesterdaysTotalNPS;
-                                    totalShiftElement = document.getElementById("currentTotalNPSShift");
+                                    var totalShiftElement = document.getElementById("currentTotalNPSShift");
                                     totalShiftElement.textContent = totalShift.toFixed(1);
                                     //set the color based on the shift
                                     if (totalShift < 0) {
