@@ -188,6 +188,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 console.log(shiftStr);
                                                 var npsShiftList = document.getElementById('nps_shift');
                                                 var liShift = document.createElement('li');
+                                                //set the color based on the shift
+                                                if (shift < 0) {
+                                                    liShift.style.color = "red"
+                                                }
+                                                else if (shift > 0) {
+                                                    liShift.style.color = "green"
+                                                }
                                                 liShift.textContent = shiftStr;
                                                 npsShiftList.appendChild(liShift);
                                             }
@@ -216,6 +223,26 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     for (k = 0; k < npsDateArray.length; k++) {
                                         daysScore = calculateNpsScore(k, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
                                         npsTotalScores.push(daysScore.toFixed(1));
+                                    }
+                                    //get the totals for today and yesterday for the shift
+                                    //get the nps score for today
+                                    var todaysTotalNPS = 0
+                                    console.log({todaysTotalNPS});
+                                    var totalScoreElement = document.getElementById('currentTotalNPS');
+                                    totalScoreElement.textContent = todaysTotalNPS.toFixed(1);
+                                    
+                                    //set the shift since yesterday
+                                    var yesterdaysTotalNPS = 0
+                                    console.log({yesterdaysTotalNPS});
+                                    var totalShift = todaysTotalNPS - yesterdaysTotalNPS;
+                                    totalShiftElement = document.getElementById("currentTotalNPSShift");
+                                    totalShiftElement.textContent = totalShift.toFixed(1);
+                                    //set the color based on the shift
+                                    if (totalShift < 0) {
+                                        totalShiftElement.style.color = "red"
+                                    }
+                                    else if (totalShift > 0) {
+                                        totalShiftElement.style.color = "green"
                                     }
 
                                     var ctx = document.getElementById('npsChart').getContext('2d');
