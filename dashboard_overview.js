@@ -288,6 +288,11 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             },
                                             legend: {
                                                 display: false
+                                            },
+                                            layout: {
+                                                padding: {
+                                                    left: 10
+                                                }
                                             }
                                         }
                                     });
