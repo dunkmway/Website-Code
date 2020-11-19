@@ -218,6 +218,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         tmpDateArray.push(npsDateArray[k]);
                                     }
                                     npsDateArray = tmpDateArray;
+                                    console.log({totalCountArray})
+                                    console.log({totalDetractorsArray})
+                                    console.log({totalPromotersArray})
 
                                     var npsTotalScores = []
                                     for (k = 0; k < npsDateArray.length; k++) {
