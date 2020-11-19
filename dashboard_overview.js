@@ -163,6 +163,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var npsShiftList = document.getElementById('nps_shift');
                                                 var liShift = document.createElement('li');
                                                 liShift.textContent = shiftStr;
+                                                //set the color based on the shift
+                                                if (shift < 0) {
+                                                    liShift.style.color = 'red'
+                                                }
+                                                else if (shift > 0) {
+                                                    liShift.style.color = 'green'
+                                                }
                                                 npsShiftList.appendChild(liShift);
 
                                                 closeLoadingScreen();
@@ -189,13 +196,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var npsShiftList = document.getElementById('nps_shift');
                                                 var liShift = document.createElement('li');
                                                 liShift.textContent = shiftStr;
-                                                //set the color based on the shift
-                                                if (shift < 0) {
-                                                    liShift.style.color = "red"
-                                                }
-                                                else if (shift > 0) {
-                                                    liShift.style.color = "green"
-                                                }
                                                 npsShiftList.appendChild(liShift);
                                             }
                                         })
@@ -222,11 +222,11 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     var npsTotalScores = []
                                     for (k = 0; k < npsDateArray.length; k++) {
                                         daysScore = calculateNpsScore(k, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
-                                        npsTotalScores.push(daysScore.toFixed(0));
+                                        npsTotalScores.push(daysScore.toFixed(1));
                                     }
                                     //get the totals for today and yesterday for the shift
                                     //get the nps score for today
-                                    var todaysTotalNPS = parseFloat(npsTotalScores[0]);
+                                    var todaysTotalNPS = parseFloat(npsTotalScores[1]);
                                     console.log({todaysTotalNPS});
                                     var totalScoreElement = document.getElementById('currentTotalNPS');
                                     totalScoreElement.textContent = todaysTotalNPS.toFixed(1);
