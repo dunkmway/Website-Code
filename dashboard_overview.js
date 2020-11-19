@@ -222,7 +222,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     var npsTotalScores = []
                                     for (k = 0; k < npsDateArray.length; k++) {
                                         daysScore = calculateNpsScore(k, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
-                                        npsTotalScores.push(daysScore.toFixed(1));
+                                        npsTotalScores.push(daysScore);
                                     }
                                     //get the totals for today and yesterday for the shift
                                     //get the nps score for today
