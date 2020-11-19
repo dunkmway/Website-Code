@@ -222,17 +222,17 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     var npsTotalScores = []
                                     for (k = 0; k < npsDateArray.length; k++) {
                                         daysScore = calculateNpsScore(k, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
-                                        npsTotalScores.push(daysScore);
+                                        npsTotalScores.push(daysScore.toFixed(0));
                                     }
                                     //get the totals for today and yesterday for the shift
                                     //get the nps score for today
-                                    var todaysTotalNPS = npsTotalScores[0];
+                                    var todaysTotalNPS = parseFloat(npsTotalScores[0]);
                                     console.log({todaysTotalNPS});
                                     var totalScoreElement = document.getElementById('currentTotalNPS');
                                     totalScoreElement.textContent = todaysTotalNPS.toFixed(1);
                                     
                                     //set the shift since yesterday
-                                    var yesterdaysTotalNPS = npsTotalScores[1];
+                                    var yesterdaysTotalNPS = parseFloat(npsTotalScores[1]);
                                     console.log({yesterdaysTotalNPS});
                                     var totalShift = todaysTotalNPS - yesterdaysTotalNPS;
                                     var totalShiftElement = document.getElementById("currentTotalNPSShift");
