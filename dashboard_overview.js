@@ -229,7 +229,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     }
                                     //get the totals for today and yesterday for the shift
                                     //get the nps score for today
-                                    var todaysTotalNPS = parseFloat(npsTotalScores[1]);
+                                    var todaysTotalNPS = parseFloat(npsTotalScores[0]);
                                     console.log({todaysTotalNPS});
                                     var totalScoreElement = document.getElementById('currentTotalNPS');
                                     totalScoreElement.textContent = todaysTotalNPS.toFixed(1);
