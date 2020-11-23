@@ -18,6 +18,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                 if (docProfile.exists) {
                     console.log("got user doc")
                     userName = docProfile.get("name");
+                    docUserName = document.getElementById('userName');
+                    docUserName.textContent = userName;
                     var business = docProfile.get("business");
                     console.log("username:", userName);
                     console.log("business ID:", business);
@@ -31,6 +33,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                             if (docBusiness.exists) {
                                 console.log("got business doc")
                                 businessName = docBusiness.get("name");
+                                docBusinessName = document.getElementById('businessName');
+                                docBusinessName.textContent = businessName;
                                 locations = docBusiness.get("locations");
                                 
                                 //populate nps_locations list
