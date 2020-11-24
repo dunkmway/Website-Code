@@ -1,10 +1,25 @@
 document.getElementById('loginButton').addEventListener('click', login);
 
+var usernameField = document.getElementById('loginUsername');
+var passwordField = document.getElementById('loginPassword');
+
+usernameField.addEventListener("keyup", function(event) {
+    if(event.keycode == 13) {
+        login();
+    }
+});
+
+passwordField.addEventListener("keyup", function(event) {
+    if(event.keycode == 13) {
+        login();
+    }
+});
+
 function login() {
     document.getElementById('loginError').style.display = 'none';
 
-    var username = document.getElementById('loginUsername').value;
-    var password = document.getElementById('loginPassword').value;
+    var username = usernameField.value;
+    var password = passwordField.value;
 
     firebase.auth().signInWithEmailAndPassword(username, password)
         .then(function() {
