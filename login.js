@@ -15,6 +15,8 @@ passwordField.addEventListener("keyup", function(event) {
     }
 });
 
+closeLoadingScreen();
+
 function login() {
     document.getElementById('loginError').style.display = 'none';
 
