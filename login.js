@@ -41,9 +41,7 @@ function login() {
 //this goes at the end of every page.
 //each page must have modify pageReady when everything has loaded in and then call the function.
 function closeLoadingScreen() {
-    if (siteWideReady && pageReady) {
-        if (document.getElementById('loadingScreen')) {
-            document.getElementById('loadingScreen').style.display = 'none';
-        }
+    if (document.getElementById('loadingScreen')) {
+        document.getElementById('loadingScreen').style.display = 'none';
     }
 }
