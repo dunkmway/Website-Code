@@ -5,12 +5,14 @@ var passwordField = document.getElementById('loginPassword');
 
 usernameField.addEventListener("keyup", function(event) {
     if(event.keycode == 13) {
+        event.preventDefault()
         login();
     }
 });
 
 passwordField.addEventListener("keyup", function(event) {
     if(event.keycode == 13) {
+        event.preventDefault()
         login();
     }
 });
