@@ -4,14 +4,16 @@ var usernameField = document.getElementById('loginUsername');
 var passwordField = document.getElementById('loginPassword');
 
 usernameField.addEventListener("keyup", function(event) {
-    if(event.keycode == 13) {
+    if(event.code === 'Enter') {
+        console.log("enter pressed on username")
         event.preventDefault()
         login();
     }
 });
 
 passwordField.addEventListener("keyup", function(event) {
-    if(event.keycode == 13) {
+    if(event.code === 'Enter') {
+        console.log("enter pressed on password")
         event.preventDefault()
         login();
     }
