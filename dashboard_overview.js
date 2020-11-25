@@ -175,8 +175,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     liShift.style.color = 'green'
                                                 }
                                                 npsShiftList.appendChild(liShift);
-
-                                                closeLoadingScreen();
                                             }
                                             else {
                                                 // doc.data() will be undefined in this case
@@ -252,6 +250,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         totalShiftElement.style.color = "green"
                                     }
 
+                                    closeLoadingScreen();
                                     var ctx = document.getElementById('npsChart').getContext('2d');
                                     var chart = new Chart(ctx, {
                                         // The type of chart we want to create
