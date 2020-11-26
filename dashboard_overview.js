@@ -91,10 +91,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 var totalPromotersArray = new Array(dateArray.length).fill(0);
 
                                 //gap totals
-                                var importanceCountTotal = 0;
-                                var importanceSumTotal = 0;
-                                var performanceCountTotal = 0;
-                                var performanceSumTotal = 0;
+                                var importanceCountTotals = [];
+                                var importanceSumTotals = [];
+                                var performanceCountTotals = [];
+                                var performanceSumTotals = [];
 
                                 var gapGraphPoints = [];
 
@@ -229,6 +229,11 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                         //get the gap data
                                         for (var k = 0; k < gapFeatures.length; k++) {
+                                            var importanceCountTotal = 0;
+                                            var importanceSumTotal = 0;
+                                            var performanceCountTotal = 0;
+                                            var performanceSumTotal = 0;
+
                                             let locationGAPDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("GAP").collection("features").doc(String(k)).collection("year").doc(yearsNeeded[i])
                                             var promise = locationGAPDoc.get()
                                                 .then(function(docLocationGAP) {
@@ -264,6 +269,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 .catch (function(locationGAPError) {
                                                     console.log("Error getting gap year document", locationGAPError);
                                                 });
+                                            importanceCountTotals.push(importanceCountTotal);
+                                            importanceSumTotals.push(importanceSumTotal);
+                                            performanceCountTotals.push(performanceCountTotal);
+                                            performanceSumTotals.push(performanceSumTotal)
                                             gapPromises.push(promise);
                                         }
                                     }
@@ -364,36 +373,38 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                 Promise.allSettled(gapPromises).then(function(setGAPGraph) {
                                     //calculate the averages for the performance and importance
-                                    if (importanceCountTotal != 0) {
-                                        var importanceAvg = importanceSumTotal/importanceCountTotal;
-                                    }
-                                    else {
-                                        var importanceAvg = 0;
-                                    }
-                                    var importanceAvgSTR = importanceAvg.toFixed(1);
-                                    console.log({importanceAvgSTR})
+                                    for (var i = 0; i < gapFeatures.length; i++) {
+                                        if (importanceCountTotals[i] != 0) {
+                                            var importanceAvg = importanceSumTotal[i]/importanceCountTotal[i];
+                                        }
+                                        else {
+                                            var importanceAvg = 0;
+                                        }
+                                        var importanceAvgSTR = importanceAvg.toFixed(1);
+                                        console.log({importanceAvgSTR})
 
-                                    if (performanceCountTotal != 0) {
-                                        var performanceAvg = performanceSumTotal/performanceCountTotal;
+                                        if (performanceCountTotal[i] != 0) {
+                                            var performanceAvg = performanceSumTotal[i]/performanceCountTotal[i];
+                                        }
+                                        else {
+                                            var performanceAvg = 0;
+                                        }
+                                        var performanceAvgSTR = performanceAvg.toFixed(1);
+                                        console.log({performanceAvgSTR})
+
+                                        gapGraphPoints.push({x:parseFloat(importanceAvgSTR), y:parseFloat(performanceAvgSTR)});
+
+                                        //set the averages for the feature in performance and importance
+                                        var gapPerformanceList = document.getElementById('gap_performance');
+                                        var score = document.createElement('li');
+                                        score.textContent = performanceAvgSTR;
+                                        gapPerformanceList.appendChild(score);
+
+                                        var gapImportanceList = document.getElementById('gap_importance');
+                                        var score = document.createElement('li');
+                                        score.textContent = importanceAvgSTR;
+                                        gapImportanceList.appendChild(score);
                                     }
-                                    else {
-                                        var performanceAvg = 0;
-                                    }
-                                    var performanceAvgSTR = performanceAvg.toFixed(1);
-                                    console.log({performanceAvgSTR})
-
-                                    gapGraphPoints.push({x:parseFloat(importanceAvgSTR), y:parseFloat(performanceAvgSTR)});
-
-                                    //set the averages for the feature in performance and importance
-                                    var gapPerformanceList = document.getElementById('gap_performance');
-                                    var score = document.createElement('li');
-                                    score.textContent = performanceAvgSTR;
-                                    gapPerformanceList.appendChild(score);
-
-                                    var gapImportanceList = document.getElementById('gap_importance');
-                                    var score = document.createElement('li');
-                                    score.textContent = importanceAvgSTR;
-                                    gapImportanceList.appendChild(score);
 
                                     //create the data points
                                     var ctxGAP = document.getElementById('gapChart').getContext('2d');
