@@ -379,6 +379,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 padding: {
                                                     left: 10
                                                 }
+                                            },
+                                            tooltips: {
+                                                custom: function(tooltip) {
+                                                    if (!tooltip) return;
+                                                    // disable displaying the color box;
+                                                    tooltip.displayColors = false;
+                                                },
                                             }
                                         }
                                     });
@@ -490,17 +497,21 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 }
                                             },
                                             tooltips: {
+                                                custom: function(tooltip) {
+                                                    if (!tooltip) return;
+                                                    // disable displaying the color box;
+                                                    tooltip.displayColors = false;
+                                                    },
                                                 mode: 'index',
                                                 callbacks: {
                                                     title: function(tooltipItem, data) {
-                                                        return data['labels'][tooltipItem[0]['index']];
+                                                        return data.labels[tooltipItem[0].index];
                                                     },
                                                     label: function(tooltipItem, data) {
-                                                        var xValue = data.datasets[0].data[tooltipItem.x];
-                                                        var yValue = data.datasets[0].data[tooltipItem.y];
-
+                                                        var xValue = tooltipItem.xLabel;
+                                                        var yValue = tooltipItem.yLabel;
                                                         return ["performance: " + yValue, "importance: " + xValue];
-                                                    }
+                                                  }
                                                 }
                                             }
                                         }
