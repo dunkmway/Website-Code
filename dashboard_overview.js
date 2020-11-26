@@ -119,7 +119,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
 
                                         //NPS data
-                                        var promise = locationNPSDoc.get()
+                                        var npsPromise = locationNPSDoc.get()
                                             .then(function(docLocationNPS) {
                                                 if(docLocationNPS.exists) {
 
@@ -226,7 +226,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             .catch(function(locationNPSError) {
                                                 console.log("Error getting nps year document", locationNPSError);
                                             });
-                                            npsPromises.push(promise);
+                                            npsPromises.push(npsPromise);
 
                                         //get the gap data
                                         for (var k = 0; k < gapFeatures.length; k++) {
@@ -236,7 +236,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             var performanceSumTotal = 0;
 
                                             let locationGAPDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("GAP").collection("features").doc(String(k)).collection("year").doc(yearsNeeded[i])
-                                            var promise = locationGAPDoc.get()
+                                            var gapPromise = locationGAPDoc.get()
                                                 .then(function(docLocationGAP) {
                                                     console.log("Got gap docs")
 
@@ -275,7 +275,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             importanceSumTotals[k] += importanceSumTotal;
                                             performanceCountTotals[k] += performanceCountTotal;
                                             performanceSumTotals[k] += performanceSumTotal;
-                                            gapPromises.push(promise);
+                                            gapPromises.push(gapPromise);
                                         }
                                     }
                                 }
