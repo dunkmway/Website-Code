@@ -430,7 +430,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             labels: gapFeatures,
                                             datasets: [{
                                                 data: gapGraphPoints,
-                                                borderColor: '#47a2ee'
+                                                borderColor: '#47a2ee',
+                                                backgroundColor: '#47a2ee',
+                                                pointRadius: 4
                                             }]
                                         },
 
