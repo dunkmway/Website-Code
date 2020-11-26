@@ -427,6 +427,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         // The type of chart we want to create
                                         type: 'scatter',
                                         data: {
+                                            labels: gapFeatures,
                                             datasets: [{
                                                 data: gapGraphPoints,
                                                 borderColor: '#47a2ee',
@@ -492,10 +493,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 mode: 'index',
                                                 callbacks: {
                                                     title: function(tooltipItem, data) {
-                                                        var title = gapFeatures[tooltipItem.datasetIndex];
-                                    
-                                                        return title;
-                                                    }
+                                                        return data['labels'][tooltipItem[0]['index']];
                                                 }
                                             }
                                         }
