@@ -493,15 +493,11 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 mode: 'index',
                                                 callbacks: {
                                                     // Use the title callback to display the feature name
-                                                    title: function(tooltipItems, data) {
-                                                        var title = ""
-                                                        tooltipItems.forEach(function(tooltipItem) {
-                                                            title = gapFeatures[tooltipItem.index];
-                                                        });
-                                                        return title;
-                                                    },
+                                                    title: function(tooltipItem, data) {
+                                                        return gapFeatures[tooltipItem.index];
+                                                    }
                                                 }
-                                            },
+                                            }
                                         }
                                     });
                                 });
