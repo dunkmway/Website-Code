@@ -232,15 +232,17 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         //get the gap data
                                         for (var k = 0; k < gapFeatures.length; k++) {
                                             console.log("Grabbing data for feature " + String(k))
-                                            var importanceCountTotal = 0;
-                                            var importanceSumTotal = 0;
-                                            var performanceCountTotal = 0;
-                                            var performanceSumTotal = 0;
+                                            
 
                                             let locationGAPDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("GAP").collection("features").doc(String(k)).collection("year").doc(yearsNeeded[i])
-                                            var gapPromise = locationGAPDoc.get()
+                                            function gapPromiseFunc(featureIndex) {
+                                                var gapPromise = locationGAPDoc.get()
                                                 .then(function(docLocationGAP) {
                                                     console.log("Got gap docs")
+                                                    var importanceCountTotal = 0;
+                                                    var importanceSumTotal = 0;
+                                                    var performanceCountTotal = 0;
+                                                    var performanceSumTotal = 0;
 
                                                     for (var l = 0; l < numDaysToCheck; l++) {
                                                         //get the totals from this date in the document
@@ -269,15 +271,20 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                             console.log({performanceSumTotal});
                                                         }
                                                     }
+                                                    importanceCountTotals[featureIndex] += importanceCountTotal;
+                                                    importanceSumTotals[featureIndex] += importanceSumTotal;
+                                                    performanceCountTotals[featureIndex] += performanceCountTotal;
+                                                    performanceSumTotals[featureIndex] += performanceSumTotal;
                                                 })
                                                 .catch (function(locationGAPError) {
                                                     console.log("Error getting gap year document", locationGAPError);
                                                 });
-                                            importanceCountTotals[k] += importanceCountTotal;
-                                            importanceSumTotals[k] += importanceSumTotal;
-                                            performanceCountTotals[k] += performanceCountTotal;
-                                            performanceSumTotals[k] += performanceSumTotal;
-                                            gapPromises.push(gapPromise);
+                                                gapPromises.push(gapPromise);
+                                                return gapPromise;
+                                            }
+                                            
+                                            gapPromiseFunc(k);
+                                            
                                         }
                                     }
                                 }
@@ -427,7 +434,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             scales: {
                                                 yAxes: [{
                                                     ticks: {
-                                                        display: true
+                                                        display: true,
+                                                        min: 1,
+                                                        max: 10
                                                     },
                                                     gridLines: {
                                                         display: false
@@ -440,7 +449,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 }],
                                                 xAxes: [{
                                                     ticks: {
-                                                        display: true
+                                                        display: true,
+                                                        min: 1,
+                                                        max: 10
                                                     },
                                                     gridLines: {
                                                         display: false
