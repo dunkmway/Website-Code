@@ -388,7 +388,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     //calculate the averages for the performance and importance
                                     for (var i = 0; i < gapFeatures.length; i++) {
                                         if (importanceCountTotals[i] != 0) {
-                                            var importanceAvg = importanceSumTotal[i]/importanceCountTotal[i];
+                                            var importanceAvg = importanceSumTotals[i]/importanceCountTotals[i];
                                         }
                                         else {
                                             var importanceAvg = 0;
@@ -397,7 +397,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         console.log({importanceAvgSTR})
 
                                         if (performanceCountTotals[i] != 0) {
-                                            var performanceAvg = performanceSumTotal[i]/performanceCountTotal[i];
+                                            var performanceAvg = performanceSumTotals[i]/performanceCountTotals[i];
                                         }
                                         else {
                                             var performanceAvg = 0;
