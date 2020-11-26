@@ -403,6 +403,46 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             datasets: [{
                                                 data: gapGraphPoints
                                             }]
+                                        },
+
+                                        // Configuration options go here
+                                        options: {
+                                            scales: {
+                                                yAxes: [{
+                                                    ticks: {
+                                                        display: false
+                                                    },
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    scaleLabel: {
+                                                        labelString: "performance",
+                                                        fontColor: '#707070',
+                                                        fontFamily: "Arial rounded mt"
+                                                    }
+                                                }],
+                                                xAxes: [{
+                                                    ticks: {
+                                                        display: false
+                                                    },
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    scaleLabel: {
+                                                        labelString: "importance",
+                                                        fontColor: '#707070',
+                                                        fontFamily: "Arial rounded mt"
+                                                    }
+                                                }]
+                                            },
+                                            legend: {
+                                                display: false
+                                            },
+                                            layout: {
+                                                padding: {
+                                                    left: 10
+                                                }
+                                            }
                                         }
                                     });
                                 });
