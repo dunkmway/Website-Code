@@ -35,7 +35,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 businessName = docBusiness.get("name");
                                 docBusinessName = document.getElementById('businessName');
                                 docBusinessName.textContent = businessName;
-                                locations = docBusiness.get("locations");
+                                var locations = docBusiness.get("locations");
+                                var gapFeatures = docBusiness.get("all_gap_features");
                                 
                                 //populate nps_locations list
                                 var npsLocationList = document.getElementById('nps_locations');
@@ -80,23 +81,38 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 var totalCountArray = new Array(dateArray.length).fill(0);
                                 var totalDetractorsArray = new Array(dateArray.length).fill(0);
                                 var totalPromotersArray = new Array(dateArray.length).fill(0);
-                                var npsDateArray = []
+
+                                //This array will store a list of arrays that contain zeros for each day in dateArray for each feature
+                                var gapImportanceCountTotals = []
+                                var gapPerformanceCountTotals = []
+                                var gapImportanceSumTotals = []
+                                var gapPerformanceSumTotals = []
+                                for (var i = 0; i < gapFeatures.length; i++) {
+                                    gapImportanceCountTotals.push(0)
+                                    gapPerformanceCountTotals.push(0)
+                                    gapImportanceSumTotals.push(0)
+                                    gapPerformanceSumTotals.push(0)
+                                }
+
+                                var strDateArray = []
 
                                 for (var i = 0; i < dateArray.length; i++) {
                                     let yearStr = String(dateArray[i].getFullYear());
                                     let monthStr = String(dateArray[i].getMonth() + 1);
                                     let dayStr = String(dateArray[i].getDate());
                                     let dateStr = yearStr + '-' + monthStr + '-' + dayStr;
-                                    npsDateArray.push(dateStr);
+                                    strDateArray.push(dateStr);
                                 }
 
-                                console.log({npsDateArray});
-                                var promises = [];
+                                console.log({npsDateArray: strDateArray});
+                                var npsPromises = [];
+                                var gapPromises = [];
 
                                 for (var i = 0; i < yearsNeeded.length; i++) {
                                     for (var j = 0; j < locations.length; j++) {
                                     let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
 
+                                    //NPS data
                                     var promise = locationNPSDoc.get()
                                         .then(function(docLocationNPS) {
                                             if(docLocationNPS.exists) {
@@ -107,16 +123,16 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var npsPromotersArray = [];
                                                 var npsScoreArray = [];
 
-                                                console.log({npsDateArray});
-                                                for (var k = 0; k < npsDateArray.length; k++) {
+                                                console.log({npsDateArray: strDateArray});
+                                                for (var k = 0; k < strDateArray.length; k++) {
                                                     //get the totals from this date in the document
                                                     var dayCount = 0;
                                                     var numDetractors = 0;
                                                     var numPromoters = 0;
 
-                                                    dayCount = docLocationNPS.get(`${npsDateArray[k]}.day_count`);
-                                                    numDetractors = docLocationNPS.get(`${npsDateArray[k]}.num_detractors`);
-                                                    numPromoters = docLocationNPS.get(`${npsDateArray[k]}.num_promoters`);
+                                                    dayCount = docLocationNPS.get(`${strDateArray[k]}.day_count`);
+                                                    numDetractors = docLocationNPS.get(`${strDateArray[k]}.num_detractors`);
+                                                    numPromoters = docLocationNPS.get(`${strDateArray[k]}.num_promoters`);
 
                                                     //store the totals in an array (0 if no data)
                                                     if (dayCount != undefined) {
@@ -204,7 +220,68 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         .catch(function(locationNPSError) {
                                             console.log("Error getting nps year document", locationNPSError);
                                         });
-                                        promises.push(promise);
+                                        npsPromises.push(promise);
+                                    }
+
+                                    for (var k = 0; k < gapFeatures.length; k++) {
+                                        //set the feature list
+                                        var gapFeatureList = document.getElementById('gap_features');
+                                        var feature = document.createElement('li');
+                                        feature.textContent = gapFeatures[k];
+                                        gapFeatureList.appendChild(feature);
+
+                                        let locationGAPDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("GAP").collection("features").doc(String(k)).collection("year").doc(yearsNeeded[i])
+                                        var promise = locationGapDoc.get()
+                                            .then(function(docLocationGAP) {
+
+                                                importanceCountTotal = 0;
+                                                importanceSumTotal = 0;
+                                                performanceCountTotal = 0;
+                                                performanceSumTotal = 0;
+                                                for (var l = 0; l < strDateArray.length; l++) {
+                                                    //get the totals from this date in the document
+                                                    var importanceCount = 0;
+                                                    var importanceSum = 0;
+                                                    var performanceCount = 0;
+                                                    var performanceSum = 0;
+
+                                                    importanceCount = docLocationGAP.get(`${strDateArray[l]}.importance_day_count`);
+                                                    importanceSum = docLocationGAP.get(`${strDateArray[l]}.importance_day_sum`);
+                                                    performanceCount = docLocationGAP.get(`${strDateArray[l]}.performance_day_count`);
+                                                    performanceSum = docLocationGAP.get(`${strDateArray[l]}.performance_day_sum`);
+
+                                                    //store the totals in an array (0 if no data)
+                                                    if (importanceCount != undefined) {
+                                                        importanceCountTotal += importanceCountTotal + importanceCount;
+                                                        importanceSumTotal += importanceSumTotal + importanceSum;
+                                                    }
+                                                    if (performanceCount != undefined) {
+                                                        performanceCountTotal += performanceCountTotal + performanceCount;
+                                                        performanceSumTotal += performanceSumTotal + performanceSum;
+                                                    }
+                                                }
+                                                //calculate the averages for the perforamnce and importance
+                                                var importanceAvg = importanceCountTotal/importanceSumTotal;
+                                                var importanceAvgSTR = importanceAvg.toFixed(1);
+
+                                                var performanceAvg = performanceSumTotal/performanceCount;
+                                                var performanceAvgSTR = performanceAvg.toFixed(1);
+
+                                                //set the averages for the feature in performance and importance
+                                                var gapPerforamnceList = document.getElementById('gap_performance');
+                                                var score = document.createElement('li');
+                                                score.textContent = performanceAvgSTR;
+                                                gapPerforamnceList.appendChild(score);
+
+                                                var gapImportanceList = document.getElementById('gap_importance');
+                                                var score = document.createElement('li');
+                                                score.textContent = importanceAvgSTR;
+                                                gapImportanceList.appendChild(score);
+                                            })
+                                            .catch (function(locationGAPError) {
+                                                console.log("Error getting gap year document", locationGAPError);
+                                            });
+                                        gapPromises.push(promise);
                                     }
                                 }
                                 //set up the graph
@@ -213,19 +290,19 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                 //need to only get the npsDates that we are requesting which is numDaysToCheck
                                 //if this is the final time calulating the scores then calculate the totals
-                                Promise.allSettled(promises).then(function(getNPSTotals) {
+                                Promise.allSettled(npsPromises).then(function(getNPSTotals) {
                                     console.log("In the if statement to create the graph.")
                                     var tmpDateArray = []
                                     for (k = 0; k < numDaysToCheck; k++) {
-                                        tmpDateArray.push(npsDateArray[k]);
+                                        tmpDateArray.push(strDateArray[k]);
                                     }
-                                    npsDateArray = tmpDateArray;
+                                    strDateArray = tmpDateArray;
                                     console.log({totalCountArray})
                                     console.log({totalDetractorsArray})
                                     console.log({totalPromotersArray})
 
                                     var npsTotalScores = []
-                                    for (k = 0; k < npsDateArray.length; k++) {
+                                    for (k = 0; k < strDateArray.length; k++) {
                                         daysScore = calculateNpsScore(k, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
                                         npsTotalScores.push(daysScore.toFixed(1));
                                     }
@@ -251,14 +328,14 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     }
 
                                     closeLoadingScreen();
-                                    var ctx = document.getElementById('npsChart').getContext('2d');
-                                    var chart = new Chart(ctx, {
+                                    var ctxNPS = document.getElementById('npsChart').getContext('2d');
+                                    var chart = new Chart(ctxNPS, {
                                         // The type of chart we want to create
                                         type: 'line',
                                     
                                         // The data for our dataset
                                         data: {
-                                            labels: npsDateArray.reverse(),
+                                            labels: strDateArray.reverse(),
                                             datasets: [{
                                                 backgroundColor: '#707070',
                                                 borderColor: '#707070',
@@ -298,6 +375,14 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 }
                                             }
                                         }
+                                    });
+                                });
+
+                                Promise.allSettled(gapPromises).then(function(setGAPGraph) {
+                                    var ctxGAP = document.getElementById('gapChart').getContext('2d');
+                                    var chart = new Chart(ctxGAP, {
+                                        // The type of chart we want to create
+                                        type: 'scatter'
                                     });
                                 });
 
