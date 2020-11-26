@@ -248,14 +248,14 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                                         //store the totals in an array (0 if no data)
                                                         if (importanceCount != undefined) {
-                                                            importanceCountTotal += importanceCountTotal + importanceCount;
-                                                            importanceSumTotal += importanceSumTotal + importanceSum;
+                                                            importanceCountTotal += importanceCount;
+                                                            importanceSumTotal += importanceSum;
                                                             console.log({importanceCountTotal});
                                                             console.log({importanceSumTotal});
                                                         }
                                                         if (performanceCount != undefined) {
-                                                            performanceCountTotal += performanceCountTotal + performanceCount;
-                                                            performanceSumTotal += performanceSumTotal + performanceSum;
+                                                            performanceCountTotal += performanceCount;
+                                                            performanceSumTotal += performanceSum;
                                                             console.log({performanceCountTotal});
                                                             console.log({performanceSumTotal});
                                                         }
