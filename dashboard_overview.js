@@ -242,6 +242,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                                     for (var l = 0; l < numDaysToCheck; l++) {
                                                         //get the totals from this date in the document
+                                                        console.log("Grabbing data for location " + String(j) + " feature " + String(k) + " and day " + String(l))
                                                         var importanceCount = 0;
                                                         var importanceSum = 0;
                                                         var performanceCount = 0;
