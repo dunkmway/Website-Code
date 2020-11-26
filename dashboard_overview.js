@@ -381,7 +381,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     var performanceAvgSTR = performanceAvg.toFixed(1);
                                     console.log({performanceAvgSTR})
 
-                                    gapGraphPoints.push({x:importanceAvg, y:performanceAvg});
+                                    gapGraphPoints.push({x:parseFloat(importanceAvgSTR), y:parseFloat(performanceAvgSTR)});
 
                                     //set the averages for the feature in performance and importance
                                     var gapPerformanceList = document.getElementById('gap_performance');
