@@ -239,7 +239,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var gapPromise = locationGAPDoc.get()
                                                 .then(function(docLocationGAP) {
                                                     console.log("Got gap docs")
-                                                    console.log("Grabbing data for feature " + String(k))
+                                                    console.log("Grabbing data for feature " + String(featureIndex))
                                                     var importanceCountTotal = 0;
                                                     var importanceSumTotal = 0;
                                                     var performanceCountTotal = 0;
