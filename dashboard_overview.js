@@ -115,6 +115,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                 for (var i = 0; i < yearsNeeded.length; i++) {
                                     for (var j = 0; j < locations.length; j++) {
+                                        console.log("Grabbing data for location " + String(j))
 
                                         let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
 
@@ -230,6 +231,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                         //get the gap data
                                         for (var k = 0; k < gapFeatures.length; k++) {
+                                            console.log("Grabbing data for feature " + String(k))
                                             var importanceCountTotal = 0;
                                             var importanceSumTotal = 0;
                                             var performanceCountTotal = 0;
@@ -242,7 +244,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                                     for (var l = 0; l < numDaysToCheck; l++) {
                                                         //get the totals from this date in the document
-                                                        console.log("Grabbing data for location " + String(j) + " feature " + String(k) + " and day " + String(l))
+                                                        console.log("Grabbing data for day " + String(l))
                                                         var importanceCount = 0;
                                                         var importanceSum = 0;
                                                         var performanceCount = 0;
