@@ -296,7 +296,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 //need to only get the npsDates that we are requesting which is numDaysToCheck
                                 //if this is the final time calulating the scores then calculate the totals
                                 Promise.allSettled(npsPromises).then(function(getNPSTotals) {
-                                    console.log("In the if statement to create the graph.")
+                                    console.log("In the if statement to create the nps graph.");
                                     var tmpDateArray = []
                                     for (k = 0; k < numDaysToCheck; k++) {
                                         tmpDateArray.push(strDateArray[k]);
@@ -384,6 +384,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 });
 
                                 Promise.allSettled(gapPromises).then(function(setGAPGraph) {
+                                    console.log("In the if statement to create the nps graph.");
 
                                     //calculate the averages for the performance and importance
                                     for (var i = 0; i < gapFeatures.length; i++) {
@@ -426,7 +427,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         type: 'scatter',
                                         data: {
                                             datasets: [{
-                                                data: gapGraphPoints
+                                                data: gapGraphPoints,
+                                                borderColor: "#707070"
                                             }]
                                         },
 
@@ -435,7 +437,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             scales: {
                                                 yAxes: [{
                                                     ticks: {
-                                                        display: true,
+                                                        display: false,
                                                         min: 1,
                                                         max: 10
                                                     },
@@ -443,24 +445,26 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                         display: false
                                                     },
                                                     scaleLabel: {
+                                                        display: true,
                                                         labelString: "performance",
-                                                        fontColor: '#707070',
-                                                        fontFamily: "Arial rounded mt"
+                                                        fontColor: '#a9a9a9'//,
+                                                        //fontFamily: "Arial rounded mt"
                                                     }
                                                 }],
                                                 xAxes: [{
                                                     ticks: {
-                                                        display: true,
+                                                        display: false,
                                                         min: 1,
                                                         max: 10
                                                     },
                                                     gridLines: {
-                                                        display: false
+                                                        drawOnChartArea: false
                                                     },
                                                     scaleLabel: {
+                                                        display: true,
                                                         labelString: "importance",
-                                                        fontColor: '#707070',
-                                                        fontFamily: "Arial rounded mt"
+                                                        fontColor: '#a9a9a9'//,
+                                                        //fontFamily: "Arial rounded mt"
                                                     }
                                                 }]
                                             },
