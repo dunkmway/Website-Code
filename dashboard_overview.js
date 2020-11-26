@@ -496,8 +496,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                         return data['labels'][tooltipItem[0]['index']];
                                                     },
                                                     label: function(tooltipItem, data) {
-                                                        xValue = data['datasets'][0]['data'][tooltipItem['x']];
-                                                        yValue = data['datasets'][0]['data'][tooltipItem['x']];
+                                                        var xValue = data['datasets'][0]['data'][tooltipItem['x']];
+                                                        var yValue = data['datasets'][0]['data'][tooltipItem['x']];
 
                                                         return ["performance: " + yValue, "importance: " + xValue];
                                                     }
