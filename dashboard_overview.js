@@ -494,6 +494,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 callbacks: {
                                                     title: function(tooltipItem, data) {
                                                         return data['labels'][tooltipItem[0]['index']];
+                                                    }
                                                 }
                                             }
                                         }
