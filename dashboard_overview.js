@@ -83,16 +83,18 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 var totalPromotersArray = new Array(dateArray.length).fill(0);
 
                                 //This array will store a list of arrays that contain zeros for each day in dateArray for each feature
-                                var gapImportanceCountTotals = []
-                                var gapPerformanceCountTotals = []
-                                var gapImportanceSumTotals = []
-                                var gapPerformanceSumTotals = []
-                                for (var i = 0; i < gapFeatures.length; i++) {
-                                    gapImportanceCountTotals.push(0)
-                                    gapPerformanceCountTotals.push(0)
-                                    gapImportanceSumTotals.push(0)
-                                    gapPerformanceSumTotals.push(0)
-                                }
+                                // var gapImportanceCountTotals = []
+                                // var gapPerformanceCountTotals = []
+                                // var gapImportanceSumTotals = []
+                                // var gapPerformanceSumTotals = []
+                                // for (var i = 0; i < gapFeatures.length; i++) {
+                                //     gapImportanceCountTotals.push(0)
+                                //     gapPerformanceCountTotals.push(0)
+                                //     gapImportanceSumTotals.push(0)
+                                //     gapPerformanceSumTotals.push(0)
+                                // }
+
+                                var gapGraphPoints = [];
 
                                 var strDateArray = []
 
@@ -267,6 +269,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var performanceAvg = performanceSumTotal/performanceCount;
                                                 var performanceAvgSTR = performanceAvg.toFixed(1);
 
+                                                gapGraphPoints.push(new Point(importanceAvg, performanceAvg))
+
                                                 //set the averages for the feature in performance and importance
                                                 var gapPerforamnceList = document.getElementById('gap_performance');
                                                 var score = document.createElement('li');
@@ -379,10 +383,16 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 });
 
                                 Promise.allSettled(gapPromises).then(function(setGAPGraph) {
+                                    //create the data points
                                     var ctxGAP = document.getElementById('gapChart').getContext('2d');
                                     var chart = new Chart(ctxGAP, {
                                         // The type of chart we want to create
-                                        type: 'scatter'
+                                        type: 'scatter',
+                                        data: {
+                                            datasets: [{
+                                                data: gapGraphPoints
+                                            }]
+                                        }
                                     });
                                 });
 
