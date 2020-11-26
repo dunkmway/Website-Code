@@ -50,7 +50,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 for (var i = 0; i < gapFeatures.length; i++) {
                                     var gapFeatureList = document.getElementById('gap_features');
                                     var feature = document.createElement('li');
-                                    feature.textContent = gapFeatures[k];
+                                    feature.textContent = gapFeatures[i];
                                     gapFeatureList.appendChild(feature);
                                 }
                                 
@@ -227,6 +227,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             });
                                             npsPromises.push(promise);
 
+                                        //get the gap data
                                         for (var k = 0; k < gapFeatures.length; k++) {
                                             let locationGAPDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("GAP").collection("features").doc(String(k)).collection("year").doc(yearsNeeded[i])
                                             var promise = locationGAPDoc.get()
