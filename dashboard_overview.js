@@ -237,10 +237,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             .then(function(docLocationGAP) {
                                                 console.log("Got gap docs")
 
-                                                importanceCountTotal = 0;
-                                                importanceSumTotal = 0;
-                                                performanceCountTotal = 0;
-                                                performanceSumTotal = 0;
+                                                var importanceCountTotal = 0;
+                                                var importanceSumTotal = 0;
+                                                var performanceCountTotal = 0;
+                                                var performanceSumTotal = 0;
                                                 for (var l = 0; l < strDateArray.length; l++) {
                                                     //get the totals from this date in the document
                                                     var importanceCount = 0;
@@ -263,12 +263,22 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                         performanceSumTotal += performanceSumTotal + performanceSum;
                                                     }
                                                 }
-                                                //calculate the averages for the perforamnce and importance
-                                                var importanceAvg = importanceCountTotal/importanceSumTotal;
+                                                //calculate the averages for the performance and importance
+                                                if (importanceCountTotal != 0) {
+                                                    var importanceAvg = importanceSumTotal/importanceCountTotal;
+                                                }
+                                                else {
+                                                    var importanceAvg = 0;
+                                                }
                                                 var importanceAvgSTR = importanceAvg.toFixed(1);
                                                 console.log({importanceAvgSTR})
 
-                                                var performanceAvg = performanceSumTotal/performanceCount;
+                                                if (performanceCountTotal != 0) {
+                                                    var performanceAvg = performanceSumTotal/performanceCountTotal;
+                                                }
+                                                else {
+                                                    var performanceAvg = 0;
+                                                }
                                                 var performanceAvgSTR = performanceAvg.toFixed(1);
                                                 console.log({performanceAvgSTR})
 
