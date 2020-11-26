@@ -231,7 +231,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                         //get the gap data
                                         for (var k = 0; k < gapFeatures.length; k++) {
-                                            console.log("Grabbing data for feature " + String(k))
+                                            
                                             
 
                                             let locationGAPDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("GAP").collection("features").doc(String(k)).collection("year").doc(yearsNeeded[i])
@@ -239,6 +239,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var gapPromise = locationGAPDoc.get()
                                                 .then(function(docLocationGAP) {
                                                     console.log("Got gap docs")
+                                                    console.log("Grabbing data for feature " + String(k))
                                                     var importanceCountTotal = 0;
                                                     var importanceSumTotal = 0;
                                                     var performanceCountTotal = 0;
