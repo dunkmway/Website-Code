@@ -91,10 +91,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 var totalPromotersArray = new Array(dateArray.length).fill(0);
 
                                 //gap totals
-                                var importanceCountTotals = [];
-                                var importanceSumTotals = [];
-                                var performanceCountTotals = [];
-                                var performanceSumTotals = [];
+                                var importanceCountTotals = new Array(gapFeatures.length).fill(0);
+                                var importanceSumTotals = new Array(gapFeatures.length).fill(0);
+                                var performanceCountTotals = new Array(gapFeatures.length).fill(0);
+                                var performanceSumTotals = new Array(gapFeatures.length).fill(0);
 
                                 var gapGraphPoints = [];
 
@@ -111,6 +111,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 //console.log({npsDateArray: strDateArray});
                                 var npsPromises = [];
                                 var gapPromises = [];
+
 
                                 for (var i = 0; i < yearsNeeded.length; i++) {
                                     for (var j = 0; j < locations.length; j++) {
@@ -269,10 +270,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 .catch (function(locationGAPError) {
                                                     console.log("Error getting gap year document", locationGAPError);
                                                 });
-                                            importanceCountTotals.push(importanceCountTotal);
-                                            importanceSumTotals.push(importanceSumTotal);
-                                            performanceCountTotals.push(performanceCountTotal);
-                                            performanceSumTotals.push(performanceSumTotal)
+                                            importanceCountTotals[k] += importanceCountTotal;
+                                            importanceSumTotals[k] += importanceSumTotal;
+                                            performanceCountTotals[k] += performanceCountTotal;
+                                            performanceSumTotals[k] += performanceSumTotal;
                                             gapPromises.push(promise);
                                         }
                                     }
@@ -372,6 +373,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 });
 
                                 Promise.allSettled(gapPromises).then(function(setGAPGraph) {
+
                                     //calculate the averages for the performance and importance
                                     for (var i = 0; i < gapFeatures.length; i++) {
                                         if (importanceCountTotals[i] != 0) {
@@ -383,7 +385,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         var importanceAvgSTR = importanceAvg.toFixed(1);
                                         console.log({importanceAvgSTR})
 
-                                        if (performanceCountTotal[i] != 0) {
+                                        if (performanceCountTotals[i] != 0) {
                                             var performanceAvg = performanceSumTotal[i]/performanceCountTotal[i];
                                         }
                                         else {
