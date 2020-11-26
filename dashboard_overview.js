@@ -112,197 +112,197 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                 for (var i = 0; i < yearsNeeded.length; i++) {
                                     for (var j = 0; j < locations.length; j++) {
-                                    let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
+                                        let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
 
-                                    //NPS data
-                                    var promise = locationNPSDoc.get()
-                                        .then(function(docLocationNPS) {
-                                            if(docLocationNPS.exists) {
+                                        //NPS data
+                                        var promise = locationNPSDoc.get()
+                                            .then(function(docLocationNPS) {
+                                                if(docLocationNPS.exists) {
 
-                                                //get the data needed for all of the dates in the date array
-                                                var npsCountArray = [];
-                                                var npsDetractorsArray = [];
-                                                var npsPromotersArray = [];
-                                                var npsScoreArray = [];
+                                                    //get the data needed for all of the dates in the date array
+                                                    var npsCountArray = [];
+                                                    var npsDetractorsArray = [];
+                                                    var npsPromotersArray = [];
+                                                    var npsScoreArray = [];
 
-                                                //console.log({npsDateArray: strDateArray});
-                                                for (var k = 0; k < strDateArray.length; k++) {
-                                                    //get the totals from this date in the document
-                                                    var dayCount = 0;
-                                                    var numDetractors = 0;
-                                                    var numPromoters = 0;
+                                                    //console.log({npsDateArray: strDateArray});
+                                                    for (var k = 0; k < strDateArray.length; k++) {
+                                                        //get the totals from this date in the document
+                                                        var dayCount = 0;
+                                                        var numDetractors = 0;
+                                                        var numPromoters = 0;
 
-                                                    dayCount = docLocationNPS.get(`${strDateArray[k]}.day_count`);
-                                                    numDetractors = docLocationNPS.get(`${strDateArray[k]}.num_detractors`);
-                                                    numPromoters = docLocationNPS.get(`${strDateArray[k]}.num_promoters`);
+                                                        dayCount = docLocationNPS.get(`${strDateArray[k]}.day_count`);
+                                                        numDetractors = docLocationNPS.get(`${strDateArray[k]}.num_detractors`);
+                                                        numPromoters = docLocationNPS.get(`${strDateArray[k]}.num_promoters`);
 
-                                                    //store the totals in an array (0 if no data)
-                                                    if (dayCount != undefined) {
-                                                        npsCountArray.push(dayCount);
-                                                        npsDetractorsArray.push(numDetractors);
-                                                        npsPromotersArray.push(numPromoters); 
-                                                        
-                                                        //sum up the totals into their array per day
-                                                        totalCountArray[k] = totalCountArray[k] + dayCount;
-                                                        totalDetractorsArray[k] = totalDetractorsArray[k] + numDetractors;
-                                                        totalPromotersArray[k] = totalPromotersArray[k] + numPromoters;
+                                                        //store the totals in an array (0 if no data)
+                                                        if (dayCount != undefined) {
+                                                            npsCountArray.push(dayCount);
+                                                            npsDetractorsArray.push(numDetractors);
+                                                            npsPromotersArray.push(numPromoters); 
+                                                            
+                                                            //sum up the totals into their array per day
+                                                            totalCountArray[k] = totalCountArray[k] + dayCount;
+                                                            totalDetractorsArray[k] = totalDetractorsArray[k] + numDetractors;
+                                                            totalPromotersArray[k] = totalPromotersArray[k] + numPromoters;
+                                                        }
+                                                        else {
+                                                            npsCountArray.push(0);
+                                                            npsDetractorsArray.push(0);
+                                                            npsPromotersArray.push(0);  
+
+                                                            //sum up the totals into their array per day
+                                                            //nothing was saved so don't add anything
+                                                        }
+                                                    }
+
+                                                    //get the nps scores for the number of days to check
+                                                    //console.log({npsCountArray});
+                                                    //console.log({npsDetractorsArray});
+                                                    //console.log({npsPromotersArray});
+                                                    for (var k = 0; k < numDaysToCheck; k++) {
+                                                        var daysScore = calculateNpsScore(k, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
+                                                        //console.log({daysScore});
+                                                        npsScoreArray.push(daysScore);
+                                                    }
+
+                                                    //get the nps score for today
+                                                    //console.log({npsScoreArray})
+                                                    var todaysNPS = npsScoreArray[0]
+                                                    //console.log({todaysNPS});
+                                                    var npsScoresList = document.getElementById('nps_scores');
+                                                    var score = document.createElement('li');
+                                                    score.textContent = todaysNPS.toFixed(1);
+                                                    npsScoresList.appendChild(score);
+                                                    
+                                                    //set the shift since yesterday
+                                                    var yesterdaysNPS = npsScoreArray[1]
+                                                    //console.log({yesterdaysNPS});
+                                                    var shift = todaysNPS - yesterdaysNPS;
+                                                    var shiftStr = shift.toFixed(1);
+                                                    //console.log(shiftStr);
+                                                    var npsShiftList = document.getElementById('nps_shift');
+                                                    var liShift = document.createElement('li');
+                                                    liShift.textContent = shiftStr;
+                                                    //set the color based on the shift
+                                                    if (shift < 0) {
+                                                        liShift.style.color = 'red'
+                                                    }
+                                                    else if (shift > 0) {
+                                                        liShift.style.color = 'green'
+                                                    }
+                                                    npsShiftList.appendChild(liShift);
+                                                }
+                                                else {
+                                                    // doc.data() will be undefined in this case
+                                                    console.log("No such nps year document!");
+                                                    //set the location data to 0 if they don't have documents
+
+                                                    //get the nps score for today
+                                                    var todaysNPS = 0
+                                                    //console.log({todaysNPS});
+                                                    var npsScoresList = document.getElementById('nps_scores');
+                                                    var score = document.createElement('li');
+                                                    score.textContent = todaysNPS.toFixed(1);
+                                                    npsScoresList.appendChild(score);
+                                                    
+                                                    //set the shift since yesterday
+                                                    var yesterdaysNPS = 0
+                                                    //console.log({yesterdaysNPS});
+                                                    var shift = todaysNPS - yesterdaysNPS;
+                                                    var shiftStr = shift.toFixed(1);
+                                                    //console.log(shiftStr);
+                                                    var npsShiftList = document.getElementById('nps_shift');
+                                                    var liShift = document.createElement('li');
+                                                    liShift.textContent = shiftStr;
+                                                    npsShiftList.appendChild(liShift);
+                                                }
+                                            })
+                                            .catch(function(locationNPSError) {
+                                                console.log("Error getting nps year document", locationNPSError);
+                                            });
+                                            npsPromises.push(promise);
+
+                                        for (var k = 0; k < gapFeatures.length; k++) {
+                                            //set the feature list
+                                            var gapFeatureList = document.getElementById('gap_features');
+                                            var feature = document.createElement('li');
+                                            feature.textContent = gapFeatures[k];
+                                            gapFeatureList.appendChild(feature);
+
+                                            let locationGAPDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("GAP").collection("features").doc(String(k)).collection("year").doc(yearsNeeded[i])
+                                            var promise = locationGAPDoc.get()
+                                                .then(function(docLocationGAP) {
+                                                    console.log("Got gap docs")
+
+                                                    var importanceCountTotal = 0;
+                                                    var importanceSumTotal = 0;
+                                                    var performanceCountTotal = 0;
+                                                    var performanceSumTotal = 0;
+                                                    for (var l = 0; l < strDateArray.length; l++) {
+                                                        //get the totals from this date in the document
+                                                        var importanceCount = 0;
+                                                        var importanceSum = 0;
+                                                        var performanceCount = 0;
+                                                        var performanceSum = 0;
+
+                                                        importanceCount = docLocationGAP.get(`${strDateArray[l]}.importance_day_count`);
+                                                        importanceSum = docLocationGAP.get(`${strDateArray[l]}.importance_day_sum`);
+                                                        performanceCount = docLocationGAP.get(`${strDateArray[l]}.performance_day_count`);
+                                                        performanceSum = docLocationGAP.get(`${strDateArray[l]}.performance_day_sum`);
+
+                                                        //store the totals in an array (0 if no data)
+                                                        if (importanceCount != undefined) {
+                                                            importanceCountTotal += importanceCountTotal + importanceCount;
+                                                            importanceSumTotal += importanceSumTotal + importanceSum;
+                                                            console.log({importanceCountTotal});
+                                                            console.log({importanceSumTotal});
+                                                        }
+                                                        if (performanceCount != undefined) {
+                                                            performanceCountTotal += performanceCountTotal + performanceCount;
+                                                            performanceSumTotal += performanceSumTotal + performanceSum;
+                                                            console.log({performanceCountTotal});
+                                                            console.log({performanceSumTotal});
+                                                        }
+                                                    }
+                                                    //calculate the averages for the performance and importance
+                                                    if (importanceCountTotal != 0) {
+                                                        var importanceAvg = importanceSumTotal/importanceCountTotal;
                                                     }
                                                     else {
-                                                        npsCountArray.push(0);
-                                                        npsDetractorsArray.push(0);
-                                                        npsPromotersArray.push(0);  
-
-                                                        //sum up the totals into their array per day
-                                                        //nothing was saved so don't add anything
+                                                        var importanceAvg = 0;
                                                     }
-                                                }
+                                                    var importanceAvgSTR = importanceAvg.toFixed(1);
+                                                    console.log({importanceAvgSTR})
 
-                                                //get the nps scores for the number of days to check
-                                                //console.log({npsCountArray});
-                                                //console.log({npsDetractorsArray});
-                                                //console.log({npsPromotersArray});
-                                                for (var k = 0; k < numDaysToCheck; k++) {
-                                                    var daysScore = calculateNpsScore(k, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
-                                                    //console.log({daysScore});
-                                                    npsScoreArray.push(daysScore);
-                                                }
-
-                                                //get the nps score for today
-                                                //console.log({npsScoreArray})
-                                                var todaysNPS = npsScoreArray[0]
-                                                //console.log({todaysNPS});
-                                                var npsScoresList = document.getElementById('nps_scores');
-                                                var score = document.createElement('li');
-                                                score.textContent = todaysNPS.toFixed(1);
-                                                npsScoresList.appendChild(score);
-                                                
-                                                //set the shift since yesterday
-                                                var yesterdaysNPS = npsScoreArray[1]
-                                                //console.log({yesterdaysNPS});
-                                                var shift = todaysNPS - yesterdaysNPS;
-                                                var shiftStr = shift.toFixed(1);
-                                                //console.log(shiftStr);
-                                                var npsShiftList = document.getElementById('nps_shift');
-                                                var liShift = document.createElement('li');
-                                                liShift.textContent = shiftStr;
-                                                //set the color based on the shift
-                                                if (shift < 0) {
-                                                    liShift.style.color = 'red'
-                                                }
-                                                else if (shift > 0) {
-                                                    liShift.style.color = 'green'
-                                                }
-                                                npsShiftList.appendChild(liShift);
-                                            }
-                                            else {
-                                                // doc.data() will be undefined in this case
-                                                console.log("No such nps year document!");
-                                                //set the location data to 0 if they don't have documents
-
-                                                //get the nps score for today
-                                                var todaysNPS = 0
-                                                //console.log({todaysNPS});
-                                                var npsScoresList = document.getElementById('nps_scores');
-                                                var score = document.createElement('li');
-                                                score.textContent = todaysNPS.toFixed(1);
-                                                npsScoresList.appendChild(score);
-                                                
-                                                //set the shift since yesterday
-                                                var yesterdaysNPS = 0
-                                                //console.log({yesterdaysNPS});
-                                                var shift = todaysNPS - yesterdaysNPS;
-                                                var shiftStr = shift.toFixed(1);
-                                                //console.log(shiftStr);
-                                                var npsShiftList = document.getElementById('nps_shift');
-                                                var liShift = document.createElement('li');
-                                                liShift.textContent = shiftStr;
-                                                npsShiftList.appendChild(liShift);
-                                            }
-                                        })
-                                        .catch(function(locationNPSError) {
-                                            console.log("Error getting nps year document", locationNPSError);
-                                        });
-                                        npsPromises.push(promise);
-                                    }
-
-                                    for (var k = 0; k < gapFeatures.length; k++) {
-                                        //set the feature list
-                                        var gapFeatureList = document.getElementById('gap_features');
-                                        var feature = document.createElement('li');
-                                        feature.textContent = gapFeatures[k];
-                                        gapFeatureList.appendChild(feature);
-
-                                        let locationGAPDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("GAP").collection("features").doc(String(k)).collection("year").doc(yearsNeeded[i])
-                                        var promise = locationGAPDoc.get()
-                                            .then(function(docLocationGAP) {
-                                                console.log("Got gap docs")
-
-                                                var importanceCountTotal = 0;
-                                                var importanceSumTotal = 0;
-                                                var performanceCountTotal = 0;
-                                                var performanceSumTotal = 0;
-                                                for (var l = 0; l < strDateArray.length; l++) {
-                                                    //get the totals from this date in the document
-                                                    var importanceCount = 0;
-                                                    var importanceSum = 0;
-                                                    var performanceCount = 0;
-                                                    var performanceSum = 0;
-
-                                                    importanceCount = docLocationGAP.get(`${strDateArray[l]}.importance_day_count`);
-                                                    importanceSum = docLocationGAP.get(`${strDateArray[l]}.importance_day_sum`);
-                                                    performanceCount = docLocationGAP.get(`${strDateArray[l]}.performance_day_count`);
-                                                    performanceSum = docLocationGAP.get(`${strDateArray[l]}.performance_day_sum`);
-
-                                                    //store the totals in an array (0 if no data)
-                                                    if (importanceCount != undefined) {
-                                                        importanceCountTotal += importanceCountTotal + importanceCount;
-                                                        importanceSumTotal += importanceSumTotal + importanceSum;
-                                                        console.log({importanceCountTotal});
-                                                        console.log({importanceSumTotal});
+                                                    if (performanceCountTotal != 0) {
+                                                        var performanceAvg = performanceSumTotal/performanceCountTotal;
                                                     }
-                                                    if (performanceCount != undefined) {
-                                                        performanceCountTotal += performanceCountTotal + performanceCount;
-                                                        performanceSumTotal += performanceSumTotal + performanceSum;
-                                                        console.log({performanceCountTotal});
-                                                        console.log({performanceSumTotal});
+                                                    else {
+                                                        var performanceAvg = 0;
                                                     }
-                                                }
-                                                //calculate the averages for the performance and importance
-                                                if (importanceCountTotal != 0) {
-                                                    var importanceAvg = importanceSumTotal/importanceCountTotal;
-                                                }
-                                                else {
-                                                    var importanceAvg = 0;
-                                                }
-                                                var importanceAvgSTR = importanceAvg.toFixed(1);
-                                                console.log({importanceAvgSTR})
+                                                    var performanceAvgSTR = performanceAvg.toFixed(1);
+                                                    console.log({performanceAvgSTR})
 
-                                                if (performanceCountTotal != 0) {
-                                                    var performanceAvg = performanceSumTotal/performanceCountTotal;
-                                                }
-                                                else {
-                                                    var performanceAvg = 0;
-                                                }
-                                                var performanceAvgSTR = performanceAvg.toFixed(1);
-                                                console.log({performanceAvgSTR})
+                                                    gapGraphPoints.push({x:importanceAvg, y:performanceAvg});
 
-                                                gapGraphPoints.push({x:importanceAvg, y:performanceAvg});
+                                                    //set the averages for the feature in performance and importance
+                                                    var gapPerformanceList = document.getElementById('gap_performance');
+                                                    var score = document.createElement('li');
+                                                    score.textContent = performanceAvgSTR;
+                                                    gapPerformanceList.appendChild(score);
 
-                                                //set the averages for the feature in performance and importance
-                                                var gapPerformanceList = document.getElementById('gap_performance');
-                                                var score = document.createElement('li');
-                                                score.textContent = performanceAvgSTR;
-                                                gapPerformanceList.appendChild(score);
-
-                                                var gapImportanceList = document.getElementById('gap_importance');
-                                                var score = document.createElement('li');
-                                                score.textContent = importanceAvgSTR;
-                                                gapImportanceList.appendChild(score);
-                                            })
-                                            .catch (function(locationGAPError) {
-                                                console.log("Error getting gap year document", locationGAPError);
-                                            });
-                                        gapPromises.push(promise);
+                                                    var gapImportanceList = document.getElementById('gap_importance');
+                                                    var score = document.createElement('li');
+                                                    score.textContent = importanceAvgSTR;
+                                                    gapImportanceList.appendChild(score);
+                                                })
+                                                .catch (function(locationGAPError) {
+                                                    console.log("Error getting gap year document", locationGAPError);
+                                                });
+                                            gapPromises.push(promise);
+                                        }
                                     }
                                 }
                                 //set up the graph
