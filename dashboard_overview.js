@@ -492,12 +492,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             tooltips: {
                                                 mode: 'index',
                                                 callbacks: {
-                                                    // Use the footer callback to display the feature name
+                                                    // Use the title callback to display the feature name
                                                     title: function(tooltipItems, data) {
+                                                        var title = ""
                                                         tooltipItems.forEach(function(tooltipItem) {
-                                                            sum += data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                                                            title = gapFeatures[tooltipItem.index];
                                                         });
-                                                        return gapFeatures[tooltipItem.index]
+                                                        return title;
                                                     },
                                                 }
                                             },
