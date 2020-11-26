@@ -257,10 +257,14 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     if (importanceCount != undefined) {
                                                         importanceCountTotal += importanceCountTotal + importanceCount;
                                                         importanceSumTotal += importanceSumTotal + importanceSum;
+                                                        console.log({importanceCountTotal});
+                                                        console.log({importanceSumTotal});
                                                     }
                                                     if (performanceCount != undefined) {
                                                         performanceCountTotal += performanceCountTotal + performanceCount;
                                                         performanceSumTotal += performanceSumTotal + performanceSum;
+                                                        console.log({performanceCountTotal});
+                                                        console.log({performanceSumTotal});
                                                     }
                                                 }
                                                 //calculate the averages for the performance and importance
