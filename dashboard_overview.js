@@ -351,6 +351,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     
                                         // Configuration options go here
                                         options: {
+                                            aspectRatio: 1.5,
                                             scales: {
                                                 yAxes: [{
                                                     ticks: {
@@ -446,7 +447,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     gridLines: {
                                                         drawOnChartArea: false,
                                                         lineWidth: 3,
-                                                        color: '#707070'
+                                                        color: '#707070',
+                                                        drawTicks: false
                                                     },
                                                     scaleLabel: {
                                                         display: true,
@@ -465,7 +467,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     gridLines: {
                                                         drawOnChartArea: false,
                                                         lineWidth: 3,
-                                                        color: '#707070'
+                                                        color: '#707070',
+                                                        drawTicks: false
                                                     },
                                                     scaleLabel: {
                                                         display: true,
