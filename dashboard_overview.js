@@ -488,7 +488,19 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 padding: {
                                                     left: 10
                                                 }
-                                            }
+                                            },
+                                            tooltips: {
+                                                mode: 'index',
+                                                callbacks: {
+                                                    // Use the footer callback to display the feature name
+                                                    title: function(tooltipItems, data) {
+                                                        tooltipItems.forEach(function(tooltipItem) {
+                                                            sum += data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                                                        });
+                                                        return gapFeatures[tooltipItem.index]
+                                                    },
+                                                }
+                                            },
                                         }
                                     });
                                 });
