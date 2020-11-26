@@ -427,9 +427,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         // The type of chart we want to create
                                         type: 'scatter',
                                         data: {
-                                            labels: gapFeatures,
                                             datasets: [{
                                                 data: gapGraphPoints,
+                                                label: gapFeatures,
                                                 borderColor: '#47a2ee',
                                                 backgroundColor: '#47a2ee',
                                                 pointRadius: 4
@@ -489,15 +489,15 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     left: 10
                                                 }
                                             },
-                                            tooltips: {
-                                                mode: 'index',
-                                                callbacks: {
-                                                    // Use the title callback to display the feature name
-                                                    title: function(tooltipItem, data) {
-                                                        return gapFeatures[tooltipItem.index];
-                                                    }
-                                                }
-                                            }
+                                            // tooltips: {
+                                            //     mode: 'index',
+                                            //     callbacks: {
+                                            //         // Use the title callback to display the feature name
+                                            //         title: function(tooltipItem, data) {
+                                            //             return gapFeatures[tooltipItem.index];
+                                            //         }
+                                            //     }
+                                            // }
                                         }
                                     });
                                 });
