@@ -426,10 +426,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         // The type of chart we want to create
                                         type: 'scatter',
                                         data: {
+                                            labels: gapFeatures,
                                             datasets: [{
-                                                labels: gapFeatures,
                                                 data: gapGraphPoints,
-                                                borderColor: "a9a9a9"
+                                                borderColor: '#47a2ee'
                                             }]
                                         },
 
@@ -445,7 +445,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     },
                                                     gridLines: {
                                                         drawOnChartArea: false,
-                                                        lineWidth: 3
+                                                        lineWidth: 3,
+                                                        color: '#707070'
                                                     },
                                                     scaleLabel: {
                                                         display: true,
@@ -463,7 +464,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     },
                                                     gridLines: {
                                                         drawOnChartArea: false,
-                                                        lineWidth: 3
+                                                        lineWidth: 3,
+                                                        color: '#707070'
                                                     },
                                                     scaleLabel: {
                                                         display: true,
