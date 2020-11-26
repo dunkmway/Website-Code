@@ -427,8 +427,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         type: 'scatter',
                                         data: {
                                             datasets: [{
+                                                labels: gapFeatures,
                                                 data: gapGraphPoints,
-                                                borderColor: "#707070"
+                                                borderColor: "a9a9a9"
                                             }]
                                         },
 
@@ -438,33 +439,37 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 yAxes: [{
                                                     ticks: {
                                                         display: false,
-                                                        min: 1,
+                                                        min: 0,
                                                         max: 10
                                                     },
                                                     gridLines: {
-                                                        display: false
+                                                        drawOnChartArea: false,
+                                                        lineWidth: 3
                                                     },
                                                     scaleLabel: {
                                                         display: true,
                                                         labelString: "performance",
-                                                        fontColor: '#a9a9a9'//,
-                                                        //fontFamily: "Arial rounded mt"
+                                                        fontColor: '#a9a9a9',
+                                                        fontSize: 24,
+                                                        fontFamily: "Arial"
                                                     }
                                                 }],
                                                 xAxes: [{
                                                     ticks: {
                                                         display: false,
-                                                        min: 1,
+                                                        min: 0,
                                                         max: 10
                                                     },
                                                     gridLines: {
-                                                        drawOnChartArea: false
+                                                        drawOnChartArea: false,
+                                                        lineWidth: 3
                                                     },
                                                     scaleLabel: {
                                                         display: true,
                                                         labelString: "importance",
-                                                        fontColor: '#a9a9a9'//,
-                                                        //fontFamily: "Arial rounded mt"
+                                                        fontColor: '#a9a9a9',
+                                                        fontSize: 24,
+                                                        fontFamily: "Arial"
                                                     }
                                                 }]
                                             },
