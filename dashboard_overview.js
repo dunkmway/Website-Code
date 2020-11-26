@@ -425,7 +425,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             scales: {
                                                 yAxes: [{
                                                     ticks: {
-                                                        display: false
+                                                        display: true
                                                     },
                                                     gridLines: {
                                                         display: false
@@ -438,7 +438,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 }],
                                                 xAxes: [{
                                                     ticks: {
-                                                        display: false
+                                                        display: true
                                                     },
                                                     gridLines: {
                                                         display: false
