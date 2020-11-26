@@ -429,7 +429,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         data: {
                                             datasets: [{
                                                 data: gapGraphPoints,
-                                                label: gapFeatures,
                                                 borderColor: '#47a2ee',
                                                 backgroundColor: '#47a2ee',
                                                 pointRadius: 4
@@ -489,15 +488,16 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     left: 10
                                                 }
                                             },
-                                            // tooltips: {
-                                            //     mode: 'index',
-                                            //     callbacks: {
-                                            //         // Use the title callback to display the feature name
-                                            //         title: function(tooltipItem, data) {
-                                            //             return gapFeatures[tooltipItem.index];
-                                            //         }
-                                            //     }
-                                            // }
+                                            tooltips: {
+                                                mode: 'index',
+                                                callbacks: {
+                                                    title: function(tooltipItem, data) {
+                                                        var title = gapFeatures[tooltipItem.datasetIndex];
+                                    
+                                                        return title;
+                                                    }
+                                                }
+                                            }
                                         }
                                     });
                                 });
