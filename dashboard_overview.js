@@ -106,7 +106,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     strDateArray.push(dateStr);
                                 }
 
-                                console.log({npsDateArray: strDateArray});
+                                //console.log({npsDateArray: strDateArray});
                                 var npsPromises = [];
                                 var gapPromises = [];
 
@@ -125,7 +125,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var npsPromotersArray = [];
                                                 var npsScoreArray = [];
 
-                                                console.log({npsDateArray: strDateArray});
+                                                //console.log({npsDateArray: strDateArray});
                                                 for (var k = 0; k < strDateArray.length; k++) {
                                                     //get the totals from this date in the document
                                                     var dayCount = 0;
@@ -158,19 +158,19 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 }
 
                                                 //get the nps scores for the number of days to check
-                                                console.log({npsCountArray});
-                                                console.log({npsDetractorsArray});
-                                                console.log({npsPromotersArray});
+                                                //console.log({npsCountArray});
+                                                //console.log({npsDetractorsArray});
+                                                //console.log({npsPromotersArray});
                                                 for (var k = 0; k < numDaysToCheck; k++) {
                                                     var daysScore = calculateNpsScore(k, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
-                                                    console.log({daysScore});
+                                                    //console.log({daysScore});
                                                     npsScoreArray.push(daysScore);
                                                 }
 
                                                 //get the nps score for today
-                                                console.log({npsScoreArray})
+                                                //console.log({npsScoreArray})
                                                 var todaysNPS = npsScoreArray[0]
-                                                console.log({todaysNPS});
+                                                //console.log({todaysNPS});
                                                 var npsScoresList = document.getElementById('nps_scores');
                                                 var score = document.createElement('li');
                                                 score.textContent = todaysNPS.toFixed(1);
@@ -178,10 +178,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 
                                                 //set the shift since yesterday
                                                 var yesterdaysNPS = npsScoreArray[1]
-                                                console.log({yesterdaysNPS});
+                                                //console.log({yesterdaysNPS});
                                                 var shift = todaysNPS - yesterdaysNPS;
                                                 var shiftStr = shift.toFixed(1);
-                                                console.log(shiftStr);
+                                                //console.log(shiftStr);
                                                 var npsShiftList = document.getElementById('nps_shift');
                                                 var liShift = document.createElement('li');
                                                 liShift.textContent = shiftStr;
@@ -201,7 +201,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                                 //get the nps score for today
                                                 var todaysNPS = 0
-                                                console.log({todaysNPS});
+                                                //console.log({todaysNPS});
                                                 var npsScoresList = document.getElementById('nps_scores');
                                                 var score = document.createElement('li');
                                                 score.textContent = todaysNPS.toFixed(1);
@@ -209,10 +209,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 
                                                 //set the shift since yesterday
                                                 var yesterdaysNPS = 0
-                                                console.log({yesterdaysNPS});
+                                                //console.log({yesterdaysNPS});
                                                 var shift = todaysNPS - yesterdaysNPS;
                                                 var shiftStr = shift.toFixed(1);
-                                                console.log(shiftStr);
+                                                //console.log(shiftStr);
                                                 var npsShiftList = document.getElementById('nps_shift');
                                                 var liShift = document.createElement('li');
                                                 liShift.textContent = shiftStr;
@@ -233,8 +233,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         gapFeatureList.appendChild(feature);
 
                                         let locationGAPDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("GAP").collection("features").doc(String(k)).collection("year").doc(yearsNeeded[i])
-                                        var promise = locationGapDoc.get()
+                                        var promise = locationGAPDoc.get()
                                             .then(function(docLocationGAP) {
+                                                console.log("Got gap docs")
 
                                                 importanceCountTotal = 0;
                                                 importanceSumTotal = 0;
@@ -301,9 +302,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         tmpDateArray.push(strDateArray[k]);
                                     }
                                     strDateArray = tmpDateArray;
-                                    console.log({totalCountArray})
-                                    console.log({totalDetractorsArray})
-                                    console.log({totalPromotersArray})
+                                    //console.log({totalCountArray})
+                                    //console.log({totalDetractorsArray})
+                                    //console.log({totalPromotersArray})
 
                                     var npsTotalScores = []
                                     for (k = 0; k < strDateArray.length; k++) {
@@ -313,13 +314,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     //get the totals for today and yesterday for the shift
                                     //get the nps score for today
                                     var todaysTotalNPS = parseFloat(npsTotalScores[0]);
-                                    console.log({todaysTotalNPS});
+                                    //console.log({todaysTotalNPS});
                                     var totalScoreElement = document.getElementById('currentTotalNPS');
                                     totalScoreElement.textContent = todaysTotalNPS.toFixed(1);
                                     
                                     //set the shift since yesterday
                                     var yesterdaysTotalNPS = parseFloat(npsTotalScores[1]);
-                                    console.log({yesterdaysTotalNPS});
+                                    //console.log({yesterdaysTotalNPS});
                                     var totalShift = todaysTotalNPS - yesterdaysTotalNPS;
                                     var totalShiftElement = document.getElementById("currentTotalNPSShift");
                                     totalShiftElement.textContent = totalShift.toFixed(1);
