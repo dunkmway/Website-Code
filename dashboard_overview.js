@@ -275,10 +275,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 gapGraphPoints.push({x:importanceAvg, y:performanceAvg});
 
                                                 //set the averages for the feature in performance and importance
-                                                var gapPerforamnceList = document.getElementById('gap_performance');
+                                                var gapPerformanceList = document.getElementById('gap_performance');
                                                 var score = document.createElement('li');
                                                 score.textContent = performanceAvgSTR;
-                                                gapPerforamnceList.appendChild(score);
+                                                gapPerformanceList.appendChild(score);
 
                                                 var gapImportanceList = document.getElementById('gap_importance');
                                                 var score = document.createElement('li');
