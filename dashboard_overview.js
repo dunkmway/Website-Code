@@ -234,7 +234,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 .then(function(docLocationGAP) {
                                                     console.log("Got gap docs")
 
-                                                    for (var l = 0; l < strDateArray.length; l++) {
+                                                    for (var l = 0; l < numDaysToCheck; l++) {
                                                         //get the totals from this date in the document
                                                         var importanceCount = 0;
                                                         var importanceSum = 0;
