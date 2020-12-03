@@ -115,7 +115,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                 for (var i = 0; i < yearsNeeded.length; i++) {
                                     for (var j = 0; j < locations.length; j++) {
-                                        console.log("Grabbing data for location " + String(j))
+                                        console.log("Grabbing NPS data for location " + String(j))
 
                                         let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
 
@@ -168,7 +168,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     //console.log({npsPromotersArray});
                                                     for (var k = 0; k < numDaysToCheck; k++) {
                                                         var daysScore = calculateNpsScore(k, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
-                                                        //console.log({daysScore});
+                                                        console.log({daysScore});
                                                         npsScoreArray.push(daysScore);
                                                     }
 
@@ -239,7 +239,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 var gapPromise = locationGAPDoc.get()
                                                 .then(function(docLocationGAP) {
                                                     console.log("Got gap docs")
-                                                    console.log("Grabbing data for feature " + String(featureIndex))
+                                                    console.log("Grabbing GAP data for feature " + String(featureIndex))
                                                     var importanceCountTotal = 0;
                                                     var importanceSumTotal = 0;
                                                     var performanceCountTotal = 0;
