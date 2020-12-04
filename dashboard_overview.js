@@ -596,7 +596,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         data: {
                                             labels: tmpDateArray.reverse(),
                                             datasets: [{
-                                                data: totalParticipationCount.slice(0,6)
+                                                data: totalParticipationCount.slice(0,6).reverse()
                                             }]
                                         },
 
