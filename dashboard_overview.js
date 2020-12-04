@@ -559,7 +559,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     });
                                 });
 
-                                Promise.allSettled(gapPromises).then(function(setGAPGraph) {
+                                Promise.allSettled(participationPromises).then(function(setParticpationGraph) {
                                     var tmpDateArray = []
                                     for (k = 0; k < 7; k++) {
                                         tmpDateArray.push(dateArray[k]);
