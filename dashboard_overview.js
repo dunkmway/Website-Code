@@ -108,6 +108,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     strDateArray.push(dateStr);
                                 }
 
+                                console.log({strDateArray})
+
                                 //console.log({npsDateArray: strDateArray});
                                 var npsPromises = [];
                                 var gapPromises = [];
