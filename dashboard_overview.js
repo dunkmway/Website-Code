@@ -235,7 +235,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             .catch(function(locationNPSError) {
                                                 console.log("Error getting nps year document", locationNPSError);
                                             });
-                                            npsPromises.push(npsPromise);
+                                        npsPromises.push(npsPromise);
 
                                         //GAP data
                                         //FIXME: Need to include check that the year data exists (see NPS for example)
@@ -300,12 +300,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             .then(function(docLocationParticipation) {
                                                 if(docLocationParticipation.exists) {
                                                     //var participationCountArray = [];
+                                                    console.log("participation document does exist")
 
                                                     //get the data needed for all of the dates in the date array
                                                     for (var k = 0; k < strDateArray.length; k++) {
                                                         //get the totals from this date in the document
                                                         var dayCount = 0;
-                                                        dayCount = docLocationNPS.get(strDateArray[k]);
+                                                        dayCount = docLocationParticipation.get(strDateArray[k]);
 
                                                         //store the totals in an array (0 if no data)
                                                         if (dayCount != undefined) {
@@ -322,12 +323,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 else {
                                                     //document does not exist
                                                     //do nothing (total counts already set to 0)
+                                                    console.log("participation document doesn't exist")
                                                 }
                                             })
                                             .catch (function(locationParticipationError) {
                                                 console.log("Error getting participation year document", locationParticipationError);
                                             });
-                                            participationPromises.push(participationPromise);
+                                        participationPromises.push(participationPromise);
                                     }
                                 }
                                 //set up the graph
