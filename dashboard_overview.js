@@ -163,9 +163,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     }
 
                                                     //get the nps scores for the number of days to check
-                                                    //console.log({npsCountArray});
-                                                    //console.log({npsDetractorsArray});
-                                                    //console.log({npsPromotersArray});
+                                                    console.log("Outputting the arrays for each day")
+                                                    console.log({npsCountArray});
+                                                    console.log({npsDetractorsArray});
+                                                    console.log({npsPromotersArray});
                                                     for (var k = 0; k < numDaysToCheck; k++) {
                                                         var daysScore = calculateNpsScore(k, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
                                                         console.log({daysScore});
