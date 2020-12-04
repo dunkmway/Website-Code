@@ -85,16 +85,19 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     }
                                 }
 
-                                //totals for all of the locations
+                                //NPS totals
                                 var totalCountArray = new Array(dateArray.length).fill(0);
                                 var totalDetractorsArray = new Array(dateArray.length).fill(0);
                                 var totalPromotersArray = new Array(dateArray.length).fill(0);
 
-                                //gap totals
+                                //GAP totals
                                 var importanceCountTotals = new Array(gapFeatures.length).fill(0);
                                 var importanceSumTotals = new Array(gapFeatures.length).fill(0);
                                 var performanceCountTotals = new Array(gapFeatures.length).fill(0);
                                 var performanceSumTotals = new Array(gapFeatures.length).fill(0);
+
+                                //Participation totals
+                                var totalParticipationCount = new Array(dateArray.length).fill(0);
 
                                 var gapGraphPoints = [];
 
@@ -113,15 +116,15 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 //console.log({npsDateArray: strDateArray});
                                 var npsPromises = [];
                                 var gapPromises = [];
+                                var participationPromises = [];
 
 
                                 for (var i = 0; i < yearsNeeded.length; i++) {
                                     for (var j = 0; j < locations.length; j++) {
                                         console.log("Grabbing NPS data for location " + String(j))
 
-                                        let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
-
                                         //NPS data
+                                        let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
                                         var npsPromise = locationNPSDoc.get()
                                             .then(function(docLocationNPS) {
                                                 if(docLocationNPS.exists) {
@@ -234,11 +237,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             });
                                             npsPromises.push(npsPromise);
 
-                                        //get the gap data
+                                        //GAP data
+                                        //FIXME: Need to include check that the year data exists (see NPS for example)
                                         for (var k = 0; k < gapFeatures.length; k++) {
-                                            
-                                            
-
                                             let locationGAPDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("GAP").collection("features").doc(String(k)).collection("year").doc(yearsNeeded[i])
                                             function gapPromiseFunc(featureIndex) {
                                                 var gapPromise = locationGAPDoc.get()
@@ -292,6 +293,41 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             gapPromiseFunc(k);
                                             
                                         }
+
+                                        //Particpation Data
+                                        let locationParticipationDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("Participation").collection("year").doc(yearsNeeded[i]);
+                                        var participationPromise = locationParticipationDoc.get()
+                                            .then(function(docLocationParticipation) {
+                                                if(docLocationParticipation.exists) {
+                                                    //var participationCountArray = [];
+
+                                                    //get the data needed for all of the dates in the date array
+                                                    for (var k = 0; k < strDateArray.length; k++) {
+                                                        //get the totals from this date in the document
+                                                        var dayCount = 0;
+                                                        dayCount = docLocationNPS.get(strDateArray[k]);
+
+                                                        //store the totals in an array (0 if no data)
+                                                        if (dayCount != undefined) {
+                                                            //participationCountArray.push(dayCount);
+
+                                                            //sum up the totals into their array per day
+                                                            totalParticipationCount[k] = totalParticipationCount[k] + dayCount;
+                                                        }
+                                                        else {
+                                                            //participationCountArray.push(0);
+                                                        }
+                                                    }
+                                                }
+                                                else {
+                                                    //document does not exist
+                                                    //do nothing (total counts already set to 0)
+                                                }
+                                            })
+                                            .catch (function(locationParticipationError) {
+                                                console.log("Error getting participation year document", locationGAPError);
+                                            });
+                                            participationPromises.push(participationPromise);
                                     }
                                 }
                                 //set up the graph
@@ -306,13 +342,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     for (k = 0; k < numDaysToCheck; k++) {
                                         tmpDateArray.push(strDateArray[k]);
                                     }
-                                    strDateArray = tmpDateArray;
+                                    //strDateArray = tmpDateArray;
                                     //console.log({totalCountArray})
                                     //console.log({totalDetractorsArray})
                                     //console.log({totalPromotersArray})
 
                                     var npsTotalScores = []
-                                    for (k = 0; k < strDateArray.length; k++) {
+                                    for (k = 0; k < tmpDateArray.length; k++) {
                                         daysScore = calculateNpsScore(k, trailingRange, totalCountArray, totalDetractorsArray, totalPromotersArray);
                                         npsTotalScores.push(daysScore.toFixed(1));
                                     }
@@ -345,7 +381,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     
                                         // The data for our dataset
                                         data: {
-                                            labels: strDateArray.reverse(),
+                                            labels: tmpDateArray.reverse(),
                                             datasets: [{
                                                 backgroundColor: '#707070',
                                                 borderColor: '#707070',
@@ -397,7 +433,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 });
 
                                 Promise.allSettled(gapPromises).then(function(setGAPGraph) {
-                                    console.log("In the if statement to create the nps graph.");
+                                    console.log("In the if statement to create the gap graph.");
 
                                     //calculate the averages for the performance and importance
                                     for (var i = 0; i < gapFeatures.length; i++) {
@@ -521,6 +557,29 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             }
                                         }
                                     });
+                                });
+
+                                Promise.allSettled(gapPromises).then(function(setGAPGraph) {
+                                    var tmpDateArray = []
+                                    for (k = 0; k < 7; k++) {
+                                        tmpDateArray.push(dateArray[k]);
+                                    }
+                                    
+                                    var weeklyTotal = 0;
+                                    for (k = 0; k < 7; k++) {
+                                        weeklyTotal += totalParticipationCount[k];
+                                    }
+
+                                    var priorWeeklyTotal = 0;
+                                    for(k = 7; k < 14; k++) {
+                                        priorWeeklyTotal += totalParticipationCount[k];
+                                    }
+
+                                    var participationWeeklyTotalElement = document.getElementById('participationWeeklyTotal');
+                                    participationWeeklyTotalElement.textContent = weeklyTotal;
+
+                                    var participationPriorWeeklyTotalElement = document.getElementById('participationPriorWeeklyTotal');
+                                    participationPriorWeeklyTotalElement.textContent = priorWeeklyTotal;
                                 });
 
                             }
