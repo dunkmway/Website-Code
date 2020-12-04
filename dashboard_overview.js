@@ -172,10 +172,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                         npsScoreArray[k] = daysScore;
                                                     }
 
-                                                    print({npsScoreArray});
+                                                    console.log({npsScoreArray});
 
                                                     //get the nps score for today
-                                                    //console.log({npsScoreArray})
+                                                    //console.log({npsScoreArray});
                                                     var todaysNPS = npsScoreArray[0]
                                                     //console.log({todaysNPS});
                                                     var npsScoresList = document.getElementById('nps_scores');
