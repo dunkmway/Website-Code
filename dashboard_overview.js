@@ -563,8 +563,10 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                 Promise.allSettled(participationPromises).then(function(setParticpationGraph) {
                                     var tmpDateArray = []
+                                    let dayAbbrev = ['Su', 'M', 'T', 'W', 'Th', 'F', 'S']
                                     for (k = 0; k < 7; k++) {
-                                        tmpDateArray.push(dateArray[k]);
+                                        var day = dayAbbrev[dateArray[k].getDay()];
+                                        tmpDateArray.push(day);
                                     }
                                     console.log({totalParticipationCount})
                                     
@@ -585,6 +587,24 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                     var participationPriorWeeklyTotalElement = document.getElementById('participationPriorWeeklyTotal');
                                     participationPriorWeeklyTotalElement.textContent = priorWeeklyTotal;
+
+                                    //create the data points
+                                    var ctxParticipation = document.getElementById('gapChart').getContext('2d');
+                                    var chart = new Chart(ctxGAP, {
+                                        // The type of chart we want to create
+                                        type: 'bar',
+                                        data: {
+                                            labels: tmpDateArray.reverse(),
+                                            datasets: [{
+                                                data: totalParticipationCount.slice(0,6)
+                                            }]
+                                        },
+
+                                        // Configuration options go here
+                                        options: {
+                                            aspectRatio: 1
+                                        }
+                                    });
                                 });
 
                             }
