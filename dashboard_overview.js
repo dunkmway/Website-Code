@@ -325,7 +325,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 }
                                             })
                                             .catch (function(locationParticipationError) {
-                                                console.log("Error getting participation year document", locationGAPError);
+                                                console.log("Error getting participation year document", locationParticipationError);
                                             });
                                             participationPromises.push(participationPromise);
                                     }
@@ -564,16 +564,19 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     for (k = 0; k < 7; k++) {
                                         tmpDateArray.push(dateArray[k]);
                                     }
+                                    console.log({totalParticipationCount})
                                     
                                     var weeklyTotal = 0;
                                     for (k = 0; k < 7; k++) {
                                         weeklyTotal += totalParticipationCount[k];
                                     }
+                                    console.log({weeklyTotal});
 
                                     var priorWeeklyTotal = 0;
                                     for(k = 7; k < 14; k++) {
                                         priorWeeklyTotal += totalParticipationCount[k];
                                     }
+                                    console.log({priorWeeklyTotal});
 
                                     var participationWeeklyTotalElement = document.getElementById('participationWeeklyTotal');
                                     participationWeeklyTotalElement.textContent = weeklyTotal;
