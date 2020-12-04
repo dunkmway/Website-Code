@@ -128,7 +128,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     var npsCountArray = [];
                                                     var npsDetractorsArray = [];
                                                     var npsPromotersArray = [];
-                                                    var npsScoreArray = [];
+                                                    var npsScoreArray = new Array(numDaysToCheck).fill(0);
 
                                                     //console.log({npsDateArray: strDateArray});
                                                     for (var k = 0; k < strDateArray.length; k++) {
@@ -169,8 +169,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     for (var k = 0; k < numDaysToCheck; k++) {
                                                         var daysScore = calculateNpsScore(k, trailingRange, npsCountArray, npsDetractorsArray, npsPromotersArray);
                                                         console.log({daysScore});
-                                                        npsScoreArray.push(daysScore);
+                                                        npsScoreArray[k] = daysScore;
                                                     }
+
+                                                    print({npsScoreArray});
 
                                                     //get the nps score for today
                                                     //console.log({npsScoreArray})
