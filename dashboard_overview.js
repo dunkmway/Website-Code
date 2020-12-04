@@ -589,8 +589,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     participationPriorWeeklyTotalElement.textContent = priorWeeklyTotal;
 
                                     //create the data points
-                                    var ctxParticipation = document.getElementById('gapChart').getContext('2d');
-                                    var chart = new Chart(ctxGAP, {
+                                    var ctxParticipation = document.getElementById('participationChart').getContext('2d');
+                                    var chart = new Chart(ctxParticipation, {
                                         // The type of chart we want to create
                                         type: 'bar',
                                         data: {
