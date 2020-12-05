@@ -375,7 +375,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         totalShiftElement.style.color = "green"
                                     }
 
-                                    closeLoadingScreen();
                                     var ctxNPS = document.getElementById('npsChart').getContext('2d');
                                     var chart = new Chart(ctxNPS, {
                                         // The type of chart we want to create
@@ -649,7 +648,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         }
                                     });
                                 });
-
+                                closeLoadingScreen();
                             }
                             else {
                                 // doc.data() will be undefined in this case
