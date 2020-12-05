@@ -596,13 +596,46 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         data: {
                                             labels: tmpDateArray.reverse(),
                                             datasets: [{
-                                                data: totalParticipationCount.slice(0,6).reverse()
+                                                backgroundColor: "#333",
+                                                borderColor: "#333",
+                                                barPercentage: .5,
+                                                data: totalParticipationCount.slice(0,7).reverse()
                                             }]
                                         },
 
                                         // Configuration options go here
                                         options: {
-                                            aspectRatio: 1
+                                            aspectRatio: 1,
+                                            scales: {
+                                                yAxes: [{
+                                                    ticks: {
+                                                        precision: 0,
+                                                        maxTicksLimit: 5
+                                                    },
+                                                    position: 'right'
+                                                }],
+                                                xAxes: [{
+                                                    ticks: {
+                                                        display: false
+                                                    },
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    scaleLabel: {
+                                                        display: true
+                                                    }
+                                                }]
+                                            },
+                                            legend: {
+                                                display: false
+                                            },
+                                            tooltips: {
+                                                custom: function(tooltip) {
+                                                    if (!tooltip) return;
+                                                    // disable displaying the color box;
+                                                    tooltip.displayColors = false;
+                                                },
+                                            }
                                         }
                                     });
                                 });
