@@ -401,7 +401,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                         precision: 0,
                                                         maxTicksLimit: 5
                                                     },
-                                                    gridlines: {
+                                                    gridLines: {
                                                         drawBorder: false
                                                     },
                                                     position: 'right'
