@@ -399,7 +399,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 yAxes: [{
                                                     ticks: {
                                                         precision: 0,
-                                                        maxTicksLimit: 5
+                                                        maxTicksLimit: 5,
+                                                        fontFamily: 'Arial',
+                                                        fontColor: '#a9a9a9'
                                                     },
                                                     gridLines: {
                                                         drawBorder: false
@@ -613,7 +615,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 yAxes: [{
                                                     ticks: {
                                                         precision: 0,
-                                                        maxTicksLimit: 5
+                                                        maxTicksLimit: 5,
+                                                        fontFamily: 'Arial',
+                                                        fontColor: '#a9a9a9'
                                                     },
                                                     gridLines: {
                                                         drawBorder: false
@@ -622,7 +626,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 }],
                                                 xAxes: [{
                                                     ticks: {
-                                                        display: true
+                                                        display: true,
+                                                        fontFamily: 'Arial',
+                                                        fontColor: '#a9a9a9'
                                                     },
                                                     gridLines: {
                                                         drawOnChartArea: false,
