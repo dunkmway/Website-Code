@@ -401,6 +401,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                         precision: 0,
                                                         maxTicksLimit: 5
                                                     },
+                                                    gridlines: {
+                                                        drawBorder: false
+                                                    },
                                                     position: 'right'
                                                 }],
                                                 xAxes: [{
@@ -596,8 +599,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         data: {
                                             labels: tmpDateArray.reverse(),
                                             datasets: [{
-                                                backgroundColor: "#333",
-                                                borderColor: "#333",
+                                                borderColor: '##a9a9a9',
+                                                backgroundColor: '#a9a9a9',
                                                 barPercentage: .5,
                                                 data: totalParticipationCount.slice(0,7).reverse()
                                             }]
@@ -612,17 +615,18 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                         precision: 0,
                                                         maxTicksLimit: 5
                                                     },
+                                                    gridLines: {
+                                                        drawBorder: false
+                                                    },
                                                     position: 'right'
                                                 }],
                                                 xAxes: [{
                                                     ticks: {
-                                                        display: false
+                                                        display: true
                                                     },
                                                     gridLines: {
-                                                        display: false
-                                                    },
-                                                    scaleLabel: {
-                                                        display: true
+                                                        drawOnChartArea: false,
+                                                        drawTicks: false
                                                     }
                                                 }]
                                             },
