@@ -2,7 +2,10 @@
 console.log("In the dashboard js file")
 var userName = ""
 var businessName = ""
+var role = ""
 var locations = []
+
+let allowedRoles = ['admin'];
 
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
@@ -18,6 +21,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                 if (docProfile.exists) {
                     console.log("got user doc")
                     userName = docProfile.get("name");
+                    role = docProfile.get("role");
                     docUserName = document.getElementById('userName');
                     docUserName.textContent = userName;
                     var business = docProfile.get("business");
@@ -28,7 +32,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                     var businessDoc = db.collection("businesses").doc(business);
                     
-                    businessDoc.get()
+                    if (allowedRoles.includes(role)) {
+                        businessDoc.get()
                         .then(function(docBusiness) {
                             if (docBusiness.exists) {
                                 console.log("got business doc")
@@ -658,6 +663,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                         .catch(function(businessError) {
                         console.log("Error getting business document:", businessError);
                         });
+                    }
+                    else {
+                        //user is not allow access to the dashboard
+                        document.getElementById("accessDenied").style.display = "flex";
+                        closeLoadingScreen();
+                    }
+                    
                 }
                 else {
                     // doc.data() will be undefined in this case
