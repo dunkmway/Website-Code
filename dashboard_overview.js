@@ -571,39 +571,39 @@ firebase.auth().onAuthStateChanged(function(user) {
                                             }
                                         }
                                     }
-                                    Chart.helpers.extend(Chart.controllers.line.prototype, {
-                                    draw: function() {
+                                    // Chart.helpers.extend(Chart.controllers.line.prototype, {
+                                    // draw: function() {
 
-                                        myLineExtend.apply(this, arguments);
+                                    //     myLineExtend.apply(this, arguments);
 
-                                        var chart = this.chart;
-                                        var ctx = chart.ctx;
+                                    //     var chart = this.chart;
+                                    //     var ctx = chart.ctx;
 
-                                        var test = chart.scales
-                                        console.log({test})
-                                        var xaxis = chart.scales['x-axis-0']
-                                        var yaxis = chart.scales['y-axis-0']
+                                    //     var test = chart.scales
+                                    //     console.log({test})
+                                    //     var xaxis = chart.scales['x-axis-1']
+                                    //     var yaxis = chart.scales['y-axis-1']
                                         
 
-                                        ctx.save();
-                                        ctx.beginPath();
-                                        ctx.moveTo(xaxis.left, yaxis.bottom);
-                                        ctx.strokeStyle = '#a9a9a9';
-                                        ctx.lineTo(xaxis.right, yaxis.top);
-                                        ctx.stroke();
-                                        ctx.restore();
+                                    //     ctx.save();
+                                    //     ctx.beginPath();
+                                    //     ctx.moveTo(xaxis.left, yaxis.bottom);
+                                    //     ctx.strokeStyle = '#a9a9a9';
+                                    //     ctx.lineTo(xaxis.right, yaxis.top);
+                                    //     ctx.stroke();
+                                    //     ctx.restore();
 
-                                        ctx.save();
-                                        ctx.translate(xaxis.right - 50,yaxis.top + 45);
-                                        ctx.rotate(-0.25 * Math.PI);
+                                    //     ctx.save();
+                                    //     ctx.translate(xaxis.right - 50,yaxis.top + 45);
+                                    //     ctx.rotate(-0.25 * Math.PI);
 
-                                        var rText = 'optimal';
-                                        ctx.font = "12px Arial";
-                                        ctx.fillStyle = "#a9a9a9";
-                                        ctx.fillText(rText, 0, 0);
-                                        ctx.restore();
-                                    }
-                                    });
+                                    //     var rText = 'optimal';
+                                    //     ctx.font = "12px Arial";
+                                    //     ctx.fillStyle = "#a9a9a9";
+                                    //     ctx.fillText(rText, 0, 0);
+                                    //     ctx.restore();
+                                    // }
+                                    // });
                                     let gapChart = new Chart(ctxGAP, config);
                                     //console.log(gapChart.scales)
                                 });
