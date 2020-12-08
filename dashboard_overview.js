@@ -579,8 +579,11 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         var chart = this.chart;
                                         var ctx = chart.ctx;
 
+                                        var test = chart.scales
+                                        console.log({test})
                                         var xaxis = chart.scales['x-axis-0']
                                         var yaxis = chart.scales['y-axis-0']
+                                        
 
                                         ctx.save();
                                         ctx.beginPath();
