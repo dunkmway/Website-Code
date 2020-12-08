@@ -579,8 +579,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         var chart = this.chart;
                                         var ctx = chart.ctx;
 
-                                        var xaxis = chart.scales['x-axis-1']
-                                        var yaxis = chart.scales['y-axis-1']
+                                        var xaxis = chart.scales['x-axis-0']
+                                        var yaxis = chart.scales['y-axis-0']
 
                                         ctx.save();
                                         ctx.beginPath();
@@ -596,13 +596,13 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                         var rText = 'optimal';
                                         ctx.font = "12px Arial";
-                                            ctx.fillStyle = "#a9a9a9";
+                                        ctx.fillStyle = "#a9a9a9";
                                         ctx.fillText(rText, 0, 0);
                                         ctx.restore();
                                     }
                                     });
                                     let gapChart = new Chart(ctxGAP, config);
-                                    console.log(gapChart.scales)
+                                    //console.log(gapChart.scales)
                                 });
 
                                 Promise.allSettled(participationPromises).then(function(setParticpationGraph) {
