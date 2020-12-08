@@ -480,94 +480,128 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         gapImportanceList.appendChild(score);
                                     }
 
-                                    //create the data points
-                                    var ctxGAP = document.getElementById('gapChart').getContext('2d');
-                                    var chart = new Chart(ctxGAP, {
-                                        // The type of chart we want to create
-                                        type: 'scatter',
-                                        data: {
-                                            labels: gapFeatures,
-                                            datasets: [{
-                                                data: gapGraphPoints,
-                                                borderColor: '#47a2ee',
-                                                backgroundColor: '#47a2ee',
-                                                pointRadius: 4
-                                            }]
-                                        },
+                                    //create the gap data points
+                                    var myLineExtend = Chart.controllers.line.prototype.draw;
 
-                                        // Configuration options go here
-                                        options: {
-                                            aspectRatio: 1,
-                                            scales: {
-                                                yAxes: [{
-                                                    ticks: {
-                                                        display: false,
-                                                        min: 0,
-                                                        max: 10
-                                                    },
-                                                    gridLines: {
-                                                        drawOnChartArea: false,
-                                                        lineWidth: 3,
-                                                        color: '#707070',
-                                                        drawTicks: false
-                                                    },
-                                                    scaleLabel: {
-                                                        display: true,
-                                                        labelString: "performance",
-                                                        fontColor: '#a9a9a9',
-                                                        fontSize: 24,
-                                                        fontFamily: "Arial"
-                                                    }
-                                                }],
-                                                xAxes: [{
-                                                    ticks: {
-                                                        display: false,
-                                                        min: 0,
-                                                        max: 10
-                                                    },
-                                                    gridLines: {
-                                                        drawOnChartArea: false,
-                                                        lineWidth: 3,
-                                                        color: '#707070',
-                                                        drawTicks: false
-                                                    },
-                                                    scaleLabel: {
-                                                        display: true,
-                                                        labelString: "importance",
-                                                        fontColor: '#a9a9a9',
-                                                        fontSize: 24,
-                                                        fontFamily: "Arial"
-                                                    }
-                                                }]
+                                    var ctxGAP = document.getElementById("gapChart").getContext("2d");
+
+                                    var config = {
+                                    // The type of chart we want to create
+                                    type: 'scatter',
+                                    data: {
+                                        labels: gapFeaturs,
+                                        datasets: [{
+                                        data: gapGraphPoints,
+                                        borderColor: '#47a2ee',
+                                        backgroundColor: '#47a2ee',
+                                        pointRadius: 4
+                                        }]
+                                    },
+
+                                    // Configuration options go here
+                                    options: {
+                                        aspectRatio: 1,
+                                        scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                display: false,
+                                                min: 0,
+                                                max: 10
                                             },
-                                            legend: {
-                                                display: false
+                                            gridLines: {
+                                                drawOnChartArea: false,
+                                                lineWidth: 3,
+                                                color: '#707070',
+                                                drawTicks: false
                                             },
-                                            layout: {
-                                                padding: {
-                                                    left: 10
-                                                }
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: "performance",
+                                                fontColor: '#a9a9a9',
+                                                fontSize: 24,
+                                                fontFamily: "Arial"
+                                            }
+                                        }],
+                                        xAxes: [{
+                                            ticks: {
+                                                display: false,
+                                                min: 0,
+                                                max: 10
                                             },
-                                            tooltips: {
-                                                custom: function(tooltip) {
-                                                    if (!tooltip) return;
-                                                    // disable displaying the color box;
-                                                    tooltip.displayColors = false;
-                                                    },
-                                                mode: 'index',
-                                                callbacks: {
-                                                    title: function(tooltipItem, data) {
-                                                        return data.labels[tooltipItem[0].index];
-                                                    },
-                                                    label: function(tooltipItem, data) {
-                                                        var xValue = tooltipItem.xLabel;
-                                                        var yValue = tooltipItem.yLabel;
-                                                        return ["performance: " + yValue, "importance: " + xValue];
-                                                  }
-                                                }
+                                            gridLines: {
+                                                drawOnChartArea: false,
+                                                lineWidth: 3,
+                                                color: '#707070',
+                                                drawTicks: false
+                                            },
+                                            scaleLabel: {
+                                                display: true,
+                                                labelString: "importance",
+                                                fontColor: '#a9a9a9',
+                                                fontSize: 24,
+                                                fontFamily: "Arial"
+                                            }
+                                        }]
+                                        },
+                                        legend: {
+                                            
+                                        },
+                                        layout: {
+                                            padding: {
+                                                left: 10
+                                            }
+                                        },
+                                        tooltips: {
+                                        custom: function(tooltip) {
+                                            if (!tooltip) return;
+                                            // disable displaying the color box;
+                                            tooltip.displayColors = false;
+                                        },
+                                        mode: 'index',
+                                        callbacks: {
+                                            title: function(tooltipItem, data) {
+                                                return data.labels[tooltipItem[0].index];
+                                            },
+                                            label: function(tooltipItem, data) {
+                                                var xValue = tooltipItem.xLabel;
+                                                var yValue = tooltipItem.yLabel;
+                                                return ["performance: " + yValue, "importance: " + xValue];
                                             }
                                         }
+                                        }
+                                    }
+                                    }
+                                    Chart.helpers.extend(Chart.controllers.line.prototype, {
+                                    draw: function() {
+
+                                        myLineExtend.apply(this, arguments);
+
+                                        var chart = this.chart;
+                                        var ctx = chart.chart.ctx;
+
+                                        var xaxis = chart.scales['x-axis-1']
+                                        var yaxis = chart.scales['y-axis-1']
+
+                                        ctx.save();
+                                        ctx.beginPath();
+                                        ctx.moveTo(xaxis.left, yaxis.bottom);
+                                        ctx.strokeStyle = '#a9a9a9';
+                                        ctx.lineTo(xaxis.right, yaxis.top);
+                                        ctx.stroke();
+                                        ctx.restore();
+
+                                        ctx.save();
+                                        ctx.translate(xaxis.right - 50,yaxis.top + 45);
+                                        ctx.rotate(-0.25 * Math.PI);
+
+                                        var rText = 'optimal';
+                                        ctx.font = "12px Arial";
+                                            ctx.fillStyle = "#a9a9a9";
+                                        ctx.fillText(rText, 0, 0);
+                                        ctx.restore();
+                                    }
                                     });
+                                    new Chart(ctxGAP, config);
                                 });
 
                                 Promise.allSettled(participationPromises).then(function(setParticpationGraph) {
