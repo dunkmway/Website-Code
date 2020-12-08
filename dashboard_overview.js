@@ -481,9 +481,25 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     }
 
                                     //create the gap data points
-                                    var myLineExtend = Chart.controllers.line.prototype.draw;
+                                    // var myLineExtend = Chart.controllers.line.prototype.draw;
 
                                     var ctxGAP = document.getElementById("gapChart").getContext("2d");
+
+                                    Chart.pluginService.register({
+                                        afterDraw: function(chart) {
+                                            if (typeof chart.config.options.optimalLine) {
+                                                var ctxPlugin = chart.chart.ctx;
+                                                var xAxe = chart.scales[chart.config.options.scales.xAxes[1].id];
+                                                var yAxe = chart.scales[chart.config.options.scales.yAxes[1].id];
+                                                
+                                                ctxPlugin.strokeStyle = "red";
+                                                ctxPlugin.beginPath();
+                                                ctxPlugin.moveTo(xAxe.left, yAxe.bottom);
+                                                ctxPlugin.lineTo(xAxe.right, yAxe.top);
+                                                ctxPlugin.stroke();
+                                            }
+                                        }
+                                    });
 
                                     var config = {
                                         // The type of chart we want to create
@@ -500,6 +516,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                         // Configuration options go here
                                         options: {
+                                            optimalLine: true,
                                             aspectRatio: 1,
                                             scales: {
                                                 yAxes: [{
