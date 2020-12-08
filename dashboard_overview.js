@@ -489,8 +489,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         afterDraw: function(chart) {
                                             if (typeof chart.config.options.optimalLine) {
                                                 var ctxPlugin = chart.chart.ctx;
-                                                var xAxe = chart.scales[chart.config.options.scales.xAxes[1].id];
-                                                var yAxe = chart.scales[chart.config.options.scales.yAxes[1].id];
+                                                var xAxe = chart.scales[chart.config.options.scales.xAxes[0].id];
+                                                var yAxe = chart.scales[chart.config.options.scales.yAxes[0].id];
                                                 
                                                 ctxPlugin.strokeStyle = "red";
                                                 ctxPlugin.beginPath();
