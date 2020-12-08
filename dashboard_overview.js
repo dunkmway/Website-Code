@@ -601,7 +601,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         ctx.restore();
                                     }
                                     });
-                                    new Chart(ctxGAP, config);
+                                    let gapChart = new Chart(ctxGAP, config);
+                                    console.log(gapChart.scales)
                                 });
 
                                 Promise.allSettled(participationPromises).then(function(setParticpationGraph) {
