@@ -577,7 +577,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         myLineExtend.apply(this, arguments);
 
                                         var chart = this.chart;
-                                        var ctx = chart.chart.ctx;
+                                        var ctx = chart.ctx;
 
                                         var xaxis = chart.scales['x-axis-1']
                                         var yaxis = chart.scales['y-axis-1']
