@@ -732,6 +732,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                     else {
                         //user is not allow access to the dashboard
                         document.getElementById("accessDenied").style.display = "flex";
+                        logout();
                         closeLoadingScreen();
                     }
                     
@@ -752,6 +753,21 @@ function closeLoadingScreen() {
     if (document.getElementById('loadingScreen')) {
         document.getElementById('loadingScreen').style.display = 'none';
     }
+}
+
+function logout() {
+    firebase.auth().signOut()
+    .then(function() {
+        // Sign-out successful.
+        window.location.replace('/');
+    })
+    .catch(function(error) {
+        // An error happened.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log('Error code: ' + errorCode);
+        console.log('Error message: ' + errorMessage);
+    });
 }
 
 //calculates the nps score given days since today's date and the arrays that stores all of the totals
