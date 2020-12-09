@@ -498,15 +498,15 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 ctxPlugin.lineTo(xAxe.right, yAxe.top);
                                                 ctxPlugin.stroke();
 
-                                                ctx.save();
-                                                ctx.translate(xaxis.right - 50,yaxis.top + 45);
-                                                ctx.rotate(-0.25 * Math.PI);
+                                                ctxPlugin.save();
+                                                ctxPlugin.translate(xaxis.right - 50,yaxis.top + 45);
+                                                ctxPlugin.rotate(-0.25 * Math.PI);
 
                                                 var diagonalText = 'optimal';
-                                                ctx.font = "12px Arial";
-                                                    ctx.fillStyle = "#a9a9a9";
-                                                ctx.fillText(diagonalText, 0, 0);
-                                                ctx.restore();
+                                                ctxPlugin.font = "12px Arial";
+                                                ctxPlugin.fillStyle = "#a9a9a9";
+                                                ctxPlugin.fillText(diagonalText, 0, 0);
+                                                ctxPlugin.restore();
                                             }
                                         }
                                     });
