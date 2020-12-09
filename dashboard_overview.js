@@ -487,16 +487,26 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                     Chart.pluginService.register({
                                         afterDraw: function(chart) {
-                                            if (typeof chart.config.options.optimalLine) {
+                                            if (chart.config.options.optimalLine) {
                                                 var ctxPlugin = chart.chart.ctx;
                                                 var xAxe = chart.scales[chart.config.options.scales.xAxes[0].id];
                                                 var yAxe = chart.scales[chart.config.options.scales.yAxes[0].id];
                                                 
-                                                ctxPlugin.strokeStyle = "red";
+                                                ctxPlugin.strokeStyle = '#a9a9a9';
                                                 ctxPlugin.beginPath();
                                                 ctxPlugin.moveTo(xAxe.left, yAxe.bottom);
                                                 ctxPlugin.lineTo(xAxe.right, yAxe.top);
                                                 ctxPlugin.stroke();
+
+                                                ctx.save();
+                                                ctx.translate(xaxis.right - 50,yaxis.top + 45);
+                                                ctx.rotate(-0.25 * Math.PI);
+
+                                                var diagonalText = 'optimal';
+                                                ctx.font = "12px Arial";
+                                                    ctx.fillStyle = "#a9a9a9";
+                                                ctx.fillText(diagonalText, 0, 0);
+                                                ctx.restore();
                                             }
                                         }
                                     });
