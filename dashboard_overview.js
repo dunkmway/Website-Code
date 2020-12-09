@@ -732,7 +732,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                     else {
                         //user is not allow access to the dashboard
                         document.getElementById("accessDenied").style.display = "flex";
-                        logout();
+                        document.getElementById('daccessDeniedButton').addEventListener('click', logout);
                         closeLoadingScreen();
                     }
                     
