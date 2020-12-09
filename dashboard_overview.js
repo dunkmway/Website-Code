@@ -489,17 +489,17 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         afterDraw: function(chart) {
                                             if (chart.config.options.optimalLine) {
                                                 var ctxPlugin = chart.chart.ctx;
-                                                var xAxe = chart.scales[chart.config.options.scales.xAxes[0].id];
-                                                var yAxe = chart.scales[chart.config.options.scales.yAxes[0].id];
+                                                var xAxis = chart.scales[chart.config.options.scales.xAxes[0].id];
+                                                var yAxis = chart.scales[chart.config.options.scales.yAxes[0].id];
                                                 
                                                 ctxPlugin.strokeStyle = '#a9a9a9';
                                                 ctxPlugin.beginPath();
-                                                ctxPlugin.moveTo(xAxe.left, yAxe.bottom);
-                                                ctxPlugin.lineTo(xAxe.right, yAxe.top);
+                                                ctxPlugin.moveTo(xAxis.left, yAxis.bottom);
+                                                ctxPlugin.lineTo(xAxis.right, yAxis.top);
                                                 ctxPlugin.stroke();
 
                                                 ctxPlugin.save();
-                                                ctxPlugin.translate(xaxis.right - 50,yaxis.top + 45);
+                                                ctxPlugin.translate(xAxis.right - 50,yAxis.top + 45);
                                                 ctxPlugin.rotate(-0.25 * Math.PI);
 
                                                 var diagonalText = 'optimal';
