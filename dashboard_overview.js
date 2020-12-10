@@ -25,6 +25,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                     docUserName = document.getElementById('userName');
                     docUserName.textContent = userName;
                     var business = docProfile.get("business");
+                    console.log("role: ", role);
                     console.log("username:", userName);
                     console.log("business ID:", business);
                     //set user name
