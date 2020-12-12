@@ -1,4 +1,5 @@
 //what I need to do is put up an error screen if the fetch fails
+//commit test
 console.log("In the dashboard js file")
 var userName = ""
 var businessName = ""
