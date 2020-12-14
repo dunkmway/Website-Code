@@ -535,7 +535,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     ticks: {
                                                         display: false,
                                                         min: 0,
-                                                        max: 10
+                                                        max: 11
                                                     },
                                                     gridLines: {
                                                         drawOnChartArea: false,
@@ -555,7 +555,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     ticks: {
                                                         display: false,
                                                         min: 0,
-                                                        max: 10
+                                                        max: 11
                                                     },
                                                     gridLines: {
                                                         drawOnChartArea: false,
