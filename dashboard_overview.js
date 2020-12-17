@@ -44,6 +44,20 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 docBusinessName.textContent = businessName;
                                 var locations = docBusiness.get("locations");
                                 var gapFeatures = docBusiness.get("all_gap_features");
+
+                                //cut the location names and feature names to be n characters long
+                                let stringMaxLength = 14;
+                                for (i = 0; i < locations.length; i++) {
+                                    if (locations[i].length > stringMaxLength) {
+                                        locations[i] = locations[i].slice(0,stringMaxLength - 3) + "...";
+                                    }
+                                }
+
+                                for (i = 0; i < gapFeatures.length; i++) {
+                                    if (gapFeatures[i].length > stringMaxLength) {
+                                        gapFeatures[i] = gapFeatures[i].slice(0,stringMaxLength - 3) + "..."
+                                    }
+                                }
                                 
                                 //populate nps_locations list
                                 var npsLocationList = document.getElementById('nps_locations');
