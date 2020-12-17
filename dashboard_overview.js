@@ -207,10 +207,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                     liShift.textContent = shiftStr;
                                                     //set the color based on the shift
                                                     if (shift < 0) {
-                                                        liShift.style.color = 'red'
+                                                        liShift.style.color = '#ea6463'
                                                     }
                                                     else if (shift > 0) {
-                                                        liShift.style.color = 'green'
+                                                        liShift.style.color = '#62eb62'
                                                     }
                                                     npsShiftList.appendChild(liShift);
                                                 }
@@ -376,10 +376,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     totalShiftElement.textContent = totalShift.toFixed(1);
                                     //set the color based on the shift
                                     if (totalShift < 0) {
-                                        totalShiftElement.style.color = "red"
+                                        totalShiftElement.style.color = "#ea6463"
                                     }
                                     else if (totalShift > 0) {
-                                        totalShiftElement.style.color = "green"
+                                        totalShiftElement.style.color = "62eb62"
                                     }
 
                                     var ctxNPS = document.getElementById('npsChart').getContext('2d');
@@ -400,7 +400,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     
                                         // Configuration options go here
                                         options: {
-                                            aspectRatio: 1.5,
+                                            aspectRatio: 2.0,
                                             scales: {
                                                 yAxes: [{
                                                     ticks: {
