@@ -77,7 +77,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 
                                 //handle getting the range of dates for the previous n days
                                 var trailingRange = 7;
-                                var numDaysToCheck = 7;
+                                var numDaysToCheck = 14;
 
                                 Date.prototype.subtractDays = function(days) {
                                     var dat = new Date(this.valueOf())
