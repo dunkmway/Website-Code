@@ -732,7 +732,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         // Configuration options go here
                                         options: {
                                             lineValue: average,
-                                            aspectRatio: 1,
+                                            //aspectRatio: 1,
                                             scales: {
                                                 yAxes: [{
                                                     ticks: {
