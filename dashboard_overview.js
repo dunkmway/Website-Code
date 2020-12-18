@@ -572,6 +572,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         options: {
                                             optimalLine: true,
                                             responsive: true,
+                                            maintainAspectRatio: false,
                                             aspectRatio: 1,
                                             scales: {
                                                 yAxes: [{
