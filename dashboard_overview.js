@@ -736,6 +736,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         options: {
                                             lineValue: average,
                                             responsive: true,
+                                            maintainAspectRatio: false,
                                             layout: {
                                                 padding: {
                                                     left: 20,
