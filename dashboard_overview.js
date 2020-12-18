@@ -466,6 +466,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     
                                         // Configuration options go here
                                         options: {
+                                            responsive: true,
                                             //aspectRatio: 3.0,
                                             scales: {
                                                 yAxes: [{
@@ -569,6 +570,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         // Configuration options go here
                                         options: {
                                             optimalLine: true,
+                                            responsive: true,
                                             aspectRatio: 1,
                                             scales: {
                                                 yAxes: [{
@@ -732,6 +734,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         // Configuration options go here
                                         options: {
                                             lineValue: average,
+                                            responsive: true,
                                             layout: {
                                                 padding: {
                                                     left: 20,
