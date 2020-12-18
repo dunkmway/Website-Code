@@ -47,13 +47,13 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                 //cut the location names and feature names to be n characters long
                                 let stringMaxLength = 14;
-                                for (i = 0; i < locations.length; i++) {
+                                for (var i = 0; i < locations.length; i++) {
                                     if (locations[i].length > stringMaxLength) {
                                         locations[i] = locations[i].slice(0,stringMaxLength - 3) + "...";
                                     }
                                 }
 
-                                for (i = 0; i < gapFeatures.length; i++) {
+                                for (var i = 0; i < gapFeatures.length; i++) {
                                     if (gapFeatures[i].length > stringMaxLength) {
                                         gapFeatures[i] = gapFeatures[i].slice(0,stringMaxLength - 3) + "..."
                                     }
@@ -357,6 +357,58 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 //FIXME: Need to calulate the total nps score for all locations, not each one individually
                                 //What is happening now is that each location is pushing to the array and then this is getting a lot of data.
 
+                                //set up the chart plugins
+
+                                //Draw a diagonal line from the bottom left to the top right of the graph and label it "optimal"
+                                Chart.pluginService.register({
+                                    afterDraw: function(chart) {
+                                        if (chart.config.options.optimalLine) {
+                                            var ctxPlugin = chart.chart.ctx;
+                                            var xAxis = chart.scales[chart.config.options.scales.xAxes[0].id];
+                                            var yAxis = chart.scales[chart.config.options.scales.yAxes[0].id];
+                                            
+                                            ctxPlugin.strokeStyle = '#a9a9a9';
+                                            ctxPlugin.beginPath();
+                                            ctxPlugin.moveTo(xAxis.left, yAxis.bottom);
+                                            ctxPlugin.lineTo(xAxis.right, yAxis.top);
+                                            ctxPlugin.stroke();
+
+                                            ctxPlugin.save();
+                                            ctxPlugin.translate(xAxis.right - 50,yAxis.top + 45);
+                                            ctxPlugin.rotate(-0.25 * Math.PI);
+
+                                            var diagonalText = 'optimal';
+                                            ctxPlugin.font = "12px Arial";
+                                            ctxPlugin.fillStyle = "#a9a9a9";
+                                            ctxPlugin.fillText(diagonalText, 0, 0);
+                                            ctxPlugin.restore();
+                                        }
+                                    }
+                                });
+
+                                //draw a horizontal line at the given y value
+                                Chart.pluginService.register({
+                                    afterDraw: function(chart) {
+                                      var lineValue = chart.config.options.lineValue;
+                                      if (chart.config.options.lineValue) {
+                                        var ctxPlugin = chart.chart.ctx;
+                                        var xAxis = chart.scales[chart.config.options.scales.xAxes[0].id];
+                                        var point = chart.scales[chart.config.options.scales.yAxes[0].id].getPixelForValue(lineValue)
+                                  
+                                        ctxPlugin.strokeStyle = '#ea6463';
+                                        ctxPlugin.beginPath();
+                                        ctxPlugin.moveTo(xAxis.left, point);
+                                        ctxPlugin.lineTo(xAxis.right, point);
+                                        ctxPlugin.stroke();
+                                  
+                                        var text = 'avg';
+                                        ctxPlugin.font = "12px Arial";
+                                        ctxPlugin.fillStyle = "#ea6463";
+                                        ctxPlugin.fillText(text, xAxis.right - 30, point - 10); 
+                                      }
+                                    }
+                                  });
+
                                 //need to only get the npsDates that we are requesting which is numDaysToCheck
                                 //if this is the final time calulating the scores then calculate the totals
                                 Promise.allSettled(npsPromises).then(function(getNPSTotals) {
@@ -500,32 +552,6 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     // var myLineExtend = Chart.controllers.line.prototype.draw;
 
                                     var ctxGAP = document.getElementById("gapChart").getContext("2d");
-
-                                    Chart.pluginService.register({
-                                        afterDraw: function(chart) {
-                                            if (chart.config.options.optimalLine) {
-                                                var ctxPlugin = chart.chart.ctx;
-                                                var xAxis = chart.scales[chart.config.options.scales.xAxes[0].id];
-                                                var yAxis = chart.scales[chart.config.options.scales.yAxes[0].id];
-                                                
-                                                ctxPlugin.strokeStyle = '#a9a9a9';
-                                                ctxPlugin.beginPath();
-                                                ctxPlugin.moveTo(xAxis.left, yAxis.bottom);
-                                                ctxPlugin.lineTo(xAxis.right, yAxis.top);
-                                                ctxPlugin.stroke();
-
-                                                ctxPlugin.save();
-                                                ctxPlugin.translate(xAxis.right - 50,yAxis.top + 45);
-                                                ctxPlugin.rotate(-0.25 * Math.PI);
-
-                                                var diagonalText = 'optimal';
-                                                ctxPlugin.font = "12px Arial";
-                                                ctxPlugin.fillStyle = "#a9a9a9";
-                                                ctxPlugin.fillText(diagonalText, 0, 0);
-                                                ctxPlugin.restore();
-                                            }
-                                        }
-                                    });
 
                                     var config = {
                                         // The type of chart we want to create
@@ -678,6 +704,16 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     var participationPriorWeeklyTotalElement = document.getElementById('participationPriorWeeklyTotal');
                                     participationPriorWeeklyTotalElement.textContent = priorWeeklyTotal;
 
+                                    //get the average particpation over the past 7 days
+                                    var lastSevenParticipation = totalParticipationCount.slice(0,7)
+                                    var average = 0.0;
+                                    var sum = 0.0;
+                                    for (var i = 0; i < lastSevenParticipation.length; i++) {
+                                        sum += lastSevenParticipation[i];
+                                    }
+                                    average = sum / lastSevenParticipation.length;
+                                    average = Math.round(average * 10) / 10
+
                                     //create the data points
                                     var ctxParticipation = document.getElementById('participationChart').getContext('2d');
                                     var chart = new Chart(ctxParticipation, {
@@ -689,12 +725,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                 borderColor: '##a9a9a9',
                                                 backgroundColor: '#a9a9a9',
                                                 barPercentage: .5,
-                                                data: totalParticipationCount.slice(0,7).reverse()
+                                                data: lastSevenParticipation.reverse()
                                             }]
                                         },
 
                                         // Configuration options go here
                                         options: {
+                                            lineValue: average,
                                             aspectRatio: 1,
                                             scales: {
                                                 yAxes: [{
