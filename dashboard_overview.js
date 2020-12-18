@@ -404,7 +404,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         var text = 'avg';
                                         ctxPlugin.font = "12px Arial";
                                         ctxPlugin.fillStyle = "#ea6463";
-                                        ctxPlugin.fillText(text, xAxis.right - 30, point - 10); 
+                                        ctxPlugin.fillText(text, xAxis.right + 20, point); 
                                       }
                                     }
                                   });
@@ -731,6 +731,14 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                                         // Configuration options go here
                                         options: {
+                                            layout: {
+                                                padding: {
+                                                    left: 20,
+                                                    right: 20,
+                                                    top: 0,
+                                                    bottom: 0
+                                                }
+                                            },
                                             lineValue: average,
                                             aspectRatio: 1,
                                             scales: {
