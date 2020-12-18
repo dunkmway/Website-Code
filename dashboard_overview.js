@@ -467,6 +467,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         // Configuration options go here
                                         options: {
                                             responsive: true,
+                                            maintainAspectRatio: false,
                                             //aspectRatio: 3.0,
                                             scales: {
                                                 yAxes: [{
