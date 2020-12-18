@@ -404,7 +404,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         var text = 'avg';
                                         ctxPlugin.font = "12px Arial";
                                         ctxPlugin.fillStyle = "#ea6463";
-                                        ctxPlugin.fillText(text, xAxis.left + 20, point - 6); 
+                                        ctxPlugin.fillText(text, xAxis.left - 20, point - 6); 
                                       }
                                     }
                                   });
