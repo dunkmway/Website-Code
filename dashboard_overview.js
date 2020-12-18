@@ -732,6 +732,12 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         // Configuration options go here
                                         options: {
                                             lineValue: average,
+                                            layout: {
+                                                padding: {
+                                                    left: 20,
+                                                    right: 20,
+                                                }
+                                            },
                                             //aspectRatio: 1,
                                             scales: {
                                                 yAxes: [{
