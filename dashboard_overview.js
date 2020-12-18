@@ -414,7 +414,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                     
                                         // Configuration options go here
                                         options: {
-                                            aspectRatio: 2.0,
+                                            aspectRatio: 3.0,
                                             scales: {
                                                 yAxes: [{
                                                     ticks: {
