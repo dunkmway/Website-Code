@@ -22,7 +22,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                 if (docUser.exists) {
                     console.log("got user doc");
                     userName = docUser.get("name");
-                    sessionStorage.setItem("userName", userName);
+                    
                     role = docUser.get("role");
                     docUserName = document.getElementById('userName');
                     docUserName.textContent = userName;
@@ -30,6 +30,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                     console.log("role: ", role);
                     console.log("username:", userName);
                     console.log("business ID:", business);
+
+                    sessionStorage.setItem("userName", userName);
+                    sessionStorage.setItem("businessID", business);
                     //set user name
                     //document.getElementById('profileName').innerHTML = userName;
 
