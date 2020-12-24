@@ -20,9 +20,9 @@ firebase.auth().onAuthStateChanged(function(user) {
         profileDoc.get()
             .then(function(docUser) {
                 if (docUser.exists) {
-                    sessionStorage.setItem("userProfileDoc", docUser);
-                    console.log("got user doc")
+                    console.log("got user doc");
                     userName = docUser.get("name");
+                    sessionStorage.setItem("userName", userName);
                     role = docUser.get("role");
                     docUserName = document.getElementById('userName');
                     docUserName.textContent = userName;
@@ -39,9 +39,9 @@ firebase.auth().onAuthStateChanged(function(user) {
                         businessDoc.get()
                         .then(function(docBusiness) {
                             if (docBusiness.exists) {
-                                sessionStorage.setItem("businessProfileDoc", docBusiness);
                                 console.log("got business doc")
                                 businessName = docBusiness.get("name");
+                                sessionStorage.setItem("businessName", businessName);
                                 docBusinessName = document.getElementById('businessName');
                                 docBusinessName.textContent = businessName;
                                 var locations = docBusiness.get("locations");
