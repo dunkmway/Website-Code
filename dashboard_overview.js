@@ -145,21 +145,23 @@ firebase.auth().onAuthStateChanged(function(user) {
                                 var participationPromises = [];
 
 
-                                for (var i = 0; i < yearsNeeded.length; i++) {
-                                    for (var j = 0; j < locations.length; j++) {
-                                        console.log("Grabbing NPS data for location " + String(j))
+                                
+                                for (var j = 0; j < locations.length; j++) {
+                                    console.log("Grabbing NPS data for location " + String(j))
+
+                                    //get the data needed for all of the dates in the date array
+                                    var npsCountArray = [];
+                                    var npsDetractorsArray = [];
+                                    var npsPromotersArray = [];
+                                    var npsScoreArray = new Array(numDaysToCheck).fill(0);
+
+                                    for (var i = 0; i < yearsNeeded.length; i++) {
 
                                         //NPS data
                                         let locationNPSDoc = businessDoc.collection("locations").doc(String(j)).collection("campaigns").doc("NPS").collection("year").doc(yearsNeeded[i]);
                                         var npsPromise = locationNPSDoc.get()
                                             .then(function(docLocationNPS) {
                                                 if(docLocationNPS.exists) {
-
-                                                    //get the data needed for all of the dates in the date array
-                                                    var npsCountArray = [];
-                                                    var npsDetractorsArray = [];
-                                                    var npsPromotersArray = [];
-                                                    var npsScoreArray = new Array(numDaysToCheck).fill(0);
 
                                                     //console.log({npsDateArray: strDateArray});
                                                     for (var k = 0; k < strDateArray.length; k++) {
@@ -229,7 +231,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                                         liShift.style.color = '#ea6463'
                                                     }
                                                     else if (shift > 0) {
-                                                        liShift.style.color = '#62eb62'
+                                                        liShift.style.color = '#61c959'
                                                     }
                                                     npsShiftList.appendChild(liShift);
                                                 }
@@ -450,7 +452,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                                         totalShiftElement.style.color = "#ea6463"
                                     }
                                     else if (totalShift > 0) {
-                                        totalShiftElement.style.color = "62eb62"
+                                        totalShiftElement.style.color = "61c959"
                                     }
 
                                     var ctxNPS = document.getElementById('npsChart').getContext('2d');
