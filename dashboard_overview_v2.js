@@ -202,6 +202,8 @@ function displayNPS() {
         console.log({test});
         var npsToday = calculateNpsScore(0, trailingRangeNPS, loc.npsCount, loc.npsDetractors, loc.npsPromoters);
         var npsYesterday = calculateNpsScore(1, trailingRangeNPS, loc.npsCount, loc.npsDetractors, loc.npsPromoters);
+        console.log({npsToday});
+        console.log({npsYesterday});
         var shift = npsToday - npsYesterday;
 
         var location = document.createElement('li');
