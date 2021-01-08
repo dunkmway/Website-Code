@@ -48,7 +48,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         //calculate and display the data from firebase
         .then(function() {
             displayNav();
-
+            displayNPS();
         })
         .catch((error) => HandleErrors(error));
 
