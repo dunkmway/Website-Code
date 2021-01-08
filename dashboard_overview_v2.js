@@ -198,6 +198,7 @@ function displayNPS() {
     for (var i = 0; i < locationData.length; i++) {
         //area breakdown
         var loc = locationData[i];
+        console.log({loc});
         var npsToday = calculateNpsScore(0, trailingRangeNPS, loc.npsCount, loc.npsDetractors, loc.npsPromoters);
         var npsYesterday = calculateNpsScore(1, trailingRangeNPS, loc.npsCount, loc.npsDetractors, loc.npsPromoters);
         var shift = npsToday - npsYesterday;
