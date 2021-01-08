@@ -157,17 +157,11 @@ function HandleErrors(err) {
 }
 
 function calculateNpsScore(dateIndex, trailing, count, detractors, promoters) {
-    console.log({dateIndex});
-    console.log({trailing});
-    console.log({count});
-    console.log({detractors});
-    console.log({promoters});
-
     var totalCount = 0;
     var totalDetractors = 0;
     var totalPromoters = 0;
     var npsScore = 0;
-    for (i = 0; i < trailing; i++) {
+    for (var i = 0; i < trailing; i++) {
         totalCount += count[dateIndex + i];
         totalDetractors += detractors[dateIndex + i];
         totalPromoters += promoters[dateIndex + i];
@@ -183,7 +177,6 @@ function calculateNpsScore(dateIndex, trailing, count, detractors, promoters) {
         npsScore = 0;
     }
     return npsScore;
-    
 }
 
 function displayNav() {
