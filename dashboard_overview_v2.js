@@ -166,7 +166,7 @@ function CalculateAndDisplayData() {
     var npsScoresList = document.getElementById('nps_scores');
     var npsShiftList = document.getElementById('nps_shift');
 
-    for (var i = 0; i < locationData; i++) {
+    for (var i = 0; i < locationData.length; i++) {
         //area breakdown
         var loc = locationData[i];
         var npsToday = calculateNpsScore(0, trailingRangeNPS, loc.npsCount, loc.npsDetractors, loc.npsPromoters);
