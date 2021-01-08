@@ -164,6 +164,7 @@ function calculateNpsScore(dateIndex, trailing, count, detractors, promoters) {
     for (var i = 0; i < trailing; i++) {
         totalCount += count[dateIndex + i];
         console.log({count});
+        console.log(count[i]);
         totalDetractors += detractors[dateIndex + i];
         totalPromoters += promoters[dateIndex + i];
     }
