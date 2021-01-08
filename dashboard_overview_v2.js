@@ -46,7 +46,10 @@ firebase.auth().onAuthStateChanged(function(user) {
         .then(() => GetSurveyData())
         .catch((error) => HandleErrors(error))
         //calculate and display the data from firebase
-        .then(() => CalculateAndDisplayData())
+        .then(function() {
+            displayNav();
+
+        })
         .catch((error) => HandleErrors(error));
 
     }
@@ -153,11 +156,37 @@ function HandleErrors(err) {
     return Promise.reject(err);
 }
 
-function CalculateAndDisplayData() {
-    //display user and company data
-    displayNavData();
+function calculateNpsScore(dateIndex, trailing, count, detractors, promoters) {
+    var totalCount = 0;
+    var totalDetractors = 0;
+    var totalPromoters = 0;
+    var npsScore = 0;
+    for (i = 0; i < trailing; i++) {
+        totalCount += count[dateIndex + i];
+        totalDetractors += detractors[dateIndex + i];
+        totalPromoters += promoters[dateIndex + i];
+    }
 
-    //NPS
+    if (totalCount != 0) {
+        npsScore = (totalPromoters - totalDetractors) / totalCount * 100;
+    }
+    else {
+        npsScore = 0;
+    }
+    
+    return npsScore;
+    
+}
+
+function displayNav() {
+    var docUserName = document.getElementById('userName');
+    docUserName.textContent = userName;
+
+    var docBusinessName = document.getElementById('businessName');
+    docBusinessName.textContent = businessName;
+}
+
+function displayNPS() {
     var totalCount = [];
     var totalDetractors = [];
     var totalPromoters = [];
@@ -208,36 +237,92 @@ function CalculateAndDisplayData() {
         }
 
     }
+
+    //current total nps
+    var npsTotalScores = [];
+    for (var i = 0; i < numDaysToCheckNPS; i++) {
+        npsTotal = calculateNpsScore(i, trailingRangeNPS, totalCount, totalDetractors, totalPromoters);
+        npsTotalScores.push(npsTotal);
+    }
+
+    var npsTodayTotal = npsTotalScores[0];
+    var npsYesterdayTotal = npsTotalScores[1];
+    var shiftTotal = npsTodayTotal - npsYesterdayTotal;
+
+    var totalScoreElement = document.getElementById('currentTotalNPS');
+    totalScoreElement.textContent = npsTodayTotal.toFixed(1);
+
+    var totalShiftElement = document.getElementById("currentTotalNPSShift");
+    totalShiftElement.textContent = shiftTotal.toFixed(1);
+
+    //the chart
+    GraphNPS(npsTotalScores);
 }
 
-function calculateNpsScore(dateIndex, trailing, count, detractors, promoters) {
-    var totalCount = 0;
-    var totalDetractors = 0;
-    var totalPromoters = 0;
-    var npsScore = 0;
-    for (i = 0; i < trailing; i++) {
-        totalCount += count[dateIndex + i];
-        totalDetractors += detractors[dateIndex + i];
-        totalPromoters += promoters[dateIndex + i];
-    }
-
-    if (totalCount != 0) {
-        npsScore = (totalPromoters - totalDetractors) / totalCount * 100;
-    }
-    else {
-        npsScore = 0;
-    }
+function GraphNPS(npsTotalScores) {
+    var ctxNPS = document.getElementById('npsChart').getContext('2d');
+    var chart = new Chart(ctxNPS, {
+        // The type of chart we want to create
+        type: 'line',
     
-    return npsScore;
+        // The data for our dataset
+        data: {
+            labels: dateRangeNPS.reverse(),
+            datasets: [{
+                backgroundColor: '#707070',
+                borderColor: '#707070',
+                fill: false,
+                data: npsTotalScores.reverse()
+            }]
+        },
     
-}
-
-function displayNavData() {
-    var docUserName = document.getElementById('userName');
-    docUserName.textContent = userName;
-
-    var docBusinessName = document.getElementById('businessName');
-    docBusinessName.textContent = businessName;
+        // Configuration options go here
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            //aspectRatio: 3.0,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        precision: 0,
+                        maxTicksLimit: 5,
+                        fontFamily: 'Arial',
+                        fontColor: '#a9a9a9'
+                    },
+                    gridLines: {
+                        drawBorder: false
+                    },
+                    position: 'right'
+                }],
+                xAxes: [{
+                    ticks: {
+                        display: false
+                    },
+                    gridLines: {
+                        display: false
+                    },
+                    scaleLabel: {
+                        display: false
+                    }
+                }]
+            },
+            legend: {
+                display: false
+            },
+            layout: {
+                padding: {
+                    left: 10
+                }
+            },
+            tooltips: {
+                custom: function(tooltip) {
+                    if (!tooltip) return;
+                    // disable displaying the color box;
+                    tooltip.displayColors = false;
+                },
+            }
+        }
+    });
 }
 
 function Logout() {
