@@ -21,7 +21,8 @@ let numDaysToCheckNPS = 14;
 let trailingRangeGAP = 7;
 let numDaysToCheckGAP = 14;
 
-let numDaysToCheckParticipation = 14;
+let priorNumDaysParticipation = 7;
+let currentNumDaysParticipation = 7;
 
 let allowedRoles = ['admin'];
 let db = firebase.firestore();
@@ -47,8 +48,11 @@ firebase.auth().onAuthStateChanged(function(user) {
         .catch((error) => HandleErrors(error))
         //calculate and display the data from firebase
         .then(function() {
+            console.log("Should have grabbed all of the data by now. Moving to display the data");
             displayNav();
             displayNPS();
+            displayGAP();
+            displayParticipation();
         })
         .catch((error) => HandleErrors(error));
 
@@ -57,6 +61,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 //function retrieves all user data from profile doc
 function GetUserData(doc) {
+    console.log("In GetUserData()");
     if (doc.exists) {
         userName = doc.get('name');
         role = doc.get('role');
@@ -81,6 +86,7 @@ function GetUserData(doc) {
 
 //function retrives all business data from business doc
 function GetBusinessData(doc) {
+    console.log("In GetBusinessData()");
     if (doc.exists) {
         businessName = doc.get('name');
         var locations = doc.get('locations');
@@ -98,6 +104,7 @@ function GetBusinessData(doc) {
 
 //This function will handle getting all of the survey data
 function GetSurveyData() {
+    console.log("In GetSurveyData()");
     var surveyDataPromises = []
 
     //get the dates needed for each survey type
@@ -107,19 +114,20 @@ function GetSurveyData() {
     var daysNeededGAP = numDaysToCheckGAP + trailingRangeGAP;
     dateRangeGAP = getDateRange(new Date(), (new Date()).subtractDays(daysNeededGAP));
     
-    var daysNeededParticpation = numDaysToCheckParticipation;
+    var daysNeededParticpation = currentNumDaysParticipation + priorNumDaysParticipation;
     dateRangeParticpation = getDateRange(new Date(), (new Date()).subtractDays(daysNeededParticpation));
 
     //run through each location object and fetch all of the data
     for (var i = 0; i < locationData.length; i++) {
         var npsPromise = locationData[i].fetchNPSData(dateRangeNPS, businessUID);
-        surveyDataPromises.concat(npsPromise);
+        console.log({npsPromise});
+        surveyDataPromises.push(npsPromise);
 
         var gapPromise = locationData[i].fetchGAPData(dateRangeGAP, gapFeatures, businessUID);
-        surveyDataPromises.concat(gapPromise);
+        surveyDataPromises.push(gapPromise);
 
         var participationPromise = locationData[i].fetchParticipationData(dateRangeParticpation, businessUID);
-        surveyDataPromises.concat(participationPromise);
+        surveyDataPromises.push(participationPromise);
     }
 
     //return a promise that resolves when all promises have resolved
@@ -161,11 +169,9 @@ function calculateNpsScore(dateIndex, trailing, count, detractors, promoters) {
     var totalDetractors = 0;
     var totalPromoters = 0;
     var npsScore = 0;
-    console.log({count});
+
     for (var i = 0; i < trailing; i++) {
         totalCount += count[dateIndex + i];
-        console.log(locationData[0].npsCount[i]);
-        console.log({i})
         totalDetractors += detractors[dateIndex + i];
         totalPromoters += promoters[dateIndex + i];
     }
@@ -199,16 +205,12 @@ function displayNPS() {
     for (var i = 0; i < locationData.length; i++) {
         //area breakdown
         var loc = locationData[i];
-        var test = loc.npsCount;
-        console.log({test});
         var npsToday = calculateNpsScore(0, trailingRangeNPS, loc.npsCount, loc.npsDetractors, loc.npsPromoters);
         var npsYesterday = calculateNpsScore(1, trailingRangeNPS, loc.npsCount, loc.npsDetractors, loc.npsPromoters);
-        console.log({npsToday});
-        console.log({npsYesterday});
         var shift = npsToday - npsYesterday;
 
         var location = document.createElement('li');
-        location.textContent = locationData[i].locationName;
+        location.textContent = loc.locationName;
         npsLocationList.appendChild(location);
 
         var score = document.createElement('li');
@@ -228,7 +230,7 @@ function displayNPS() {
 
 
         //sum all of the locations together
-        for (var j = 0; j < loc.npsCount; j++) {
+        for (var j = 0; j < loc.npsCount.length; j++) {
             if (totalCount[j] == undefined) {
                 totalCount.push(loc.npsCount[j]);
                 totalDetractors.push(loc.npsDetractors[j]);
@@ -247,7 +249,7 @@ function displayNPS() {
     var npsTotalScores = [];
     for (var i = 0; i < numDaysToCheckNPS; i++) {
         npsTotal = calculateNpsScore(i, trailingRangeNPS, totalCount, totalDetractors, totalPromoters);
-        npsTotalScores.push(npsTotal);
+        npsTotalScores.push(Math.round(npsTotal * 10) / 10);
     }
 
     var npsTodayTotal = npsTotalScores[0];
@@ -259,12 +261,128 @@ function displayNPS() {
 
     var totalShiftElement = document.getElementById("currentTotalNPSShift");
     totalShiftElement.textContent = shiftTotal.toFixed(1);
+    if (shiftTotal < 0) {
+        totalShiftElement.style.color = '#ea6463'
+    }
+    else if (shiftTotal > 0) {
+        totalShiftElement.style.color = '#61c959'
+    }
 
     //the chart
-    GraphNPS(npsTotalScores);
+    GraphNPS(npsTotalScores, traditionalFormatDates(dateRangeNPS).slice(0, numDaysToCheckNPS));
 }
 
-function GraphNPS(npsTotalScores) {
+function displayGAP() {
+    var gapFeatureList = document.getElementById('gap_features');
+    var gapImportanceList = document.getElementById('gap_importance');
+    var gapPerformanceList = document.getElementById('gap_performance');
+
+    var gapChartPoints = [];
+
+    //run through each feature and sum up the totals for the locations
+    for (var i = 0; i < gapFeatures.length; i++) {
+        var totalImportanceCount = 0;
+        var totalImportanceSum = 0;
+        var totalPerformanceCount = 0;
+        var totalPerformanceSum = 0;
+
+        var feature = document.createElement('li');
+        feature.textContent = gapFeatures[i];
+        gapFeatureList.appendChild(feature);
+
+        for (var j = 0; j < locationData.length; j++) {
+            var loc = locationData[j];
+            var feat = loc.gapFeatureData[i];
+            for (var k = 0; k < feat.featureImportanceCount.length; k++) {
+                totalImportanceCount += feat.featureImportanceCount[k];
+                totalImportanceSum += feat.featureImportanceSum[k];
+                totalPerformanceCount += feat.featurePerformanceCount[k];
+                totalPerformanceSum += feat.featurePerformanceSum[k];
+            }
+        }
+
+        var featureImportanceScore;
+        var featurePerformanceScore
+
+        if (totalImportanceCount != 0) {
+            featureImportanceScore = totalImportanceSum / totalImportanceCount;
+        }
+        else {
+            featureImportanceScore = 0;
+        }
+
+        if (totalPerformanceCount != 0) {
+            featurePerformanceScore = totalPerformanceSum / totalPerformanceCount;
+        }
+        else {
+            featurePerformanceScore = 0;
+        }
+
+        var importanceScore = document.createElement('li');
+        importanceScore.textContent = featureImportanceScore.toFixed(1);
+        gapImportanceList.appendChild(importanceScore);
+
+        var performanceScore = document.createElement('li');
+        performanceScore.textContent = featurePerformanceScore.toFixed(1);
+        gapPerformanceList.appendChild(performanceScore);
+
+        //set the points to be used in the chart
+        gapChartPoints.push({x:Math.round(featureImportanceScore * 10) / 10, y:Math.round(featurePerformanceScore * 10) / 10});
+    }
+
+    GraphGAP(gapChartPoints);
+}
+
+function displayParticipation() {
+    var totalParticipationCount = [];
+
+    for (var i = 0; i < locationData.length; i++) {
+        var loc = locationData[i];
+        for (var j = 0; j < loc.participationCount.length; j++) {
+            if (totalParticipationCount[j] == undefined) {
+                totalParticipationCount.push(loc.participationCount[j]);
+            }
+            else {
+                totalParticipationCount[j] += loc.participationCount[j];
+            }
+        }
+    }
+
+    console.log(totalParticipationCount);
+
+    var currentTotal = 0;
+    for (var i = 0; i < currentNumDaysParticipation; i++) {
+        currentTotal += totalParticipationCount[i];
+    }
+
+    var priorTotal = 0;
+    for (var i = currentNumDaysParticipation; i < totalParticipationCount.length; i++) {
+        priorTotal += totalParticipationCount[i];
+    }
+
+    var weeklyTotalElement = document.getElementById('participationWeeklyTotal');
+    var priorWeeklyTotalElement = document.getElementById('participationPriorWeeklyTotal');
+
+    weeklyTotalElement.textContent = currentTotal;
+    priorWeeklyTotalElement.textContent = priorTotal;
+
+    //get the past "currentNumDaysParticipation" written in terms of the abbreviations
+    let dayAbbrev = ['Su', 'M', 'T', 'W', 'Th', 'F', 'S'];
+    var strParticipationDates = [];
+    for (i = 0; i < currentNumDaysParticipation; i++) {
+        var day = dayAbbrev[(dateRangeParticpation[i].getDay()) % dayAbbrev.length];
+        strParticipationDates.push(day);
+    }
+
+    //get the average value for the past "currentNumDaysParticipation"
+    var avg = currentTotal / currentNumDaysParticipation.length;
+
+    //graph the chart 
+    GraphParticipation(strParticipationDates, totalParticipationCount.slice(0, currentNumDaysParticipation), avg);
+
+}
+
+function GraphNPS(scores, days) {
     var ctxNPS = document.getElementById('npsChart').getContext('2d');
     var chart = new Chart(ctxNPS, {
         // The type of chart we want to create
@@ -272,12 +390,12 @@ function GraphNPS(npsTotalScores) {
     
         // The data for our dataset
         data: {
-            labels: dateRangeNPS.reverse(),
+            labels: days.reverse(),
             datasets: [{
                 backgroundColor: '#707070',
                 borderColor: '#707070',
                 fill: false,
-                data: npsTotalScores.reverse()
+                data: scores.reverse()
             }]
         },
     
@@ -330,6 +448,167 @@ function GraphNPS(npsTotalScores) {
     });
 }
 
+function GraphGAP(scores) {
+    var ctxGAP = document.getElementById("gapChart").getContext("2d");
+
+    var config = {
+        // The type of chart we want to create
+        type: 'scatter',
+        data: {
+            labels: gapFeatures,
+            datasets: [{
+            data: scores,
+            borderColor: '#47a2ee',
+            backgroundColor: '#47a2ee',
+            pointRadius: 4
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            optimalLine: true,
+            responsive: true,
+            maintainAspectRatio: false,
+            aspectRatio: 1,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        display: false,
+                        min: 0,
+                        max: 11
+                    },
+                    gridLines: {
+                        drawOnChartArea: false,
+                        lineWidth: 3,
+                        color: '#707070',
+                        drawTicks: false
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: "performance",
+                        fontColor: '#a9a9a9',
+                        fontSize: 24,
+                        fontFamily: "Arial"
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        display: false,
+                        min: 0,
+                        max: 11
+                    },
+                    gridLines: {
+                        drawOnChartArea: false,
+                        lineWidth: 3,
+                        color: '#707070',
+                        drawTicks: false
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: "importance",
+                        fontColor: '#a9a9a9',
+                        fontSize: 24,
+                        fontFamily: "Arial"
+                    }
+                }]
+            },
+            legend: {
+                display: false
+            },
+            layout: {
+                padding: {
+                    left: 10
+                }
+            },
+            tooltips: {
+                custom: function(tooltip) {
+                    if (!tooltip) return;
+                    // disable displaying the color box;
+                    tooltip.displayColors = false;
+                },
+                mode: 'index',
+                callbacks: {
+                    title: function(tooltipItem, data) {
+                        return data.labels[tooltipItem[0].index];
+                    },
+                    label: function(tooltipItem, data) {
+                        var xValue = tooltipItem.xLabel;
+                        var yValue = tooltipItem.yLabel;
+                        return ["performance: " + yValue, "importance: " + xValue];
+                    }
+                }
+            }
+        }
+    }
+    let gapChart = new Chart(ctxGAP, config);
+}
+
+function GraphParticipation(days, counts, average) {
+    var ctxParticipation = document.getElementById('participationChart').getContext('2d');
+    var chart = new Chart(ctxParticipation, {
+        // The type of chart we want to create
+        type: 'bar',
+        data: {
+            labels: days.reverse(),
+            datasets: [{
+                borderColor: '##a9a9a9',
+                backgroundColor: '#a9a9a9',
+                barPercentage: .5,
+                data: counts.reverse()
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            lineValue: average,
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    left: 20,
+                    right: 20,
+                }
+            },
+            //aspectRatio: 1,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        precision: 0,
+                        maxTicksLimit: 5,
+                        fontFamily: 'Arial',
+                        fontColor: '#a9a9a9'
+                    },
+                    gridLines: {
+                        drawBorder: false
+                    },
+                    position: 'right'
+                }],
+                xAxes: [{
+                    ticks: {
+                        display: true,
+                        fontFamily: 'Arial',
+                        fontColor: '#a9a9a9'
+                    },
+                    gridLines: {
+                        drawOnChartArea: false,
+                        drawTicks: false
+                    }
+                }]
+            },
+            legend: {
+                display: false
+            },
+            tooltips: {
+                custom: function(tooltip) {
+                    if (!tooltip) return;
+                    // disable displaying the color box;
+                    tooltip.displayColors = false;
+                },
+            }
+        }
+    });
+}
+
 function Logout() {
     firebase.auth().signOut()
     .then(function() {
@@ -344,3 +623,73 @@ function Logout() {
         console.log('Error message: ' + errorMessage);
     });
 }
+
+/**
+ * Formats date objects into the form mm-dd-yyyy.
+ * Returns an array of strings.
+ * @param {array} dates array of date objects
+ */
+function traditionalFormatDates(dates) {
+    var strRange = [];
+    for (var i = 0; i < dates.length; i++) {
+        let yearStr = String(dates[i].getFullYear());
+        let monthStr = ("0" + String(dates[i].getMonth() + 1)).slice(-2);
+        let dayStr = ("0" + String(dates[i].getDate())).slice(-2);
+        let dateStr = monthStr + '-' + dayStr + '-' + yearStr;
+        strRange.push(dateStr);
+    }
+    return strRange;
+}
+
+//set up the chart plugins
+
+//Draw a diagonal line from the bottom left to the top right of the graph and label it "optimal"
+Chart.pluginService.register({
+    afterDraw: function(chart) {
+        if (chart.config.options.optimalLine) {
+            var ctxPlugin = chart.chart.ctx;
+            var xAxis = chart.scales[chart.config.options.scales.xAxes[0].id];
+            var yAxis = chart.scales[chart.config.options.scales.yAxes[0].id];
+            
+            ctxPlugin.strokeStyle = '#a9a9a9';
+            ctxPlugin.beginPath();
+            ctxPlugin.moveTo(xAxis.left, yAxis.bottom);
+            ctxPlugin.lineTo(xAxis.right, yAxis.top);
+            ctxPlugin.stroke();
+
+            ctxPlugin.save();
+            ctxPlugin.translate(xAxis.right - 50,yAxis.top + 45);
+            var rotation = Math.atan((yAxis.top - yAxis.bottom) / (xAxis.right - xAxis.left))
+            ctxPlugin.rotate(rotation);
+
+            var diagonalText = 'optimal';
+            ctxPlugin.font = "12px Arial";
+            ctxPlugin.fillStyle = "#a9a9a9";
+            ctxPlugin.fillText(diagonalText, 0, 0);
+            ctxPlugin.restore();
+        }
+    }
+});
+
+//draw a horizontal line at the given y value
+Chart.pluginService.register({
+    afterDraw: function(chart) {
+        var lineValue = chart.config.options.lineValue;
+        if (chart.config.options.lineValue) {
+        var ctxPlugin = chart.chart.ctx;
+        var xAxis = chart.scales[chart.config.options.scales.xAxes[0].id];
+        var point = chart.scales[chart.config.options.scales.yAxes[0].id].getPixelForValue(lineValue)
+    
+        ctxPlugin.strokeStyle = '#ea6463';
+        ctxPlugin.beginPath();
+        ctxPlugin.moveTo(xAxis.left, point);
+        ctxPlugin.lineTo(xAxis.right, point);
+        ctxPlugin.stroke();
+    
+        var text = 'avg';
+        ctxPlugin.font = "12px Arial";
+        ctxPlugin.fillStyle = "#ea6463";
+        ctxPlugin.fillText(text, xAxis.left - 20, point + 3); 
+        }
+    }
+    });

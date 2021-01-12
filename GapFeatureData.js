@@ -18,6 +18,7 @@ class GAPFeatureData {
     }
 
     fetchFeatureData(locationIndex, dates, businessUID) {
+        console.log("In fetchFeatureData()");
         let db = firebase.firestore();
         //set up the feature data arrays
         for (var i = 0; i < dates.length; i++) {
@@ -32,7 +33,7 @@ class GAPFeatureData {
 
         //extract the data separately by year
         var years = this.getYearsNeeded(dates);
-        var strDates = this.formatDates(dates);
+        var strDates = this.firebaseFormatDates(dates);
 
         for (var i = 0; i < years.length; i++) {
             var year = years[i];
@@ -46,13 +47,13 @@ class GAPFeatureData {
                                    .doc(String(this.featureIndex))
                                    .collection("year")
                                    .doc(year);
-            var featurePromise = featureYearRef.get();
+            var getPromise = featureYearRef.get();
             var self = this;
             function passIntoPromise(year) {
-                featurePromise.then((doc) => self.extractFeatureData(doc, strDates, year));
+                var extractPromise = getPromise.then((doc) => self.extractFeatureData(doc, strDates, year));
+                featurePromises.push(extractPromise);
             }
         passIntoPromise(year);
-        featurePromises.push(featurePromise);
         }
         return Promise.all(featurePromises);
     }
@@ -65,6 +66,7 @@ class GAPFeatureData {
      * @param {string} years string of year for the  doc to fetch
      */
     extractFeatureData(doc, dates, year) {
+        console.log("In extractFeatureData()");
         if (doc.exists) {
             //run through each day
             for (var i = 0; i < dates.length; i++) {
@@ -97,7 +99,7 @@ class GAPFeatureData {
      * Returns an array of strings.
      * @param {array} dates array of date objects
      */
-    formatDates(dates) {
+    firebaseFormatDates(dates) {
         var strRange = [];
         for (var i = 0; i < dates.length; i++) {
             let yearStr = String(dates[i].getFullYear());

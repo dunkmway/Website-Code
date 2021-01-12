@@ -31,6 +31,7 @@ class LocationData {
      * @param {array} dates array of date objects 
      */
     fetchNPSData(dates, businessUID) {
+        console.log("In fetchNPSData()");
         let db = firebase.firestore();
 
         //set up the nps data arrays
@@ -45,7 +46,7 @@ class LocationData {
 
         //extract the data separately by year
         var years = this.getYearsNeeded(dates);
-        var strDates = this.formatDates(dates);
+        var strDates = this.firebaseFormatDates(dates);
 
         for (var i = 0; i < years.length; i++) {
             var year = years[i];
@@ -57,13 +58,14 @@ class LocationData {
                                .doc("NPS")
                                .collection("year")
                                .doc(year);
-            var npsPromise = npsYearRef.get();
+            var getPromise = npsYearRef.get();
             var self = this;
             function passIntoPromise(year) {
-                npsPromise.then((doc) => self.extractNPSData(doc, strDates, year));
+                console.log("About to print the return value of the extarct function")
+                var extractPromise = getPromise.then((doc) => self.extractNPSData(doc, strDates, year));
+                npsPromises.push(extractPromise);
             }
-            passIntoPromise(year)
-            npsPromises.push(npsPromise);
+            passIntoPromise(year);
         }
         return Promise.all(npsPromises);
     }
@@ -76,6 +78,7 @@ class LocationData {
      * @param {string} years string of year for the  doc to fetch
      */
     extractNPSData(doc, dates, year) {
+        console.log("In extractNPSData()");
         if (doc.exists) {
             //run through each day
             for (var i = 0; i < dates.length; i++) {
@@ -99,6 +102,7 @@ class LocationData {
     }
 
     fetchGAPData(dates, features, businessUID) {
+        console.log("In fetchGAPData()");
         var gapPromises = [];
 
         for (var i = 0; i < features.length; i++) {
@@ -111,6 +115,7 @@ class LocationData {
     }
 
     fetchParticipationData(dates, businessUID) {
+        console.log("In fetchParticipationData()");
         let db = firebase.firestore();
 
         //set up the participation data array
@@ -123,7 +128,7 @@ class LocationData {
 
         //extract the data separately by year
         var years = this.getYearsNeeded(dates);
-        var strDates = this.formatDates(dates);
+        var strDates = this.firebaseFormatDates(dates);
 
         for (var i = 0; i < years.length; i++) {
             var year = years[i];
@@ -135,19 +140,21 @@ class LocationData {
                                .doc("Participation")
                                .collection("year")
                                .doc(year);
-            var participationPromise = participationYearRef.get();
+            var getPromise = participationYearRef.get();
             var self = this;
             function passIntoPromise(year) {
-                participationPromise.then((doc) => self.extractParticipationData(doc, strDates, year));
+                var extractPromise = getPromise.then((doc) => self.extractParticipationData(doc, strDates, year));
+                participationPromises.push(extractPromise);
             }
             passIntoPromise(year)
-            participationPromises.push(participationPromise);
+            
         }
         return Promise.all(participationPromises);
 
     }
 
     extractParticipationData(doc, dates, year) {
+        console.log("In extractParticipationData()");
         if(doc.exists) {
             //run through each day
             for (var i = 0; i < dates.length; i++) {
@@ -169,7 +176,7 @@ class LocationData {
      * Returns an array of strings.
      * @param {array} dates array of date objects
      */
-    formatDates(dates) {
+    firebaseFormatDates(dates) {
         var strRange = [];
         for (var i = 0; i < dates.length; i++) {
             let yearStr = String(dates[i].getFullYear());
