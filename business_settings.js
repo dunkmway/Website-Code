@@ -19,6 +19,9 @@ var profileName = sessionStorage.getItem("userName");
 var profileBusiness = sessionStorage.getItem("businessName");
 var businessUID = sessionStorage.getItem("businessUID");
 
+var adminSelected = false;
+var userSelected = false;
+
 //set the user's name and business in the top nav bar
 docUserName = document.getElementById('userName');
 docUserName.textContent = profileName;
@@ -97,18 +100,73 @@ var newPassword = document.getElementById("new_password")
 var adminButton = document.getElementById("admin_button");
 var userButton = document.getElementById("user_button");
 
+var errorMessage = document.getElementById("new_error");
 var submitNewUserButton = document.getElementById("submit_new_user_button")
 
 submitNewUserButton.addEventListener('click', SubmitNewUser);
+adminButton.addEventListener('click', adminPressed);
+userButton.addEventListener('click', userPressed);
 
 function SubmitNewUser() {
+    errorMessage.textContent = "";
     //create the user
+    var name = newName.value;
+    var email = newEmail.value;
+    var password = newPassword.value;
+    var role;
 
-    //set up their business_user doc
+    if (adminSelected) {
+        role = "admin";
+    }
+    if (userSelected) {
+        role = "user";
+    }
 
-    //add them to their business's userIDs array and to the user map
+    if (name == undefined || email == undefined || password == undefined || role == undefined) {
+        errorMessage.textContent = "Please fill in all fields and select a role."
+        return
+    }
+    else {
+        const createUser = firebase.functions().httpsCallable('createUserTest');
+            createUser({
+                name: name,
+                email: email,
+                password: password,
+                role: role,
+            })
+            .then((result) => {
+                console.log(result.data);
+            })
+            .catch((error) => {
+                // Getting the Error details.
+                var code = error.code;
+                var message = error.message;
+                var details = error.details;
+                console.log('function called and rejected');
+                console.log(code);
+                console.log(message);
+                console.log(details);
+            });
+    }
 
     //verify that this has happened and add append this user to the users list and close the modal
 
     //OR notify the user of an error and prompt them to try again
+}
+
+function adminPressed() {
+    adminSelected = true;
+    userSelected = fasle;
+
+    adminButton.style.backgroundColor = "#468a00";
+    userButton.style.backgroundColor = "#7bbf51";
+}
+
+function userPressed() {
+    adminSelected = false;
+    userSelected = true;
+
+    adminButton.style.backgroundColor = "#7bbf51";
+    userButton.style.backgroundColor = "#468a00";
+    
 }

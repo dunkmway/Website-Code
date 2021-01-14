@@ -643,7 +643,7 @@ function traditionalFormatDates(dates) {
 }
 
 /**
- * Any variables that will be stored to the session must be set in this fucntion
+ * Any variables that will be stored to the session must be set in this function
  */
 function setSessionStorage() {
     sessionStorage.setItem("userName", userName);
