@@ -36,26 +36,27 @@ businessDoc.get()
 .then(function(docBusiness) {
     if (docBusiness.exists) {
         var locations = docBusiness.get("locations");
-        var userIDs = docBusiness.get("userIDs");
+        var users = docBusiness.get("users");
         console.log(locations);
-        console.log(userIDs);
+        console.log(users);
 
         console.log("Test before first loop");
         var userNames = [];
         var userRoles = [];
-        for (var i = 0; i < userIDs.length; i++) {
-            var userName = docBusiness.get(`users.${userIDs[i]}.name`);
-            var userRole = docBusiness.get(`users.${userIDs[i]}.role`);
+        var userUIDS = [];
+        for (var i = 0; i < users.length; i++) {
+            var userName = users[i].name
+            var userRole = users[i].role
+            var userUID = users[i].uid
 
             userNames.push(userName);
             userRoles.push(userRole);
-
-            console.log(userName);
-            console.log(userRole);
+            userUIDS.push(userUID);
         }
         console.log("Test after first loop")
         console.log(userNames);
         console.log(userRoles);
+        console.log(userUIDS);
 
         //set the role names
         var userNamesList = document.getElementById("role_names");
