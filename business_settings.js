@@ -136,6 +136,31 @@ function SubmitNewUser() {
             })
             .then((result) => {
                 console.log(result);
+
+                //add the new user to the list
+                var userNamesList = document.getElementById("role_names");
+                var roleList = document.getElementById("role_roles");
+
+                var listName = document.createElement('li');
+                listName.textContent = name;
+                userNamesList.appendChild(listName);
+
+                var listRole = document.createElement('li');
+                listRole.textContent = role;
+                roleList.appendChild(listRole);
+
+                //reset all of the fields
+                adminSelected = false;
+                userSelected = false;
+
+                newName.value = "";
+                newEmail.value = "";
+                newPassword.value = "";
+                adminButton.style.backgroundColor = "#7bbf51";
+                userButton.style.backgroundColor = "#7bbf51";
+
+                //close the modal
+                document.getElementById("new-user-modal").style.display = "none";
             })
             .catch((error) => {
                 // Getting the Error details.
@@ -146,6 +171,8 @@ function SubmitNewUser() {
                 console.log(code);
                 console.log(message);
                 console.log(details);
+
+                errorMessage.textContent = "An error has occured. Please contact us by email or phone."
             });
     }
 
