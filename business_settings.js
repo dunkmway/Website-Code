@@ -108,7 +108,7 @@ adminButton.addEventListener('click', adminPressed);
 userButton.addEventListener('click', userPressed);
 
 function SubmitNewUser() {
-    errorMessage.textContent = "";
+    errorMessage.textContent = "This might take a few moments...";
     //create the user
     var name = newName.value;
     var email = newEmail.value;
