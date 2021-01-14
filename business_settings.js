@@ -135,7 +135,7 @@ function SubmitNewUser() {
                 role: role,
             })
             .then((result) => {
-                console.log(result.data);
+                console.log(result);
             })
             .catch((error) => {
                 // Getting the Error details.
