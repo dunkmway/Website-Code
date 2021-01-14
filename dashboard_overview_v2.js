@@ -1,6 +1,6 @@
 //user variables
 var userName = "";
-var role = "";
+var userRole = "";
 var userUID = "";
 
 //business variables
@@ -48,6 +48,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         .catch((error) => HandleErrors(error))
         //calculate and display the data from firebase
         .then(function() {
+            setSessionStorage();
             console.log("Should have grabbed all of the data by now. Moving to display the data");
             displayNav();
             displayNPS();
@@ -64,10 +65,10 @@ function GetUserData(doc) {
     console.log("In GetUserData()");
     if (doc.exists) {
         userName = doc.get('name');
-        role = doc.get('role');
+        userRole = doc.get('role');
         businessUID = doc.get('business'); 
 
-        if (allowedRoles.includes(role)) {
+        if (allowedRoles.includes(userRole)) {
             businessRef = db.collection("businesses").doc(businessUID);
             return businessRef.get()
         }
@@ -639,6 +640,18 @@ function traditionalFormatDates(dates) {
         strRange.push(dateStr);
     }
     return strRange;
+}
+
+/**
+ * Any variables that will be stored to the session must be set in this fucntion
+ */
+function setSessionStorage() {
+    sessionStorage.setItem("userName", userName);
+    sessionStorage.setItem("userRole", userRole);
+    sessionStorage.setItem("userUID", userUID);
+
+    sessionStorage.setItem("businessName", businessName);
+    sessionStorage.setItem("businessUID", businessUID);
 }
 
 //set up the chart plugins

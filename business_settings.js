@@ -5,22 +5,19 @@
 //The business's profile page should have been fetched already and saved locally. All data needed will be on that document.
 // - every business has a profile document. This will contain an array of the uid's of
 //   all employees that have an account connected to the business. 
-//   The document also has a key of dictionaries with a structure that looks like the following
-//   users: {
-//      (userUID): {
-//          name: (user's name)
-//          role: (user's role) 
-//      }
-//   }
+//   The document also has an array of dictionaries with a structure that looks like the following
+//   users[{
+//          name: (user's name),
+//          role: (user's role),
+//          uid: (user's uid)
+//   }]
 //   the path of this document is Firebase.firebase().collection("businesses").document(businessID)
 
 
 //get the user's name and business name from session storage
 var profileName = sessionStorage.getItem("userName");
 var profileBusiness = sessionStorage.getItem("businessName");
-var businessID = sessionStorage.getItem("businessID");
-
-console.log({businessID})
+var businessUID = sessionStorage.getItem("businessUID");
 
 //set the user's name and business in the top nav bar
 docUserName = document.getElementById('userName');
@@ -30,7 +27,7 @@ docBusinessName = document.getElementById('businessName');
 docBusinessName.textContent = profileBusiness;
 
 //get the location names, user names, and user roles from firebase
-var businessDoc = firebase.firestore().collection("businesses").doc(businessID);
+var businessDoc = firebase.firestore().collection("businesses").doc(businessUID);
 
 businessDoc.get()
 .then(function(docBusiness) {
