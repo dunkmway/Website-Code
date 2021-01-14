@@ -3,7 +3,7 @@
 console.log("In the dashboard js file")
 var userName = ""
 var businessName = ""
-var role = ""
+var userRole = ""
 var locations = []
 
 let allowedRoles = ['admin'];
@@ -23,11 +23,11 @@ firebase.auth().onAuthStateChanged(function(user) {
                     console.log("got user doc");
                     userName = docUser.get("name");
                     
-                    role = docUser.get("role");
+                    userRole = docUser.get("role");
                     docUserName = document.getElementById('userName');
                     docUserName.textContent = userName;
                     var business = docUser.get("business");
-                    console.log("role: ", role);
+                    console.log("role: ", userRole);
                     console.log("username:", userName);
                     console.log("business ID:", business);
 
@@ -38,7 +38,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                     var businessDoc = db.collection("businesses").doc(business);
                     
-                    if (allowedRoles.includes(role)) {
+                    if (allowedRoles.includes(userRole)) {
                         businessDoc.get()
                         .then(function(docBusiness) {
                             if (docBusiness.exists) {

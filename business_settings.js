@@ -10,7 +10,7 @@
 //          name: (user's name),
 //          role: (user's role),
 //          uid: (user's uid)
-//   }]
+//   },]
 //   the path of this document is Firebase.firebase().collection("businesses").document(businessID)
 
 
