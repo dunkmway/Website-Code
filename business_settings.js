@@ -74,6 +74,14 @@ businessDoc.get()
             roleList.appendChild(listRole);
         }
 
+        //set the role edit x's
+        var editList = document.getElementById("role_edit");
+        for (var i = 0; i < userNames.length; i++) {
+            var listRole = document.createElement('img')
+            listRole.src = "https://uploads-ssl.webflow.com/5f4b05025c871a872cab8713/5ff4b69b2d2ad13718d57d0d_edit%20X.png";
+            editList.appendChild(listRole);
+        }
+
         //set the location names
         var locationsList = document.getElementById("location_names");
         for (var i = 0; i < locations.length; i++) {
