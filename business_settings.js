@@ -101,11 +101,13 @@ var adminButton = document.getElementById("admin_button");
 var userButton = document.getElementById("user_button");
 
 var errorMessage = document.getElementById("new_error");
-var submitNewUserButton = document.getElementById("submit_new_user_button")
+var submitNewUserButton = document.getElementById("submit_new_user_button");
+var closeModalButton = document.getElementById("close-modal-button");
 
 submitNewUserButton.addEventListener('click', SubmitNewUser);
 adminButton.addEventListener('click', adminPressed);
 userButton.addEventListener('click', userPressed);
+closeModalButton.addEventListener('click', closeModal);
 
 function SubmitNewUser() {
     errorMessage.textContent = "This might take a few moments...";
@@ -128,52 +130,52 @@ function SubmitNewUser() {
     }
     else {
         const createUser = firebase.functions().httpsCallable('createUserTest');
-            createUser({
-                name: name,
-                email: email,
-                password: password,
-                role: role,
-            })
-            .then((result) => {
-                console.log(result);
+        createUser({
+            name: name,
+            email: email,
+            password: password,
+            role: role,
+        })
+        .then((result) => {
+            console.log(result);
 
-                //add the new user to the list
-                var userNamesList = document.getElementById("role_names");
-                var roleList = document.getElementById("role_roles");
+            //add the new user to the list
+            var userNamesList = document.getElementById("role_names");
+            var roleList = document.getElementById("role_roles");
 
-                var listName = document.createElement('li');
-                listName.textContent = name;
-                userNamesList.appendChild(listName);
+            var listName = document.createElement('li');
+            listName.textContent = name;
+            userNamesList.appendChild(listName);
 
-                var listRole = document.createElement('li');
-                listRole.textContent = role;
-                roleList.appendChild(listRole);
+            var listRole = document.createElement('li');
+            listRole.textContent = role;
+            roleList.appendChild(listRole);
 
-                //reset all of the fields
-                adminSelected = false;
-                userSelected = false;
+            //reset all of the fields
+            adminSelected = false;
+            userSelected = false;
 
-                newName.value = "";
-                newEmail.value = "";
-                newPassword.value = "";
-                adminButton.style.backgroundColor = "#7bbf51";
-                userButton.style.backgroundColor = "#7bbf51";
+            newName.value = "";
+            newEmail.value = "";
+            newPassword.value = "";
+            adminButton.style.backgroundColor = "#7bbf51";
+            userButton.style.backgroundColor = "#7bbf51";
 
-                //close the modal
-                document.getElementById("new-user-modal").style.display = "none";
-            })
-            .catch((error) => {
-                // Getting the Error details.
-                var code = error.code;
-                var message = error.message;
-                var details = error.details;
-                console.log('function called and rejected');
-                console.log(code);
-                console.log(message);
-                console.log(details);
+            //close the modal
+            document.getElementById("new-user-modal").style.display = "none";
+        })
+        .catch((error) => {
+            // Getting the Error details.
+            var code = error.code;
+            var message = error.message;
+            var details = error.details;
+            console.log('function called and rejected');
+            console.log(code);
+            console.log(message);
+            console.log(details);
 
-                errorMessage.textContent = "An error has occured. Please contact us by email or phone."
-            });
+            errorMessage.textContent = "An error has occured. Please contact us by email or phone."
+        });
     }
 
     //verify that this has happened and add append this user to the users list and close the modal
@@ -196,4 +198,16 @@ function userPressed() {
     adminButton.style.backgroundColor = "#7bbf51";
     userButton.style.backgroundColor = "#468a00";
     
+}
+
+function closeModal() {
+    //clear all of the fields and let webflow handle the modal transistion
+    adminSelected = false;
+    userSelected = false;
+
+    newName.value = "";
+    newEmail.value = "";
+    newPassword.value = "";
+    adminButton.style.backgroundColor = "#7bbf51";
+    userButton.style.backgroundColor = "#7bbf51";
 }
