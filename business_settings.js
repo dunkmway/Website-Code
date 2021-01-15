@@ -79,8 +79,6 @@ businessDoc.get()
         for (var i = 0; i < userNames.length; i++) {
             var listRole = document.createElement('img')
             listRole.src = "https://uploads-ssl.webflow.com/5f4b05025c871a872cab8713/5ff4b69b2d2ad13718d57d0d_edit%20X.png";
-            listRole.style.height = "20px";
-            listRole.style.display = "block";
             editList.appendChild(listRole);
         }
 
