@@ -215,3 +215,18 @@ function closeModal() {
     adminButton.style.backgroundColor = "#7bbf51";
     userButton.style.backgroundColor = "#7bbf51";
 }
+
+function Logout() {
+    firebase.auth().signOut()
+    .then(function() {
+        // Sign-out successful.
+        window.location.replace('/');
+    })
+    .catch(function(error) {
+        // An error happened.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log('Error code: ' + errorCode);
+        console.log('Error message: ' + errorMessage);
+    });
+}
