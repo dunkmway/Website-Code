@@ -610,6 +610,9 @@ function GraphParticipation(days, counts, average) {
     });
 }
 
+/**
+ * Logs the user out and returns them to the home page
+ */
 function Logout() {
     firebase.auth().signOut()
     .then(function() {
