@@ -183,7 +183,7 @@ function SubmitNewUser() {
 
 function adminPressed() {
     adminSelected = true;
-    userSelected = fasle;
+    userSelected = false;
 
     adminButton.style.backgroundColor = "#468a00";
     userButton.style.backgroundColor = "#7bbf51";
