@@ -80,12 +80,12 @@ businessDoc.get()
 
         //set the role edit x's
         var editList = document.getElementById("role_edit");
-        editList.addEventListener('click', removeUser(this));
         for (var i = 0; i < userNames.length; i++) {
             var listEdit = document.createElement('img')
             listEdit.src = editUserImg;
             editList.appendChild(listEdit);
         }
+        editList.addEventListener('click', removeUser(this));
 
         //set the location names
         var locationsList = document.getElementById("location_names");
