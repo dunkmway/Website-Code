@@ -155,6 +155,7 @@ function SubmitNewUser() {
             allUsers: users,
         })
         .then((newUser) => {
+            console.log(newUser);
             users.push(newUser);
 
             //add the new user to the list
