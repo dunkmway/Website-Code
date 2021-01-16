@@ -147,6 +147,7 @@ function SubmitNewUser() {
             password: password,
             role: role,
             businessUID, businessUID,
+            allUsers: users,
         })
         .then((result) => {
             console.log(result);
