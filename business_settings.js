@@ -85,7 +85,7 @@ businessDoc.get()
             listEdit.src = editUserImg;
             editList.appendChild(listEdit);
         }
-        editList.addEventListener('click', removeUser(this));
+        editList.addEventListener('click', (e) => removeUser(e));
 
         //set the location names
         var locationsList = document.getElementById("location_names");
