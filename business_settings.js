@@ -102,6 +102,8 @@ businessDoc.get()
 });
 
 //handle the new user submission
+var newProfileButton = document.getElementById("add-new-profile-button");
+
 var newName = document.getElementById("new_name");
 var newEmail = document.getElementById("new_email");
 var newPassword = document.getElementById("new_password")
@@ -113,6 +115,9 @@ var errorMessage = document.getElementById("new_error");
 var submitNewUserButton = document.getElementById("submit_new_user_button");
 var closeModalButton = document.getElementById("close-modal-button");
 
+newProfileButton.addEventListener('click', function() {
+    errorMessage.textContent = "";
+})
 submitNewUserButton.addEventListener('click', SubmitNewUser);
 adminButton.addEventListener('click', adminPressed);
 userButton.addEventListener('click', userPressed);
