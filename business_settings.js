@@ -146,6 +146,7 @@ function SubmitNewUser() {
             email: email,
             password: password,
             role: role,
+            businessUID, businessUID,
         })
         .then((result) => {
             console.log(result);
@@ -258,6 +259,7 @@ function removeUser(e) {
             const removeUser = firebase.functions().httpsCallable('adminRemoveUser');
             removeUser({
                 userData: users[index],
+                businessUID: businessUID,
             }).then((result) => {
                 console.log(result);
 
