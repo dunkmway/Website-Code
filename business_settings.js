@@ -149,8 +149,8 @@ function SubmitNewUser() {
             businessUID, businessUID,
             allUsers: users,
         })
-        .then((result) => {
-            console.log(result);
+        .then((newUser) => {
+            users.push(newUser);
 
             //add the new user to the list
             var namesList = document.getElementById("role_names");
@@ -184,6 +184,7 @@ function SubmitNewUser() {
 
             //reenable the button
             submitNewUserButton.disabled = false;
+            errorMessage.textContent = "";
         })
         .catch((error) => {
             errorMessage.textContent = error;
