@@ -186,16 +186,7 @@ function SubmitNewUser() {
             submitNewUserButton.disabled = false;
         })
         .catch((error) => {
-            // Getting the Error details.
-            var code = error.code;
-            var message = error.message;
-            var details = error.details;
-            console.log('function called and rejected');
-            console.log(code);
-            console.log(message);
-            console.log(details);
-
-            errorMessage.textContent = "An error has occured. Please contact us by email or phone."
+            errorMessage.textContent = error;
 
             submitNewUserButton.disabled = false;
         });
@@ -277,8 +268,7 @@ function removeUser(e) {
                 modal.style.display = "none";
                 yesButton.disabled = false;
             }).catch((err) => {
-                console.log(err);
-                errMsg.textContent = "An error has occured. Please try again.";
+                errMsg.textContent = err;
                 yesButton.disabled = false;
             });
         });
