@@ -253,6 +253,7 @@ function removeUser(e) {
             modal.style.display = "none";
         });
         yesButton.addEventListener('click', function() {
+            yesButton.disabled = true;
             errMsg.textContent = "This might take a few moments...";
             const removeUser = firebase.functions().httpsCallable('adminRemoveUser');
             removeUser({
@@ -271,9 +272,11 @@ function removeUser(e) {
 
                 //close the modal
                 modal.style.display = "none";
+                yesButton.disabled = false;
             }).catch((err) => {
                 console.log(err);
                 errMsg.textContent = "An error has occured. Please try again.";
+                yesButton.disabled = false;
             });
         });
     }
