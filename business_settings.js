@@ -191,10 +191,6 @@ function SubmitNewUser() {
             submitNewUserButton.disabled = false;
         });
     }
-
-    //verify that this has happened and add append this user to the users list and close the modal
-
-    //OR notify the user of an error and prompt them to try again
 }
 
 function adminPressed() {
@@ -247,6 +243,7 @@ function removeUser(e) {
         });
         yesButton.addEventListener('click', function() {
             yesButton.disabled = true;
+            noButton.disabled = true;
             errMsg.textContent = "This might take a few moments...";
             const removeUser = firebase.functions().httpsCallable('adminRemoveUser');
             removeUser({
@@ -267,9 +264,11 @@ function removeUser(e) {
                 //close the modal
                 modal.style.display = "none";
                 yesButton.disabled = false;
+                noButton.disabled = false;
             }).catch((err) => {
                 errMsg.textContent = err;
                 yesButton.disabled = false;
+                noButton.disabled = false;
             });
         });
     }
