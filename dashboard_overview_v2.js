@@ -5,6 +5,7 @@ var userUID = "";
 
 //business variables
 var businessName = "";
+var businessUIDs = [];
 var businessUID = "";
 var locationData = [];
 var gapFeatures = [];
@@ -66,7 +67,8 @@ function GetUserData(doc) {
     if (doc.exists) {
         userName = doc.get('name');
         userRole = doc.get('role');
-        businessUID = doc.get('business'); 
+        businessUIDs = doc.get('business'); 
+        businessUID = businessUIDs[0];
 
         if (allowedRoles.includes(userRole)) {
             businessRef = db.collection("businesses").doc(businessUID);
