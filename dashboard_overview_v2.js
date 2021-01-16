@@ -66,7 +66,7 @@ function GetUserData(doc) {
     console.log("In GetUserData()");
     if (doc.exists) {
         userName = doc.get('name');
-        businesses = doc.get('business'); 
+        businesses = doc.get('businesses'); 
         businessUID = businesses[0].uid;
         userRole = businesses[0].role;
 
