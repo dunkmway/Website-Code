@@ -145,8 +145,8 @@ function SubmitNewUser() {
         return
     }
     else {
-        const createUser = firebase.functions().httpsCallable('adminAddUser');
-        createUser({
+        const addUser = firebase.functions().httpsCallable('adminAddUser');
+        addUser({
             name: name,
             email: email,
             password: password,
@@ -193,7 +193,11 @@ function SubmitNewUser() {
             errorMessage.textContent = "";
         })
         .catch((error) => {
-            errorMessage.textContent = error;
+            console.log(error);
+            console.log(error.code);
+            console.log(error.message);
+            console.log(error.details);
+            errorMessage.textContent = error.message;
 
             submitNewUserButton.disabled = false;
         });
@@ -273,7 +277,7 @@ function removeUser(e) {
                 yesButton.disabled = false;
                 noButton.disabled = false;
             }).catch((err) => {
-                errMsg.textContent = err;
+                errMsg.textContent = err.message;
                 yesButton.disabled = false;
                 noButton.disabled = false;
             });
