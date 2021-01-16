@@ -154,9 +154,9 @@ function SubmitNewUser() {
             businessUID, businessUID,
             allUsers: users,
         })
-        .then((newUser) => {
-            console.log(newUser);
-            users.push(newUser);
+        .then((result) => {
+            console.log(result.data);
+            users.push(result.data);
 
             //add the new user to the list
             var namesList = document.getElementById("role_names");
