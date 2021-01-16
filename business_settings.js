@@ -19,8 +19,12 @@ var profileName = sessionStorage.getItem("userName");
 var profileBusiness = sessionStorage.getItem("businessName");
 var businessUID = sessionStorage.getItem("businessUID");
 
+var users = [];
+
 var adminSelected = false;
 var userSelected = false;
+
+const editUserImg = "https://uploads-ssl.webflow.com/5f4b05025c871a872cab8713/5ff4b69b2d2ad13718d57d0d_edit%20X.png";
 
 //set the user's name and business in the top nav bar
 docUserName = document.getElementById('userName');
@@ -36,7 +40,7 @@ businessDoc.get()
 .then(function(docBusiness) {
     if (docBusiness.exists) {
         var locations = docBusiness.get("locations");
-        var users = docBusiness.get("users");
+        users = docBusiness.get("users");
         console.log(locations);
         console.log(users);
 
@@ -59,11 +63,11 @@ businessDoc.get()
         console.log(userUIDS);
 
         //set the role names
-        var userNamesList = document.getElementById("role_names");
+        var namesList = document.getElementById("role_names");
         for (var i = 0; i < userNames.length; i++) {
             var listName = document.createElement('li');
             listName.textContent = userNames[i];
-            userNamesList.appendChild(listName);
+            namesList.appendChild(listName);
         }
 
         //set the role roles
@@ -76,10 +80,11 @@ businessDoc.get()
 
         //set the role edit x's
         var editList = document.getElementById("role_edit");
+        editList.addEventListener('click', removeUser(this));
         for (var i = 0; i < userNames.length; i++) {
-            var listRole = document.createElement('img')
-            listRole.src = "https://uploads-ssl.webflow.com/5f4b05025c871a872cab8713/5ff4b69b2d2ad13718d57d0d_edit%20X.png";
-            editList.appendChild(listRole);
+            var listEdit = document.createElement('img')
+            listEdit.src = editUserImg;
+            editList.appendChild(listEdit);
         }
 
         //set the location names
@@ -114,6 +119,8 @@ userButton.addEventListener('click', userPressed);
 closeModalButton.addEventListener('click', closeModal);
 
 function SubmitNewUser() {
+    // disable the submit button so that multiple function arent called
+    submitNewUserButton.disabled = true;
     errorMessage.textContent = "This might take a few moments...";
     //create the user
     var name = newName.value;
@@ -133,7 +140,7 @@ function SubmitNewUser() {
         return
     }
     else {
-        const createUser = firebase.functions().httpsCallable('adminCreateUser');
+        const createUser = firebase.functions().httpsCallable('adminAddUser');
         createUser({
             name: name,
             email: email,
@@ -144,16 +151,21 @@ function SubmitNewUser() {
             console.log(result);
 
             //add the new user to the list
-            var userNamesList = document.getElementById("role_names");
+            var namesList = document.getElementById("role_names");
             var roleList = document.getElementById("role_roles");
+            var editList = document.getElementById("role_edit");
 
             var listName = document.createElement('li');
             listName.textContent = name;
-            userNamesList.appendChild(listName);
+            namesList.appendChild(listName);
 
             var listRole = document.createElement('li');
             listRole.textContent = role;
             roleList.appendChild(listRole);
+
+            var listEdit = document.createElement('img')
+            listEdit.src = editUserImg;
+            editList.appendChild(listEdit);
 
             //reset all of the fields
             adminSelected = false;
@@ -167,6 +179,9 @@ function SubmitNewUser() {
 
             //close the modal
             document.getElementById("new-user-modal").style.display = "none";
+
+            //reenable the button
+            submitNewUserButton.disabled = false;
         })
         .catch((error) => {
             // Getting the Error details.
@@ -179,6 +194,8 @@ function SubmitNewUser() {
             console.log(details);
 
             errorMessage.textContent = "An error has occured. Please contact us by email or phone."
+
+            submitNewUserButton.disabled = false;
         });
     }
 
@@ -214,6 +231,52 @@ function closeModal() {
     newPassword.value = "";
     adminButton.style.backgroundColor = "#7bbf51";
     userButton.style.backgroundColor = "#7bbf51";
+}
+
+function removeUser(e) {
+    const modal = document.getElementById("remove-user-modal");
+    const userName = document.getElementById("remove-user-name");
+    const errMsg = document.getElementById("remove-error");
+    const noButton = document.getElementById("remove-user-no-button");
+    const yesButton = document.getElementById("remove-user-yes-button");
+
+    const child = e.target;
+    // if one of the x's was pressed
+    if (child.tagName == "IMG") {
+        const index = Array.from(child.parentNode.children).indexOf(child);
+
+        errMsg.textContent = "";
+        modal.style.display = "flex";
+        userName.textContent = users[index].name;
+        noButton.addEventListener('click', function() {
+            errMsg.textContent = "";
+            modal.style.display = "none";
+        });
+        yesButton.addEventListener('click', function() {
+            errMsg.textContent = "";
+            const removeUser = firebase.functions().httpsCallable('adminRemoveUser');
+            removeUser({
+                userData: users[index],
+            }).then((result) => {
+                console.log(result);
+
+                //remove that user from the lists
+                var namesList = document.getElementById("role_names");
+                var roleList = document.getElementById("role_roles");
+                var editList = document.getElementById("role_edit");
+                
+                namesList.removeChild(Array.from(namesList.children)[index]);
+                roleList.removeChild(Array.from(roleList.children)[index]);
+                editList.removeChild(Array.from(editList.children)[index]);
+
+                //close the modal
+                modal.style.display = "none";
+            }).catch((err) => {
+                console.log(err);
+                errMsg.textContent = "An error has occured. Please try again.";
+            });
+        });
+    }
 }
 
 function Logout() {
