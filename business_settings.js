@@ -133,7 +133,7 @@ function SubmitNewUser() {
         return
     }
     else {
-        const createUser = firebase.functions().httpsCallable('createUserTest');
+        const createUser = firebase.functions().httpsCallable('adminCreateUser');
         createUser({
             name: name,
             email: email,
