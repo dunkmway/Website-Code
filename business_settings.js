@@ -115,6 +115,8 @@ var errorMessage = document.getElementById("new_error");
 var submitNewUserButton = document.getElementById("submit_new_user_button");
 var closeModalButton = document.getElementById("close-modal-button");
 
+var logoutButton = document.getElementById("dashLogout");
+
 newProfileButton.addEventListener('click', function() {
     errorMessage.textContent = "";
 })
@@ -122,6 +124,8 @@ submitNewUserButton.addEventListener('click', SubmitNewUser);
 adminButton.addEventListener('click', adminPressed);
 userButton.addEventListener('click', userPressed);
 closeModalButton.addEventListener('click', closeModal);
+logoutButton.addEventListener('click', Logout);
+
 
 function SubmitNewUser() {
     // disable the submit button so that multiple function arent called
