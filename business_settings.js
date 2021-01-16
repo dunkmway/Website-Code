@@ -253,7 +253,7 @@ function removeUser(e) {
             modal.style.display = "none";
         });
         yesButton.addEventListener('click', function() {
-            errMsg.textContent = "";
+            errMsg.textContent = "This might take a few moments...";
             const removeUser = firebase.functions().httpsCallable('adminRemoveUser');
             removeUser({
                 userData: users[index],
