@@ -133,9 +133,9 @@ function SubmitNewUser() {
     closeModalButton.disabled = true;
     errorMessage.textContent = "This might take a few moments...";
     //create the user
-    var name = newName.value;
-    var email = newEmail.value;
-    var password = newPassword.value;
+    var name = newName.value.replace(/\s+/g, '');
+    var email = newEmail.value.replace(/\s+/g, '');
+    var password = newPassword.value.replace(/\s+/g, '');
     var role = "";
 
     if (adminSelected) {
