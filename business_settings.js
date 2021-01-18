@@ -206,7 +206,7 @@ function SubmitNewUser() {
             console.log(error.code);
             console.log(error.message);
             console.log(error.details);
-            errorMessage.textContent = error.message;
+            errorMessage.textContent = "An error has occured. Please contact n-gauge if the error persists.";
 
             submitNewUserButton.disabled = false;
             closeModalButton.disabled = false;
