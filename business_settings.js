@@ -136,7 +136,7 @@ function SubmitNewUser() {
     var name = newName.value;
     var email = newEmail.value;
     var password = newPassword.value;
-    var role;
+    var role = "";
 
     if (adminSelected) {
         role = "admin";
@@ -145,11 +145,11 @@ function SubmitNewUser() {
         role = "user";
     }
 
-    if (name == "" || email == "" || password == "" || role == undefined) {
+    if (name == "" || email == "" || password == "" || role == "") {
         errorMessage.textContent = "Please fill in all fields and select a role."
         submitNewUserButton.disabled = false;
         closeModalButton.disabled = false;
-        return
+        return;
     }
     else {
         const addUser = firebase.functions().httpsCallable('adminAddUser');
@@ -189,6 +189,7 @@ function SubmitNewUser() {
             newName.value = "";
             newEmail.value = "";
             newPassword.value = "";
+            role = "";
             adminButton.style.backgroundColor = "#7bbf51";
             userButton.style.backgroundColor = "#7bbf51";
 
@@ -211,6 +212,7 @@ function SubmitNewUser() {
             closeModalButton.disabled = false;
         });
     }
+    return;
 }
 
 function adminPressed() {
