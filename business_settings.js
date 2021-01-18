@@ -145,7 +145,7 @@ function SubmitNewUser() {
         role = "user";
     }
 
-    if (name == undefined || email == undefined || password == undefined || role == undefined) {
+    if (name == "" || email == "" || password == "" || role == undefined) {
         errorMessage.textContent = "Please fill in all fields and select a role."
         submitNewUserButton.disabled = false;
         closeModalButton.disabled = false;
