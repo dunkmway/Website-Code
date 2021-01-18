@@ -130,6 +130,7 @@ logoutButton.addEventListener('click', Logout);
 function SubmitNewUser() {
     // disable the submit button so that multiple function arent called
     submitNewUserButton.disabled = true;
+    closeModalButton.disabled = true;
     errorMessage.textContent = "This might take a few moments...";
     //create the user
     var name = newName.value;
@@ -146,6 +147,8 @@ function SubmitNewUser() {
 
     if (name == undefined || email == undefined || password == undefined || role == undefined) {
         errorMessage.textContent = "Please fill in all fields and select a role."
+        submitNewUserButton.disabled = false;
+        closeModalButton.disabled = false;
         return
     }
     else {
@@ -194,6 +197,7 @@ function SubmitNewUser() {
 
             //reenable the button
             submitNewUserButton.disabled = false;
+            closeModalButton.disabled = false;
             errorMessage.textContent = "";
         })
         .catch((error) => {
@@ -204,6 +208,7 @@ function SubmitNewUser() {
             errorMessage.textContent = error.message;
 
             submitNewUserButton.disabled = false;
+            closeModalButton.disabled = false;
         });
     }
 }
