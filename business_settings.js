@@ -136,7 +136,7 @@ var locationEditButton = document.getElementById("location-edit-button");
 
 var locationTextField = document.getElementById("location-contact-textfield");
 
-var locationSubmitButton = docuemnt.getElementById("location-contact-submit-button");
+var locationSubmitButton = document.getElementById("location-contact-submit-button");
 
 locationSubmitButton.addEventListener('click', submitLocationEdit);
 locationAddButton.addEventListener('click', addPressed);
