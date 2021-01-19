@@ -351,7 +351,7 @@ function submitLocationEdit() {
     }
 
     if (editType == "" || userRequest == "") {
-        errorMessage.textContent = "Please fill in all fields and select an request type."
+        locationErrorMsg.textContent = "Please fill in all fields and select an request type."
         locationSubmitButton.disabled = false;
         closeModalButton.disabled = false;
         return;
@@ -378,14 +378,14 @@ function submitLocationEdit() {
 
             locationSubmitButton.disabled = false;
             closeModalButton.disabled = false;
-            errorMessage.textContent = "";
+            locationErrorMsg.textContent = "";
 
         }).catch((error) => {
             console.log(error);
 
             locationSubmitButton.disabled = false;
             closeModalButton.disabled = false;
-            errorMessage.textContent = "There seems to be a problem while sending this request. " +
+            locationErrorMsg.textContent = "There seems to be a problem while sending this request. " +
                     "Please try again. If the error persists please contact n-gauge directly."
         });
     }
