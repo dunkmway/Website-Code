@@ -380,6 +380,9 @@ function submitLocationEdit() {
 
         }).catch((error) => {
             console.log(error);
+
+            locationSubmitButton.disabled = false;
+            closeModalButton.disabled = false;
             errorMessage.textContent = "There seems to be a problem while sending this request. " +
                     "Please try again. If the error persists please contact n-gauge directly."
         });
