@@ -16,6 +16,7 @@
 
 //get the user's name and business name from session storage
 var profileName = sessionStorage.getItem("userName");
+var userUID = sessionStorage.getItem("userUID");
 var profileBusiness = sessionStorage.getItem("businessName");
 var businessUID = sessionStorage.getItem("businessUID");
 
