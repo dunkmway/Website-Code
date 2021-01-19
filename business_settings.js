@@ -136,6 +136,7 @@ var locationEditButton = document.getElementById("location-edit-button");
 
 var locationTextField = document.getElementById("location-contact-textfield");
 
+var locationErrorMsg = document.getElementById("location-error-msg");
 var locationSubmitButton = document.getElementById("location-contact-submit-button");
 
 locationSubmitButton.addEventListener('click', submitLocationEdit);
@@ -333,7 +334,7 @@ function submitLocationEdit() {
     // disable the submit button so that multiple function arent called
     locationSubmitButton.disabled = true;
     closeModalButton.disabled = true;
-    errorMessage.textContent = "This might take a few moments...";
+    locationErrorMsg.textContent = "This might take a few moments...";
 
     var editType = "";
     var userRequest = locationTextField.value;
