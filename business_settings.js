@@ -336,7 +336,7 @@ function submitLocationEdit() {
     errorMessage.textContent = "This might take a few moments...";
 
     var editType = "";
-    var userRequest = "";
+    var userRequest = locationTextField.value;
 
     if (addSelected) {
         editType = "Add";
