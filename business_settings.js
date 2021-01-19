@@ -21,8 +21,14 @@ var businessUID = sessionStorage.getItem("businessUID");
 
 var users = [];
 
+// buttons for adding users
 var adminSelected = false;
 var userSelected = false;
+
+//buttons for contacting with location edits
+var addSelected = false;
+var removeSelected = false;
+var editSelected = false;
 
 const editUserImg = "https://uploads-ssl.webflow.com/5f4b05025c871a872cab8713/5ff4b69b2d2ad13718d57d0d_edit%20X.png";
 
@@ -115,8 +121,6 @@ var errorMessage = document.getElementById("new_error");
 var submitNewUserButton = document.getElementById("submit_new_user_button");
 var closeModalButton = document.getElementById("close-modal-button");
 
-var logoutButton = document.getElementById("dashLogout");
-
 newProfileButton.addEventListener('click', function() {
     errorMessage.textContent = "";
 })
@@ -124,6 +128,23 @@ submitNewUserButton.addEventListener('click', SubmitNewUser);
 adminButton.addEventListener('click', adminPressed);
 userButton.addEventListener('click', userPressed);
 closeModalButton.addEventListener('click', closeModal);
+
+//handle editing the location elements
+var locationAddButton = document.getElementById("location-add-button");
+var locationRemoveButton = document.getElementById("location-remove-button");
+var locationEditButton = document.getElementById("location-edit-button");
+
+var locationTextField = document.getElementById("location-contact-textfield");
+
+var locationSubmitButton = docuemnt.getElementById("location-contact-submit-button");
+
+locationSubmitButton.addEventListener('click', submitLocationEdit);
+locationAddButton.addEventListener('click', addPressed);
+locationRemoveButton.addEventListener('click', removePressed);
+locationEditButton.addEventListener('click', editPressed);
+
+//handle the logout
+var logoutButton = document.getElementById("dashLogout");
 logoutButton.addEventListener('click', Logout);
 
 
@@ -141,7 +162,7 @@ function SubmitNewUser() {
     if (adminSelected) {
         role = "admin";
     }
-    if (userSelected) {
+    else if (userSelected) {
         role = "user";
     }
 
@@ -237,11 +258,20 @@ function closeModal() {
     adminSelected = false;
     userSelected = false;
 
+    addSelected = false;
+    removeSelected = false;
+    editSelected = false;
+
     newName.value = "";
     newEmail.value = "";
     newPassword.value = "";
     adminButton.style.backgroundColor = "#7bbf51";
     userButton.style.backgroundColor = "#7bbf51";
+
+    userRequest = ""
+    locationAddButton.style.backgroundColor = "#7bbf51";
+    locationRemoveButton.style.backgroundColor = "#7bbf51";
+    locationEditButton.style.backgroundColor = "#7bbf51";
 }
 
 function removeUser(e) {
@@ -297,6 +327,93 @@ function removeUser(e) {
             });
         });
     }
+}
+
+function submitLocationEdit() {
+    // disable the submit button so that multiple function arent called
+    locationSubmitButton.disabled = true;
+    closeModalButton.disabled = true;
+    errorMessage.textContent = "This might take a few moments...";
+
+    var editType = "";
+    var userRequest = "";
+
+    if (addSelected) {
+        editType = "Add";
+    }
+    else if (removeSelected) {
+        editType = "Remove";
+    }
+    else if (editSelected) {
+        editType = "Edit";
+    }
+
+    if (editType == "" || userRequest == "") {
+        errorMessage.textContent = "Please fill in all fields and select an request type."
+        locationSubmitButton.disabled = false;
+        closeModalButton.disabled = false;
+        return;
+    }
+    else {
+        var subject = `Location ${editType} Request: ${businessUID}`;
+        var html = `<p>business UID: ${businessUID}</p>
+                    <p>business name: ${profileBusiness}</p>
+                    <p>user UID: ${userUID}</p>
+                    <p>user name: ${profileName}</p>
+                    <p>${userRequest}</p>`
+
+        const sendLocationRequestEmail = firebase.functions().httpsCallable('sendEmailToAdmin');
+        sendLocationRequestEmail({
+            subject: subject,
+            html: html,
+        }).then((result) => {
+            console.log(result);
+
+            editType = "";
+            userRequest = "";
+
+            document.getElementById("location-request-modal").style.display = "none";
+
+            locationSubmitButton.disabled = false;
+            closeModalButton.disabled = false;
+            errorMessage.textContent = "";
+
+        }).catch((error) => {
+            console.log(error);
+            errorMessage.textContent = "There seems to be a problem while sending this request. " +
+                    "Please try again. If the error persists please contact n-gauge directly."
+        });
+    }
+}
+
+function addPressed() {
+    addSelected = true;
+    removeSelected = false;
+    editSelected = false;
+
+    locationAddButton.style.backgroundColor = "#468a00";
+    locationRemoveButton.style.backgroundColor = "#7bbf51";
+    locationEditButton.style.backgroundColor = "#7bbf51";
+}
+
+function removePressed() {
+    addSelected = false;
+    removeSelected = true;
+    editSelected = false;
+
+    locationAddButton.style.backgroundColor = "#7bbf51";
+    locationRemoveButton.style.backgroundColor = "#468a00";
+    locationEditButton.style.backgroundColor = "#7bbf51";
+}
+
+function editPressed() {
+    addSelected = false;
+    removeSelected = false;
+    editSelected = true;
+
+    locationAddButton.style.backgroundColor = "#7bbf51";
+    locationRemoveButton.style.backgroundColor = "#7bbf51";
+    locationEditButton.style.backgroundColor = "#468a00";
 }
 
 function Logout() {
