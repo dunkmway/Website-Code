@@ -283,6 +283,9 @@ function removeUser(e) {
                 roleList.removeChild(Array.from(roleList.children)[index]);
                 editList.removeChild(Array.from(editList.children)[index]);
 
+                //remove the user from the locally saved users array
+                users.splice(index, 1);
+
                 //close the modal
                 modal.style.display = "none";
                 yesButton.disabled = false;
