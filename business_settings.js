@@ -140,10 +140,13 @@ var locationTextField = document.getElementById("location-contact-textfield");
 var locationErrorMsg = document.getElementById("location-error-msg");
 var locationSubmitButton = document.getElementById("location-contact-submit-button");
 
+var locationCloseModalButton = document.getElementById("close-location-modal-button");
+
 locationSubmitButton.addEventListener('click', submitLocationEdit);
 locationAddButton.addEventListener('click', addPressed);
 locationRemoveButton.addEventListener('click', removePressed);
 locationEditButton.addEventListener('click', editPressed);
+locationCloseModalButton.addEventListener('click', closeModal);
 
 //handle the logout
 var logoutButton = document.getElementById("dashLogout");
@@ -229,7 +232,7 @@ function SubmitNewUser() {
             console.log(error.code);
             console.log(error.message);
             console.log(error.details);
-            errorMessage.textContent = "An error has occured. Please contact n-gauge if the error persists.";
+            errorMessage.textContent = error.message;
 
             submitNewUserButton.disabled = false;
             closeModalButton.disabled = false;
@@ -270,7 +273,9 @@ function closeModal() {
     adminButton.style.backgroundColor = "#7bbf51";
     userButton.style.backgroundColor = "#7bbf51";
 
-    userRequest = ""
+    editSelected = "";
+    userRequest = "";
+    locationTextField.value = "";
     locationAddButton.style.backgroundColor = "#7bbf51";
     locationRemoveButton.style.backgroundColor = "#7bbf51";
     locationEditButton.style.backgroundColor = "#7bbf51";
@@ -373,6 +378,14 @@ function submitLocationEdit() {
 
             editType = "";
             userRequest = "";
+
+            locationAddButton.style.backgroundColor = "#7bbf51";
+            locationRemoveButton.style.backgroundColor = "#7bbf51";
+            locationEditButton.style.backgroundColor = "#7bbf51";
+
+            locationTextField.value = "";
+
+
 
             document.getElementById("location-request-modal").style.display = "none";
 
