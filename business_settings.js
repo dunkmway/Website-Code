@@ -16,7 +16,7 @@
 
 //get the user's name and business name from session storage
 var profileName = sessionStorage.getItem("userName");
-var userUID = sessionStorage.getItem("userUID");
+var currentUserUID = sessionStorage.getItem("userUID");
 var profileBusiness = sessionStorage.getItem("businessName");
 var businessUID = sessionStorage.getItem("businessUID");
 
@@ -90,19 +90,19 @@ businessDoc.get()
         for (var i = 0; i < userNames.length; i++) {
             
             //dont place the img if the user that is being displayed is the current user
-            if (!(userUID == users[i].uid)) {
-                var listEdit = document.createElement('img')
+            if (!(currentUserUID == users[i].uid)) {
+                var listEdit = document.createElement('img');
                 listEdit.src = editUserImg;
             }
             else {
-                var listEdit = document.createElement('div')
+                var listEdit = document.createElement('div');
                 listEdit.id = "user-edit-filler";
             }
             
             editList.appendChild(listEdit);
         }
         editList.addEventListener('click', (e) => removeUser(e));
-
+        
         //set the location names
         var locationsList = document.getElementById("location_names");
         for (var i = 0; i < locations.length; i++) {
@@ -372,7 +372,7 @@ function submitLocationEdit() {
         var subject = `Location ${editType} Request: ${businessUID}`;
         var html = `<p>business UID: ${businessUID}</p>
                     <p>business name: ${profileBusiness}</p>
-                    <p>user UID: ${userUID}</p>
+                    <p>user UID: ${currentUserUID}</p>
                     <p>user name: ${profileName}</p>
                     <p>${userRequest}</p>`
 
