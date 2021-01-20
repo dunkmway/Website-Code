@@ -88,8 +88,17 @@ businessDoc.get()
         //set the role edit x's
         var editList = document.getElementById("role_edit");
         for (var i = 0; i < userNames.length; i++) {
-            var listEdit = document.createElement('img')
-            listEdit.src = editUserImg;
+            
+            //dont place the img if the user that is being displayed is the current user
+            if (!(userUID == users[i].uid)) {
+                var listEdit = document.createElement('img')
+                listEdit.src = editUserImg;
+            }
+            else {
+                var listEdit = document.createElement('div')
+                listEdit.id = "user-edit-filler";
+            }
+            
             editList.appendChild(listEdit);
         }
         editList.addEventListener('click', (e) => removeUser(e));
@@ -300,6 +309,7 @@ function removeUser(e) {
         yesButton.addEventListener('click', function() {
             yesButton.disabled = true;
             noButton.disabled = true;
+
             errMsg.textContent = "This might take a few moments...";
             const removeUser = firebase.functions().httpsCallable('adminRemoveUser');
             removeUser({
