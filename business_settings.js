@@ -109,8 +109,6 @@ businessDoc.get()
 });
 
 //handle the new user submission
-var newProfileButton = document.getElementById("add-new-profile-button");
-
 var newName = document.getElementById("new_name");
 var newEmail = document.getElementById("new_email");
 var newPassword = document.getElementById("new_password")
@@ -122,9 +120,6 @@ var errorMessage = document.getElementById("new_error");
 var submitNewUserButton = document.getElementById("submit_new_user_button");
 var closeModalButton = document.getElementById("close-modal-button");
 
-newProfileButton.addEventListener('click', function() {
-    errorMessage.textContent = "";
-})
 submitNewUserButton.addEventListener('click', SubmitNewUser);
 adminButton.addEventListener('click', adminPressed);
 userButton.addEventListener('click', userPressed);
@@ -270,12 +265,14 @@ function closeModal() {
     newName.value = "";
     newEmail.value = "";
     newPassword.value = "";
+    errorMessage.value = "";
     adminButton.style.backgroundColor = "#7bbf51";
     userButton.style.backgroundColor = "#7bbf51";
 
     editSelected = "";
     userRequest = "";
     locationTextField.value = "";
+    locationErrorMsg.value = "";
     locationAddButton.style.backgroundColor = "#7bbf51";
     locationRemoveButton.style.backgroundColor = "#7bbf51";
     locationEditButton.style.backgroundColor = "#7bbf51";
