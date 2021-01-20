@@ -265,14 +265,14 @@ function closeModal() {
     newName.value = "";
     newEmail.value = "";
     newPassword.value = "";
-    errorMessage.value = "";
+    errorMessage.textContent = "";
     adminButton.style.backgroundColor = "#7bbf51";
     userButton.style.backgroundColor = "#7bbf51";
 
     editSelected = "";
     userRequest = "";
     locationTextField.value = "";
-    locationErrorMsg.value = "";
+    locationErrorMsg.textContent = "";
     locationAddButton.style.backgroundColor = "#7bbf51";
     locationRemoveButton.style.backgroundColor = "#7bbf51";
     locationEditButton.style.backgroundColor = "#7bbf51";
