@@ -19,7 +19,7 @@ var dateRangeParticpation = [];
 let trailingRangeNPS = 7;
 let numDaysToCheckNPS = 14;
 
-let trailingRangeGAP = 7;
+let trailingRangeGAP = 0;
 let numDaysToCheckGAP = 14;
 
 let priorNumDaysParticipation = 7;
@@ -113,6 +113,7 @@ function GetSurveyData() {
     //get the dates needed for each survey type
     var daysNeededNPS = numDaysToCheckNPS + trailingRangeNPS;
     dateRangeNPS = getDateRange(new Date(), (new Date()).subtractDays(daysNeededNPS));
+    console.log(dateRangeNPS);
 
     var daysNeededGAP = numDaysToCheckGAP + trailingRangeGAP;
     dateRangeGAP = getDateRange(new Date(), (new Date()).subtractDays(daysNeededGAP));
