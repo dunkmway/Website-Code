@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Live NPS</title>
+    <link href="live-nps.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <section id="content-wrapper">
+      <div id="top-nav-bar">
+        <div class="top-nav-block">
+          <div id="menu-icon">
+            <div class="menu-lines"></div>
+            <div class="menu-lines"></div>
+            <div class="menu-lines"></div>
+          </div>
+          <img src="images/logo n-gauge V2.png" class="top-nav-img">
+          <p>Business Name</p>
+          <img src="images/white down arrow.png" class="dropdown-arrow">
+        </div>
+        <div class="top-nav-block">
+          <p>User Name</p>
+          <img src="images/white down arrow.png" class="dropdown-arrow">
+          <img src="images/person icon.png" class="top-nav-img">
+        </div>
+      </div>
+    
+      <div id="side-nav-bar">
+        <p>overview</p>
+        <p class="active">live NPS</p>
+        <p>live GAP</p>
+      </div>
+
+      <div id="main-content">
+        <div id="nps-data-grid">
+          <div id="nps-overview-wrapper" class="nps-data-wrapper">
+            <div class="nps-data-header">
+              <p>NPS overview</p>
+            </div>
+            <div class="nps-data-area">
+              <canvas id="nps-overview-chart"></canvas>
+              <div id="nps-overview-footer">
+                <div id="location-dropdown" class="nps-dropdown">
+                  <p>all locations</p>
+                  <img src="images/white down arrow.png" class="dropdown-arrow">
+                </div>
+                <div id="time-dropdown" class="nps-dropdown">
+                  <p>past 3 months</p>
+                  <img src="images/white down arrow.png" class="dropdown-arrow">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="live-score-wrapper" class="nps-snapshot-wrapper">
+            <p class="snapshot-heading">live score</p>
+            <p id="live-score">46.3</p>
+          </div>
+
+          <div id="current-shift-wrapper" class="nps-snapshot-wrapper">
+            <p class="snapshot-heading">current shift</p>
+            <div id="current-shift-data">
+              <div class="current-shift-block">
+                <p id="current-shift-today">-3.1</p>
+                <p class="snapshot-subheading-below">today</p>
+              </div>
+              <div id="current-shift-vertical-line"></div>
+              <div class="current-shift-block">
+                <p id="current-shift-this-week">7.4</p>
+                <p class="snapshot-subheading-below">this week</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="nps-breakdown-wrapper" class="nps-snapshot-wrapper">
+            <p class="snapshot-heading">NPS breakdown</p>
+            <div class="breakdown-row">
+              <p class="snapshot-subheading-beside">promoters</p>
+              <p id="promoters">735</p>
+            </div>
+            <div class="breakdown-row">
+              <p class="snapshot-subheading-beside">detractors</p>
+              <p id="detractors">288</p>
+            </div>
+            <div class="breakdown-row">
+              <p class="snapshot-subheading-beside">passive</p>
+              <p id="passive">319</p>
+            </div>
+          </div>
+
+          <div id="nps-location-breakdown-wrapper" class="nps-data-wrapper">
+            <div class="nps-data-header">
+              <p>NPS location breakdown</p>
+            </div>
+            <div class="nps-data-area">
+              <p>all of the location breakdown stuff will go here</p>
+            </div>
+          </div>
+
+          <div id="next-day-prediction-wrapper" class="nps-snapshot-wrapper">
+            <p class="snapshot-heading">next day prediction</p>
+            <p id="next-day-prediction">45.1</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
