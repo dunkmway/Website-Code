@@ -566,7 +566,8 @@ function GraphParticipation(days, counts, average) {
         options: {
             lineValue: average,
             responsive: true,
-            maintainAspectRatio: false,
+            // maintainAspectRatio: false,
+            aspectRatio: 1.5,
             layout: {
                 padding: {
                     left: 20,
